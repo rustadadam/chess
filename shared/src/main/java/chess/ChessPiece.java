@@ -48,23 +48,32 @@ public class ChessPiece {
     }
 
     //Function to check moves.
-    private boolean moveCheck(ChessBoard board, ChessPosition myPosition, int move_row, int move_col) {
+    private String moveCheck(ChessBoard board, ChessPosition myPosition, int move_row, int move_col) {
 
         //Add the row and col to pos
         ChessPosition newPosition = new ChessPosition(myPosition.getRow() + move_row, myPosition.getColumn() + move_col);
 
+        //Check it the newPosition is fair
+        //Check to make sure its on the board
+        if (newPosition.getRow() > 7 || newPosition.getRow() < 0) {
+            return "Out";
+        }
+
+        if (newPosition.getColumn() > 7 || newPosition.getColumn() < 0) {
+            return "Out";
+        }
+
         if (board.getPiece(newPosition) == null) {
             //No piece occupies there
-            return true;
+            return "Empty";
+
+        } else if (board.getPiece(newPosition).getTeamColor() != color) {
+            //Opponent Piece occupies there
+            return "Occupied_Opp";
         } else {
-            //Piece occupies there
-            return false;
+            //Ally Piece occupies there
+            return "Occupied_Team";
         }
-    }
-
-    //Function to create a move object
-    private createMove(ChessPosition newPos) {
-
     }
 
     /**
@@ -84,12 +93,39 @@ public class ChessPiece {
         if (type == ChessPiece.PieceType.PAWN) {
 
             if (color == ChessGame.TeamColor.WHITE) {
+
                 //Check to see if can move forward
-                if (moveCheck(board, myPosition, myPosition.getRow() - 1, myPosition.getColumn())) {
+                if (moveCheck(board, myPosition, myPosition.getRow() - 1, myPosition.getColumn()) == "Empty") {
                     //If true, can move forward
                     ChessPosition newMove = new ChessPosition(myPosition.getRow() - 1, myPosition.getColumn());
 
-                    availableMoves.add();
+                    //Check if the pawn if the pawn gets promoted
+                    if (newMove.getRow() == 0) {
+                        //Pawn is promoted
+                        for (PieceType type : PieceType.values()) {
+                            ChessMove move = new ChessMove(myPosition, newMove, type);
+
+                            //Add the move to the dictionary
+                            availableMoves.add(move);
+                        }
+                    } else {
+
+                        //Pawn is not promoted
+                        ChessMove move = new ChessMove(myPosition, newMove, null);
+
+                        //Add the move to the dictionary
+                        availableMoves.add(move);
+                    }
+                }
+
+                //Check to see if it can take diagonally
+                if (moveCheck(board, myPosition, myPosition.getRow() - 1, myPosition.getColumn() + 1) == "Occupied_Opp") {
+                    //Piece is occupied by Opp
+
+                    //Create new position
+                    ChessPosition newMove = new ChessPosition(myPosition.getRow() - 1, myPosition.getColumn());
+
+                    //RETURN AT THE LINE ABOVE TODO
                 }
 
 
