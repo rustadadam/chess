@@ -10,7 +10,14 @@ import java.util.Collection;
  */
 public class ChessPiece {
 
+    // Create set ups fo we can create the things later
+    private final ChessGame.TeamColor color;
+    private final ChessPiece.PieceType type;
+
+    //--------------------- CONSTRUCTOR ---------------------
     public ChessPiece(ChessGame.TeamColor pieceColor, ChessPiece.PieceType type) {
+        this.color = pieceColor;
+        this.type = type;
     }
 
     /**
@@ -48,5 +55,14 @@ public class ChessPiece {
      */
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
         throw new RuntimeException("Not implemented");
+    }
+
+    //Overide the to string funciton
+    @Override
+    public String toString() {
+        return "ChessPiece{" +
+                "type='" + type + '\'' +
+                ", color='" + color + '\'' +
+                '}';
     }
 }
