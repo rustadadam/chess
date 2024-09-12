@@ -33,4 +33,30 @@ public class ChessPosition {
     public int getColumn() {
         return col;
     }
+
+    //Overide the to string funciton
+    @Override
+    public String toString() {
+        return "ChessPosition:" + row + "," + col;
+    }
+
+    //Overide the to equal function
+    @Override
+    public boolean equals(Object o) {
+        //Equals in memory
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ChessPosition that = (ChessPosition) o;
+
+        //Check to see if the positions match
+        return row == that.row && col == that.col;
+    }
+
+    //Overide the hash Fucntion
+    @Override
+    public int hashCode() {
+        return 31 * row + col;
+    }
+
+
 }

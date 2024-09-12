@@ -54,6 +54,13 @@ public class ChessPiece {
      * @return Collection of valid moves
      */
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
+        //Create a move set for each peice?
+
+        //Check the board for each move to see if the piece can move there with the position
+
+        //
+
+
         throw new RuntimeException("Not implemented");
     }
 

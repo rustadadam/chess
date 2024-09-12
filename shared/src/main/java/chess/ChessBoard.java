@@ -37,7 +37,9 @@ public class ChessBoard {
      * position
      */
     public ChessPiece getPiece(ChessPosition position) {
-        throw new RuntimeException("Not implemented");
+        //Return chess peice
+        return BoardPositions[position.getRow()][position.getColumn()];
+        //throw new RuntimeException("Not implemented");
     }
 
     /**
@@ -48,7 +50,7 @@ public class ChessBoard {
 
         // Create an empty 8 by 8 array. (or nested)
         BoardPositions = new ChessPiece[8][8]; // NOTE. Are these NULL in here? The ans: Yes
-        
+
         // Add pawns
         for (int col = 0; col < 8; col++) {
             addPiece(new ChessPosition(1, col), new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.PAWN));
@@ -116,6 +118,12 @@ public class ChessBoard {
         // Create an 8 by 8 array of ChessPiece objects
         ChessBoard chess_board = new ChessBoard();
 
+        //Test get piece
+        ChessPosition pos = new ChessPosition(0, 6);
+        ChessPiece found_piece = chess_board.getPiece(pos);
+        System.out.println(found_piece);
+
+        //Print out the chess board
         System.out.println(chess_board.toString());
     }
 }
