@@ -1,5 +1,6 @@
 package chess;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 /**
@@ -46,6 +47,26 @@ public class ChessPiece {
         return type;
     }
 
+    //Function to check moves.
+    private boolean moveCheck(ChessBoard board, ChessPosition myPosition, int move_row, int move_col) {
+
+        //Add the row and col to pos
+        ChessPosition newPosition = new ChessPosition(myPosition.getRow() + move_row, myPosition.getColumn() + move_col);
+
+        if (board.getPiece(newPosition) == null) {
+            //No piece occupies there
+            return true;
+        } else {
+            //Piece occupies there
+            return false;
+        }
+    }
+
+    //Function to create a move object
+    private createMove(ChessPosition newPos) {
+
+    }
+
     /**
      * Calculates all the positions a chess piece can move to
      * Does not take into account moves that are illegal due to leaving the king in
@@ -54,13 +75,35 @@ public class ChessPiece {
      * @return Collection of valid moves
      */
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
+        //Create the object to return later, that we can append pieces too
+        Collection<ChessMove> availableMoves = new ArrayList<>();
+
         //Create a move set for each peice?
+
+        //Move Pawn. Check if the piece is a pawn
+        if (type == ChessPiece.PieceType.PAWN) {
+
+            if (color == ChessGame.TeamColor.WHITE) {
+                //Check to see if can move forward
+                if (moveCheck(board, myPosition, myPosition.getRow() - 1, myPosition.getColumn())) {
+                    //If true, can move forward
+                    ChessPosition newMove = new ChessPosition(myPosition.getRow() - 1, myPosition.getColumn());
+
+                    availableMoves.add();
+                }
+
+
+            } else { //Color will be Black
+
+            }
+
+        }
 
         //Check the board for each move to see if the piece can move there with the position
 
         //
 
-
+        // return Collection<ChessMove>
         throw new RuntimeException("Not implemented");
     }
 
