@@ -14,11 +14,14 @@ public class ChessPiece {
     // Create set ups fo we can create the things later
     private final ChessGame.TeamColor color;
     private final ChessPiece.PieceType type;
+    //Create the object to return later, that we can append pieces too
+    private Collection<ChessMove> availableMoves;
 
     //--------------------- CONSTRUCTOR ---------------------
     public ChessPiece(ChessGame.TeamColor pieceColor, ChessPiece.PieceType type) {
         this.color = pieceColor;
         this.type = type;
+        this.availableMoves = new ArrayList<>();
     }
 
     /**
@@ -76,6 +79,27 @@ public class ChessPiece {
         }
     }
 
+    //Pawn promotion funciton
+    private void check_promotion(ChessPosition myPosition, ChessPosition newMove) {
+        //Check if the pawn if the pawn gets promoted
+        if (newMove.getRow() == 0) {
+            //Pawn is promoted
+            for (PieceType type : PieceType.values()) {
+                ChessMove move = new ChessMove(myPosition, newMove, type);
+
+                //Add the move to the dictionary
+                availableMoves.add(move);
+            }
+        } else {
+
+            //Pawn is not promoted
+            ChessMove move = new ChessMove(myPosition, newMove, null);
+
+            //Add the move to the dictionary
+            availableMoves.add(move);
+        }
+    }
+
     /**
      * Calculates all the positions a chess piece can move to
      * Does not take into account moves that are illegal due to leaving the king in
@@ -84,14 +108,11 @@ public class ChessPiece {
      * @return Collection of valid moves
      */
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
-        //Create the object to return later, that we can append pieces too
-        Collection<ChessMove> availableMoves = new ArrayList<>();
-
         //Create a move set for each peice?
 
         //Move Pawn. Check if the piece is a pawn
         if (type == ChessPiece.PieceType.PAWN) {
-
+            //Check color
             if (color == ChessGame.TeamColor.WHITE) {
 
                 //Check to see if can move forward
@@ -99,48 +120,158 @@ public class ChessPiece {
                     //If true, can move forward
                     ChessPosition newMove = new ChessPosition(myPosition.getRow() - 1, myPosition.getColumn());
 
-                    //Check if the pawn if the pawn gets promoted
-                    if (newMove.getRow() == 0) {
-                        //Pawn is promoted
-                        for (PieceType type : PieceType.values()) {
-                            ChessMove move = new ChessMove(myPosition, newMove, type);
-
-                            //Add the move to the dictionary
-                            availableMoves.add(move);
-                        }
-                    } else {
-
-                        //Pawn is not promoted
-                        ChessMove move = new ChessMove(myPosition, newMove, null);
-
-                        //Add the move to the dictionary
-                        availableMoves.add(move);
-                    }
+                    //This adds the moves to the dictionary
+                    check_promotion(myPosition, newMove);
                 }
 
                 //Check to see if it can take diagonally
                 if (moveCheck(board, myPosition, myPosition.getRow() - 1, myPosition.getColumn() + 1) == "Occupied_Opp") {
-                    //Piece is occupied by Opp
 
                     //Create new position
                     ChessPosition newMove = new ChessPosition(myPosition.getRow() - 1, myPosition.getColumn());
 
-                    //RETURN AT THE LINE ABOVE TODO
+                    //This adds the moves to the dictionary
+                    check_promotion(myPosition, newMove);
+                }
+
+                //Check to see if it can take diagonally on the other side
+                if (moveCheck(board, myPosition, myPosition.getRow() - 1, myPosition.getColumn() - 1) == "Occupied_Opp") {
+
+                    //Create new position
+                    ChessPosition newMove = new ChessPosition(myPosition.getRow() - 1, myPosition.getColumn());
+
+                    //This adds the moves to the dictionary
+                    check_promotion(myPosition, newMove);
                 }
 
 
-            } else { //Color will be Black
+            } else {
+                //Color is black
+                //Check to see if can move forward
+                if (moveCheck(board, myPosition, myPosition.getRow() + 1, myPosition.getColumn()) == "Empty") {
+                    //If true, can move forward
+                    ChessPosition newMove = new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn());
+
+                    //This adds the moves to the dictionary
+                    check_promotion(myPosition, newMove);
+                }
+
+                //Check to see if it can take diagonally
+                if (moveCheck(board, myPosition, myPosition.getRow() + 1, myPosition.getColumn() + 1) == "Occupied_Opp") {
+
+                    //Create new position
+                    ChessPosition newMove = new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn());
+
+                    //This adds the moves to the dictionary
+                    check_promotion(myPosition, newMove);
+                }
+
+                //Check to see if it can take diagonally on the other side
+                if (moveCheck(board, myPosition, myPosition.getRow() + 1, myPosition.getColumn() - 1) == "Occupied_Opp") {
+
+                    //Create new position
+                    ChessPosition newMove = new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn());
+
+                    //This adds the moves to the dictionary
+                    check_promotion(myPosition, newMove);
+                }
+            }
+        }
+
+        if (type == ChessPiece.PieceType.ROOK) {
+            //Move right
+            int row_move = myPosition.getRow() + 1;
+            String move_string = moveCheck(board, myPosition, row_move, myPosition.getColumn());
+            while (move_string != "Out" && move_string != "Occupied_Team") {
+
+                //Add move
+                ChessPosition newMove = new ChessPosition(row_move, myPosition.getColumn());
+                ChessMove move = new ChessMove(myPosition, newMove, null);
+                availableMoves.add(move);
+
+                if (move_string == "Occupied_Opp") {
+                    //Stop the loop.
+                    move_string = "Out";
+                } else {
+                    //Index row_move
+                    row_move++;
+                    move_string = moveCheck(board, myPosition, row_move, myPosition.getColumn());
+                }
+
+            }
+
+            //Move Left
+            row_move = myPosition.getRow() - 1;
+            move_string = moveCheck(board, myPosition, row_move, myPosition.getColumn());
+            while (move_string != "Out" && move_string != "Occupied_Team") {
+
+                //Add move
+                ChessPosition newMove = new ChessPosition(row_move, myPosition.getColumn());
+                ChessMove move = new ChessMove(myPosition, newMove, null);
+                availableMoves.add(move);
+
+                if (move_string == "Occupied_Opp") {
+                    //Stop the loop.
+                    move_string = "Out";
+                } else {
+                    //Index row_move
+                    row_move--;
+                    move_string = moveCheck(board, myPosition, row_move, myPosition.getColumn());
+                }
+
+            }
+
+            //Move up
+            int col_move = myPosition.getColumn() + 1;
+            move_string = moveCheck(board, myPosition, myPosition.getRow(), col_move);
+            while (move_string != "Out" && move_string != "Occupied_Team") {
+
+                //Add move
+                ChessPosition newMove = new ChessPosition(row_move, myPosition.getColumn());
+                ChessMove move = new ChessMove(myPosition, newMove, null);
+                availableMoves.add(move);
+
+                if (move_string == "Occupied_Opp") {
+                    //Stop the loop.
+                    move_string = "Out";
+                } else {
+                    //Index row_move
+                    col_move++;
+                    move_string = moveCheck(board, myPosition, col_move, myPosition.getColumn());
+                }
+
+            }
+
+            //Move down
+            col_move = myPosition.getColumn() - 1;
+            move_string = moveCheck(board, myPosition, myPosition.getRow(), col_move);
+            while (move_string != "Out" && move_string != "Occupied_Team") {
+
+                //Add move
+                ChessPosition newMove = new ChessPosition(row_move, myPosition.getColumn());
+                ChessMove move = new ChessMove(myPosition, newMove, null);
+                availableMoves.add(move);
+
+                if (move_string == "Occupied_Opp") {
+                    //Stop the loop.
+                    move_string = "Out";
+                } else {
+                    //Index row_move
+                    col_move--;
+                    move_string = moveCheck(board, myPosition, col_move, myPosition.getColumn());
+                }
 
             }
 
         }
 
-        //Check the board for each move to see if the piece can move there with the position
+        if (type == ChessPiece.PieceType.KING) {
+            //Code the kings moves
+        }
 
-        //
 
         // return Collection<ChessMove>
-        throw new RuntimeException("Not implemented");
+        return availableMoves;
     }
 
     //Overide the to string funciton
