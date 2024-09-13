@@ -26,7 +26,7 @@ public class ChessBoard {
      * @param piece    the piece to add
      */
     public void addPiece(ChessPosition position, ChessPiece piece) {
-        BoardPositions[position.getRow()][position.getColumn()] = piece;
+        BoardPositions[position.getRow() - 1][position.getColumn() - 1] = piece;
     }
 
     /**
@@ -39,7 +39,7 @@ public class ChessBoard {
     public ChessPiece getPiece(ChessPosition position) {
 
         //Return chess peice
-        return BoardPositions[position.getRow()][position.getColumn()];
+        return BoardPositions[position.getRow() - 1][position.getColumn() - 1];
         //throw new RuntimeException("Not implemented");
     }
 
@@ -54,35 +54,35 @@ public class ChessBoard {
 
         // Add pawns
         for (int col = 0; col < 8; col++) {
-            addPiece(new ChessPosition(1, col), new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.PAWN));
-            addPiece(new ChessPosition(6, col), new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.PAWN));
+            addPiece(new ChessPosition(2, col + 1), new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.PAWN));
+            addPiece(new ChessPosition(7, col + 1), new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.PAWN));
         }
 
         // Add rooks
-        addPiece(new ChessPosition(0, 0), new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.ROOK));
-        addPiece(new ChessPosition(0, 7), new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.ROOK));
-        addPiece(new ChessPosition(7, 0), new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.ROOK));
-        addPiece(new ChessPosition(7, 7), new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.ROOK));
+        addPiece(new ChessPosition(1, 1), new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.ROOK));
+        addPiece(new ChessPosition(1, 8), new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.ROOK));
+        addPiece(new ChessPosition(8, 1), new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.ROOK));
+        addPiece(new ChessPosition(8, 8), new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.ROOK));
 
         // Add knights
-        addPiece(new ChessPosition(0, 1), new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.KNIGHT));
-        addPiece(new ChessPosition(0, 6), new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.KNIGHT));
-        addPiece(new ChessPosition(7, 1), new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.KNIGHT));
-        addPiece(new ChessPosition(7, 6), new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.KNIGHT));
+        addPiece(new ChessPosition(1, 2), new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.KNIGHT));
+        addPiece(new ChessPosition(1, 7), new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.KNIGHT));
+        addPiece(new ChessPosition(8, 2), new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.KNIGHT));
+        addPiece(new ChessPosition(8, 7), new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.KNIGHT));
 
         // Add bishops
-        addPiece(new ChessPosition(0, 2), new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.BISHOP));
-        addPiece(new ChessPosition(0, 5), new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.BISHOP));
-        addPiece(new ChessPosition(7, 2), new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.BISHOP));
-        addPiece(new ChessPosition(7, 5), new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.BISHOP));
+        addPiece(new ChessPosition(1, 3), new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.BISHOP));
+        addPiece(new ChessPosition(1, 6), new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.BISHOP));
+        addPiece(new ChessPosition(8, 3), new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.BISHOP));
+        addPiece(new ChessPosition(8, 6), new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.BISHOP));
 
         // Add queens
-        addPiece(new ChessPosition(0, 3), new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.QUEEN));
-        addPiece(new ChessPosition(7, 3), new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.QUEEN));
+        addPiece(new ChessPosition(1, 4), new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.QUEEN));
+        addPiece(new ChessPosition(8, 4), new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.QUEEN));
 
         // Add kings
-        addPiece(new ChessPosition(0, 4), new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.KING));
-        addPiece(new ChessPosition(7, 4), new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.KING));
+        addPiece(new ChessPosition(1, 5), new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.KING));
+        addPiece(new ChessPosition(8, 5), new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.KING));
 
 
         //throw new RuntimeException("Not implemented");
@@ -103,10 +103,55 @@ public class ChessBoard {
             for (int col = 0; col < 8; col++) {
 
                 //Print P if it's a pawn
-                if (BoardPositions[row][col] != null) {
-                    sb.append(' ').append("P").append(' ').append('|');
+                if (BoardPositions[row][col] == null) {
+                    sb.append(' ').append('|');
                 } else {
-                    sb.append(' ').append(" ").append(' ').append('|');
+                    //Get Chess piece
+                    ChessPiece piece = BoardPositions[row][col];
+
+                    //Check to see if uppercase or not
+                    if (piece.getTeamColor() != ChessGame.TeamColor.BLACK) {
+
+                        //Print whatever it is
+                        if (piece.getPieceType() == ChessPiece.PieceType.PAWN) {
+                            sb.append('p').append('|');
+                        }
+                        if (piece.getPieceType() == ChessPiece.PieceType.KING) {
+                            sb.append('k').append('|');
+                        }
+                        if (piece.getPieceType() == ChessPiece.PieceType.QUEEN) {
+                            sb.append('q').append('|');
+                        }
+                        if (piece.getPieceType() == ChessPiece.PieceType.ROOK) {
+                            sb.append('r').append('|');
+                        }
+                        if (piece.getPieceType() == ChessPiece.PieceType.KNIGHT) {
+                            sb.append('n').append('|');
+                        }
+                        if (piece.getPieceType() == ChessPiece.PieceType.BISHOP) {
+                            sb.append('b').append('|');
+                        }
+                    } else {
+                        //Print whatever it is
+                        if (piece.getPieceType() == ChessPiece.PieceType.PAWN) {
+                            sb.append('P').append('|');
+                        }
+                        if (piece.getPieceType() == ChessPiece.PieceType.KING) {
+                            sb.append('K').append('|');
+                        }
+                        if (piece.getPieceType() == ChessPiece.PieceType.QUEEN) {
+                            sb.append('Q').append('|');
+                        }
+                        if (piece.getPieceType() == ChessPiece.PieceType.ROOK) {
+                            sb.append('R').append('|');
+                        }
+                        if (piece.getPieceType() == ChessPiece.PieceType.KNIGHT) {
+                            sb.append('N').append('|');
+                        }
+                        if (piece.getPieceType() == ChessPiece.PieceType.BISHOP) {
+                            sb.append('B').append('|');
+                        }
+                    }
                 }
             }
             sb.append('\n');
@@ -118,13 +163,27 @@ public class ChessBoard {
     public static void main(String[] args) {
         // Create an 8 by 8 array of ChessPiece objects
         ChessBoard chess_board = new ChessBoard();
-
-        //Test get piece
-        ChessPosition pos = new ChessPosition(0, 6);
-        ChessPiece found_piece = chess_board.getPiece(pos);
-        System.out.println(found_piece);
+        chess_board.resetBoard();
 
         //Print out the chess board
         System.out.println(chess_board.toString());
+    }
+
+    //Overide the to equal function
+    @Override
+    public boolean equals(Object o) {
+        //Equals in memory
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ChessBoard that = (ChessBoard) o;
+
+        //Check to see if the positions match
+        return that.toString().equals(this.toString());
+    }
+
+    //Overide the hash Fucntion
+    @Override
+    public int hashCode() {
+        return 31 * toString().hashCode();
     }
 }

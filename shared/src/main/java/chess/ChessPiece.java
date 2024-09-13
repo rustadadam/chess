@@ -54,15 +54,15 @@ public class ChessPiece {
     private String moveCheck(ChessBoard board, ChessPosition myPosition, int move_row, int move_col) {
 
         //Add the row and col to pos
-        ChessPosition newPosition = new ChessPosition(myPosition.getRow() + move_row, myPosition.getColumn() + move_col);
+        ChessPosition newPosition = new ChessPosition(myPosition.getRow() + 1 + move_row, myPosition.getColumn() + 1 + move_col);
 
         //Check it the newPosition is fair
         //Check to make sure its on the board
-        if (newPosition.getRow() > 7 || newPosition.getRow() < 0) {
+        if (newPosition.getRow() > 8 || newPosition.getRow() < 1) {
             return "Out";
         }
 
-        if (newPosition.getColumn() > 7 || newPosition.getColumn() < 0) {
+        if (newPosition.getColumn() > 8 || newPosition.getColumn() < 1) {
             return "Out";
         }
 
@@ -178,7 +178,7 @@ public class ChessPiece {
             }
         }
 
-        if (type == ChessPiece.PieceType.ROOK) {
+        if (type == ChessPiece.PieceType.ROOK || type == ChessPiece.PieceType.QUEEN) {
             //Move right
             int row_move = myPosition.getRow() + 1;
             String move_string = moveCheck(board, myPosition, row_move, myPosition.getColumn());
@@ -266,9 +266,135 @@ public class ChessPiece {
         }
 
         if (type == ChessPiece.PieceType.KING) {
-            //Code the kings moves
+//            //Code the kings moves
+//            ChessPosition up = new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn());
+//            ChessPosition up_right = new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn() + 1);
+//            ChessPosition left = new ChessPosition(myPosition.getRow(), myPosition.getColumn() - 1);
+//            ChessPosition right = new ChessPosition(myPosition.getRow(), myPosition.getColumn() + 1);
+//            ChessPosition down_left = new ChessPosition(myPosition.getRow() - 1, myPosition.getColumn() - 1);
+//            ChessPosition down = new ChessPosition(myPosition.getRow() - 1, myPosition.getColumn());
+//            ChessPosition down_right = new ChessPosition(myPosition.getRow() - 1, myPosition.getColumn() + 1);
+
+            //Iterate through moves
+            for (int i = -1; i < 2; i++) {
+                for (int j = -1; j < 2; j++) {
+                    if (moveCheck(board, myPosition, i, j) != "out" && moveCheck(board, myPosition, i, j) != "Occupied_Team") {
+                        ChessPosition new_pos = new ChessPosition(myPosition.getRow() + i, myPosition.getColumn() - j);
+                        ChessMove move = new ChessMove(myPosition, new_pos, null);
+                        availableMoves.add(move);
+                    }
+                }
+            }
         }
 
+        if (type == ChessPiece.PieceType.BISHOP || type == ChessPiece.PieceType.QUEEN) {
+            //Move Up - Right
+            int row_move = myPosition.getRow() + 1;
+            int col_move = myPosition.getColumn() + 1;
+            String move_string = moveCheck(board, myPosition, row_move, col_move);
+            while (move_string != "Out" && move_string != "Occupied_Team") {
+
+                //Add move
+                ChessPosition newMove = new ChessPosition(row_move, col_move);
+                ChessMove move = new ChessMove(myPosition, newMove, null);
+                availableMoves.add(move);
+
+                if (move_string == "Occupied_Opp") {
+                    //Stop the loop.
+                    move_string = "Out";
+                } else {
+                    //Index row_move
+                    row_move++;
+                    col_move++;
+                    move_string = moveCheck(board, myPosition, row_move, col_move);
+                }
+            }
+
+            //Move Up - Left
+            row_move = myPosition.getRow() + 1;
+            col_move = myPosition.getColumn() - 1;
+            move_string = moveCheck(board, myPosition, row_move, col_move);
+            while (move_string != "Out" && move_string != "Occupied_Team") {
+
+                //Add move
+                ChessPosition newMove = new ChessPosition(row_move, col_move);
+                ChessMove move = new ChessMove(myPosition, newMove, null);
+                availableMoves.add(move);
+
+                if (move_string == "Occupied_Opp") {
+                    //Stop the loop.
+                    move_string = "Out";
+                } else {
+                    //Index row_move
+                    row_move++;
+                    col_move--;
+                    move_string = moveCheck(board, myPosition, row_move, col_move);
+                }
+            }
+
+            //Move down - Left
+            row_move = myPosition.getRow() - 1;
+            col_move = myPosition.getColumn() - 1;
+            move_string = moveCheck(board, myPosition, row_move, col_move);
+            while (move_string != "Out" && move_string != "Occupied_Team") {
+
+                //Add move
+                ChessPosition newMove = new ChessPosition(row_move, col_move);
+                ChessMove move = new ChessMove(myPosition, newMove, null);
+                availableMoves.add(move);
+
+                if (move_string == "Occupied_Opp") {
+                    //Stop the loop.
+                    move_string = "Out";
+                } else {
+                    //Index row_move
+                    row_move--;
+                    col_move--;
+                    move_string = moveCheck(board, myPosition, row_move, col_move);
+                }
+            }
+
+            //Move down - right
+            row_move = myPosition.getRow() - 1;
+            col_move = myPosition.getColumn() + 1;
+            move_string = moveCheck(board, myPosition, row_move, col_move);
+            while (move_string != "Out" && move_string != "Occupied_Team") {
+
+                //Add move
+                ChessPosition newMove = new ChessPosition(row_move, col_move);
+                ChessMove move = new ChessMove(myPosition, newMove, null);
+                availableMoves.add(move);
+
+                if (move_string == "Occupied_Opp") {
+                    //Stop the loop.
+                    move_string = "Out";
+                } else {
+                    //Index row_move
+                    row_move--;
+                    col_move++;
+                    move_string = moveCheck(board, myPosition, row_move, col_move);
+                }
+            }
+        }
+
+        if (type == ChessPiece.PieceType.KNIGHT) {
+            //Make a move set
+            // Possible moves a knight can make
+            final int[][] KNIGHT_MOVES = {
+                    {2, 1}, {2, -1}, {-2, 1}, {-2, -1},
+                    {1, 2}, {1, -2}, {-1, 2}, {-1, -2}
+            };
+
+            for (int[] knight_move : KNIGHT_MOVES) {
+                //Check the move
+                if (moveCheck(board, myPosition, knight_move[0], knight_move[1]) == "Occupied_Opp" || moveCheck(board, myPosition, knight_move[0], knight_move[1]) == "Empty") {
+                    //Add move
+                    ChessPosition newMove = new ChessPosition(myPosition.getRow() + knight_move[0], myPosition.getColumn() + knight_move[1]);
+                    ChessMove move = new ChessMove(myPosition, newMove, null);
+                    availableMoves.add(move);
+                }
+            }
+        }
 
         // return Collection<ChessMove>
         return availableMoves;
