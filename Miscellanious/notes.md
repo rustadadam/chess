@@ -26,3 +26,9 @@ git push
 ## Programming tips
 - Make everything private unless something else needs to know. (Create classes like a need-to-know basis)
 - Overide the following functions: to_string, hashCode, equals
+
+### Terms
+- Polymorphism: Can be related in many forms
+- Interface: It is a class that has certain values without the implementation. This allows for different implementations for different things.
+  - Implements is the keyword to use the interface
+- instanceof checks to see if th object you give it is the object listed.

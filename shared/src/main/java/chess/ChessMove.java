@@ -51,7 +51,12 @@ public class ChessMove {
 
     @Override
     public String toString() {
-        return "Chess move: " + startPosition.toString() + " - " + endPosition.toString() + " - " + promotionPiece.toString();
+        if (promotionPiece == null) {
+            return "Chess move: " + startPosition.toString() + " - " + endPosition.toString();
+
+        } else {
+            return "Chess move: " + startPosition.toString() + " - " + endPosition.toString() + " - " + promotionPiece.toString();
+        }
     }
 
     @Override

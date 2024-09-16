@@ -54,7 +54,7 @@ public class ChessPiece {
     private String moveCheck(ChessBoard board, ChessPosition myPosition, int move_row, int move_col) {
 
         //Add the row and col to pos
-        ChessPosition newPosition = new ChessPosition(myPosition.getRow() + 1 + move_row, myPosition.getColumn() + 1 + move_col);
+        ChessPosition newPosition = new ChessPosition(myPosition.getRow() + move_row, myPosition.getColumn() + move_col);
 
         //Check it the newPosition is fair
         //Check to make sure its on the board
@@ -182,14 +182,14 @@ public class ChessPiece {
             //Move right
             int row_move = myPosition.getRow() + 1;
             String move_string = moveCheck(board, myPosition, row_move, myPosition.getColumn());
-            while (move_string != "Out" && move_string != "Occupied_Team") {
+            while (!move_string.equals("Out") && !move_string.equals("Occupied_Team")) {
 
                 //Add move
                 ChessPosition newMove = new ChessPosition(row_move, myPosition.getColumn());
                 ChessMove move = new ChessMove(myPosition, newMove, null);
                 availableMoves.add(move);
 
-                if (move_string == "Occupied_Opp") {
+                if (move_string.equals("Occupied_Opp")) {
                     //Stop the loop.
                     move_string = "Out";
                 } else {
@@ -203,14 +203,14 @@ public class ChessPiece {
             //Move Left
             row_move = myPosition.getRow() - 1;
             move_string = moveCheck(board, myPosition, row_move, myPosition.getColumn());
-            while (move_string != "Out" && move_string != "Occupied_Team") {
+            while (!move_string.equals("Out") && !move_string.equals("Occupied_Team")) {
 
                 //Add move
                 ChessPosition newMove = new ChessPosition(row_move, myPosition.getColumn());
                 ChessMove move = new ChessMove(myPosition, newMove, null);
                 availableMoves.add(move);
 
-                if (move_string == "Occupied_Opp") {
+                if (move_string.equals("Occupied_Opp")) {
                     //Stop the loop.
                     move_string = "Out";
                 } else {
@@ -224,20 +224,20 @@ public class ChessPiece {
             //Move up
             int col_move = myPosition.getColumn() + 1;
             move_string = moveCheck(board, myPosition, myPosition.getRow(), col_move);
-            while (move_string != "Out" && move_string != "Occupied_Team") {
+            while (!move_string.equals("Out") && !move_string.equals("Occupied_Team")) {
 
                 //Add move
-                ChessPosition newMove = new ChessPosition(row_move, myPosition.getColumn());
+                ChessPosition newMove = new ChessPosition(myPosition.getRow(), col_move);
                 ChessMove move = new ChessMove(myPosition, newMove, null);
                 availableMoves.add(move);
 
-                if (move_string == "Occupied_Opp") {
+                if (move_string.equals("Occupied_Opp")) {
                     //Stop the loop.
                     move_string = "Out";
                 } else {
                     //Index row_move
                     col_move++;
-                    move_string = moveCheck(board, myPosition, col_move, myPosition.getColumn());
+                    move_string = moveCheck(board, myPosition, myPosition.getRow(), col_move);
                 }
 
             }
@@ -245,20 +245,20 @@ public class ChessPiece {
             //Move down
             col_move = myPosition.getColumn() - 1;
             move_string = moveCheck(board, myPosition, myPosition.getRow(), col_move);
-            while (move_string != "Out" && move_string != "Occupied_Team") {
+            while (!move_string.equals("Out") && !move_string.equals("Occupied_Team")) {
 
                 //Add move
-                ChessPosition newMove = new ChessPosition(row_move, myPosition.getColumn());
+                ChessPosition newMove = new ChessPosition(myPosition.getRow(), col_move);
                 ChessMove move = new ChessMove(myPosition, newMove, null);
                 availableMoves.add(move);
 
-                if (move_string == "Occupied_Opp") {
+                if (move_string.equals("Occupied_Opp")) {
                     //Stop the loop.
                     move_string = "Out";
                 } else {
                     //Index row_move
                     col_move--;
-                    move_string = moveCheck(board, myPosition, col_move, myPosition.getColumn());
+                    move_string = moveCheck(board, myPosition, myPosition.getRow(), col_move);
                 }
 
             }
