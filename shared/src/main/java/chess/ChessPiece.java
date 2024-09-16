@@ -85,10 +85,12 @@ public class ChessPiece {
         if (newMove.getRow() == 1 || newMove.getRow() == 8) {
             //Pawn is promoted
             for (PieceType type : PieceType.values()) {
-                ChessMove move = new ChessMove(myPosition, newMove, type);
+                if (type != PieceType.KING && type != PieceType.PAWN) {
+                    ChessMove move = new ChessMove(myPosition, newMove, type);
 
-                //Add the move to the dictionary
-                availableMoves.add(move);
+                    //Add the move to the dictionary
+                    availableMoves.add(move);
+                }
             }
         } else {
 
@@ -122,13 +124,27 @@ public class ChessPiece {
 
                     //This adds the moves to the dictionary
                     check_promotion(myPosition, newMove);
+
+                    //Check to move again if position = 0
+                    if (myPosition.getRow() == 7) {
+                        //Check to see if can move forward
+                        if (moveCheck(board, myPosition, myPosition.getRow() - 2, myPosition.getColumn()) == "Empty") {
+                            //If true, can move forward
+                            ChessPosition second_move = new ChessPosition(myPosition.getRow() - 2, myPosition.getColumn());
+
+                            //This adds the moves to the dictionary
+                            check_promotion(myPosition, second_move);
+                        }
+
+                    }
+
                 }
 
                 //Check to see if it can take diagonally
                 if (moveCheck(board, myPosition, myPosition.getRow() - 1, myPosition.getColumn() + 1) == "Occupied_Opp") {
 
                     //Create new position
-                    ChessPosition newMove = new ChessPosition(myPosition.getRow() - 1, myPosition.getColumn());
+                    ChessPosition newMove = new ChessPosition(myPosition.getRow() - 1, myPosition.getColumn() + 1);
 
                     //This adds the moves to the dictionary
                     check_promotion(myPosition, newMove);
@@ -138,7 +154,7 @@ public class ChessPiece {
                 if (moveCheck(board, myPosition, myPosition.getRow() - 1, myPosition.getColumn() - 1) == "Occupied_Opp") {
 
                     //Create new position
-                    ChessPosition newMove = new ChessPosition(myPosition.getRow() - 1, myPosition.getColumn());
+                    ChessPosition newMove = new ChessPosition(myPosition.getRow() - 1, myPosition.getColumn() - 1);
 
                     //This adds the moves to the dictionary
                     check_promotion(myPosition, newMove);
@@ -154,13 +170,26 @@ public class ChessPiece {
 
                     //This adds the moves to the dictionary
                     check_promotion(myPosition, newMove);
+
+                    //Check to move again if position = 0
+                    if (myPosition.getRow() == 2) {
+                        //Check to see if can move forward
+                        if (moveCheck(board, myPosition, myPosition.getRow() + 2, myPosition.getColumn()) == "Empty") {
+                            //If true, can move forward
+                            ChessPosition second_move = new ChessPosition(myPosition.getRow() + 2, myPosition.getColumn());
+
+                            //This adds the moves to the dictionary
+                            check_promotion(myPosition, second_move);
+                        }
+
+                    }
                 }
 
                 //Check to see if it can take diagonally
                 if (moveCheck(board, myPosition, myPosition.getRow() + 1, myPosition.getColumn() + 1) == "Occupied_Opp") {
 
                     //Create new position
-                    ChessPosition newMove = new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn());
+                    ChessPosition newMove = new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn() + 1);
 
                     //This adds the moves to the dictionary
                     check_promotion(myPosition, newMove);
@@ -170,7 +199,7 @@ public class ChessPiece {
                 if (moveCheck(board, myPosition, myPosition.getRow() + 1, myPosition.getColumn() - 1) == "Occupied_Opp") {
 
                     //Create new position
-                    ChessPosition newMove = new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn());
+                    ChessPosition newMove = new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn() - 1);
 
                     //This adds the moves to the dictionary
                     check_promotion(myPosition, newMove);
