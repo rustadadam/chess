@@ -82,7 +82,7 @@ public class ChessPiece {
     //Pawn promotion funciton
     private void check_promotion(ChessPosition myPosition, ChessPosition newMove) {
         //Check if the pawn if the pawn gets promoted
-        if (newMove.getRow() == 0) {
+        if (newMove.getRow() == 1 || newMove.getRow() == 8) {
             //Pawn is promoted
             for (PieceType type : PieceType.values()) {
                 ChessMove move = new ChessMove(myPosition, newMove, type);
@@ -113,7 +113,7 @@ public class ChessPiece {
         //Move Pawn. Check if the piece is a pawn
         if (type == ChessPiece.PieceType.PAWN) {
             //Check color
-            if (color == ChessGame.TeamColor.WHITE) {
+            if (color == ChessGame.TeamColor.BLACK) {
 
                 //Check to see if can move forward
                 if (moveCheck(board, myPosition, myPosition.getRow() - 1, myPosition.getColumn()) == "Empty") {
@@ -146,7 +146,7 @@ public class ChessPiece {
 
 
             } else {
-                //Color is black
+                //Color is White
                 //Check to see if can move forward
                 if (moveCheck(board, myPosition, myPosition.getRow() + 1, myPosition.getColumn()) == "Empty") {
                     //If true, can move forward
@@ -391,7 +391,7 @@ public class ChessPiece {
 
             for (int[] knight_move : KNIGHT_MOVES) {
                 //Check the move
-                if (moveCheck(board, myPosition, knight_move[0], knight_move[1]) == "Occupied_Opp" || moveCheck(board, myPosition, knight_move[0], knight_move[1]) == "Empty") {
+                if (moveCheck(board, myPosition, myPosition.getRow() + knight_move[0], myPosition.getColumn() + knight_move[1]) == "Occupied_Opp" || moveCheck(board, myPosition, myPosition.getRow() + knight_move[0], myPosition.getColumn() + knight_move[1]) == "Empty") {
                     //Add move
                     ChessPosition newMove = new ChessPosition(myPosition.getRow() + knight_move[0], myPosition.getColumn() + knight_move[1]);
                     ChessMove move = new ChessMove(myPosition, newMove, null);
