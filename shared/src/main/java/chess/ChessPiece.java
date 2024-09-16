@@ -54,7 +54,7 @@ public class ChessPiece {
     private String moveCheck(ChessBoard board, ChessPosition myPosition, int move_row, int move_col) {
 
         //Add the row and col to pos
-        ChessPosition newPosition = new ChessPosition(myPosition.getRow() + move_row, myPosition.getColumn() + move_col);
+        ChessPosition newPosition = new ChessPosition(move_row, move_col);
 
         //Check it the newPosition is fair
         //Check to make sure its on the board

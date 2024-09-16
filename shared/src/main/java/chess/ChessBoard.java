@@ -15,8 +15,11 @@ public class ChessBoard {
     // ----- CONSTRUCTOR -----
     public ChessBoard() {
 
+        //Just create an empty board
+        BoardPositions = new ChessPiece[8][8]; // NOTE. Are these NULL in here? The ans: Yes
+
         //Call reset Board to remove and then all the pieces
-        resetBoard();
+        //resetBoard();
     }
 
     /**
