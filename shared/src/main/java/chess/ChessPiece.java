@@ -278,10 +278,14 @@ public class ChessPiece {
             //Iterate through moves
             for (int i = -1; i < 2; i++) {
                 for (int j = -1; j < 2; j++) {
-                    if (moveCheck(board, myPosition, i, j) != "out" && moveCheck(board, myPosition, i, j) != "Occupied_Team") {
-                        ChessPosition new_pos = new ChessPosition(myPosition.getRow() + i, myPosition.getColumn() - j);
-                        ChessMove move = new ChessMove(myPosition, new_pos, null);
-                        availableMoves.add(move);
+                    if (moveCheck(board, myPosition, myPosition.getRow() + i, myPosition.getColumn() + j) != "Out" && moveCheck(board, myPosition, myPosition.getRow() + i, myPosition.getColumn() + j) != "Occupied_Team") {
+
+                        //Check to make sure its a move
+                        if (!(i == 0 && j == 0)) {
+                            ChessPosition new_pos = new ChessPosition(myPosition.getRow() + i, myPosition.getColumn() + j);
+                            ChessMove move = new ChessMove(myPosition, new_pos, null);
+                            availableMoves.add(move);
+                        }
                     }
                 }
             }
