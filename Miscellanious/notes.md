@@ -32,3 +32,7 @@ git push
 - Interface: It is a class that has certain values without the implementation. This allows for different implementations for different things.
   - Implements is the keyword to use the interface
 - instanceof checks to see if th object you give it is the object listed.
+
+###  Packages
+- To be able to compare objects, you will need to implement the comparable interface. It will tell you if things are greater or less than
+- 
