@@ -8,18 +8,11 @@ package chess;
  */
 public class ChessBoard {
 
-    // Variables
-    // Create an 8 by 8 array
-    ChessPiece[][] BoardPositions;
+    ChessPiece[][] board;
 
-    // ----- CONSTRUCTOR -----
     public ChessBoard() {
-
-        //Just create an empty board
-        BoardPositions = new ChessPiece[8][8]; // NOTE. Are these NULL in here? The ans: Yes
-
-        //Call reset Board to remove and then all the pieces
-        //resetBoard();
+        //Create Board
+        board = new ChessPiece[8][8]; //Initalizes with Null
     }
 
     /**
@@ -29,7 +22,8 @@ public class ChessBoard {
      * @param piece    the piece to add
      */
     public void addPiece(ChessPosition position, ChessPiece piece) {
-        BoardPositions[position.getRow() - 1][position.getColumn() - 1] = piece;
+        board[position.getRow()-1][position.getColumn()-1] = piece;
+        //throw new RuntimeException("Not implemented");
     }
 
     /**
@@ -41,8 +35,13 @@ public class ChessBoard {
      */
     public ChessPiece getPiece(ChessPosition position) {
 
-        //Return chess peice
-        return BoardPositions[position.getRow() - 1][position.getColumn() - 1];
+        //Check if off board
+        if (position.getColumn()-1 < 0 || position.getColumn()-1 > 7){
+            return null;
+        }
+        //Remember 0 indexing
+        return board[position.getRow() -1][position.getColumn()-1];
+
         //throw new RuntimeException("Not implemented");
     }
 
@@ -52,141 +51,86 @@ public class ChessBoard {
      */
     public void resetBoard() {
 
-        // Create an empty 8 by 8 array. (or nested)
-        BoardPositions = new ChessPiece[8][8]; // NOTE. Are these NULL in here? The ans: Yes
+        //throw new RuntimeException("Not implemented");
 
-        // Add pawns
-        for (int col = 0; col < 8; col++) {
-            addPiece(new ChessPosition(2, col + 1), new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.PAWN));
-            addPiece(new ChessPosition(7, col + 1), new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.PAWN));
+        //Place the pieces on the board
+
+        for (int col = 1; col < 9; col++) {
+            ChessPosition position = new ChessPosition(2, col);
+            ChessPiece pawn = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.PAWN);
+            addPiece(position, pawn);
+        }
+        for (int col = 1; col < 9; col++) {
+            addPiece(new ChessPosition(7, col), new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.PAWN));
         }
 
-        // Add rooks
+        //Add rooks
         addPiece(new ChessPosition(1, 1), new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.ROOK));
         addPiece(new ChessPosition(1, 8), new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.ROOK));
         addPiece(new ChessPosition(8, 1), new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.ROOK));
         addPiece(new ChessPosition(8, 8), new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.ROOK));
 
-        // Add knights
-        addPiece(new ChessPosition(1, 2), new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.KNIGHT));
-        addPiece(new ChessPosition(1, 7), new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.KNIGHT));
-        addPiece(new ChessPosition(8, 2), new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.KNIGHT));
-        addPiece(new ChessPosition(8, 7), new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.KNIGHT));
-
-        // Add bishops
+        //Add Bishops
         addPiece(new ChessPosition(1, 3), new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.BISHOP));
         addPiece(new ChessPosition(1, 6), new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.BISHOP));
         addPiece(new ChessPosition(8, 3), new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.BISHOP));
         addPiece(new ChessPosition(8, 6), new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.BISHOP));
 
-        // Add queens
-        addPiece(new ChessPosition(1, 4), new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.QUEEN));
-        addPiece(new ChessPosition(8, 4), new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.QUEEN));
+        //Add Knights
+        addPiece(new ChessPosition(1, 2), new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.KNIGHT));
+        addPiece(new ChessPosition(1, 7), new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.KNIGHT));
+        addPiece(new ChessPosition(8, 2), new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.KNIGHT));
+        addPiece(new ChessPosition(8, 7), new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.KNIGHT));
 
-        // Add kings
+        //Add kings
         addPiece(new ChessPosition(1, 5), new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.KING));
         addPiece(new ChessPosition(8, 5), new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.KING));
 
+        //Add kings
+        addPiece(new ChessPosition(1, 4), new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.QUEEN));
+        addPiece(new ChessPosition(8, 4), new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.QUEEN));
 
-        //throw new RuntimeException("Not implemented");
     }
 
-    //Create a to_string function to print out the board -- Just the pawns for now
+
+    //Add Overides
     @Override
     public String toString() {
+        //Create stringbuilder
 
-        //Create a stringbuilder obejct
         StringBuilder sb = new StringBuilder();
 
-        for (int row = 0; row < 8; row++) {
+        //Loop through rows
+        for (int row = 0; row < 8; row++ ) {
 
-            //Add walls on left side
-            sb.append('|');
+            sb.append("|"); //Add baord columns
 
-            for (int col = 0; col < 8; col++) {
 
-                //Print P if it's a pawn
-                if (BoardPositions[row][col] == null) {
-                    sb.append(' ').append('|');
-                } else {
-                    //Get Chess piece
-                    ChessPiece piece = BoardPositions[row][col];
-
-                    //Check to see if uppercase or not
-                    if (piece.getTeamColor() != ChessGame.TeamColor.BLACK) {
-
-                        //Print whatever it is
-                        if (piece.getPieceType() == ChessPiece.PieceType.PAWN) {
-                            sb.append('p').append('|');
-                        }
-                        if (piece.getPieceType() == ChessPiece.PieceType.KING) {
-                            sb.append('k').append('|');
-                        }
-                        if (piece.getPieceType() == ChessPiece.PieceType.QUEEN) {
-                            sb.append('q').append('|');
-                        }
-                        if (piece.getPieceType() == ChessPiece.PieceType.ROOK) {
-                            sb.append('r').append('|');
-                        }
-                        if (piece.getPieceType() == ChessPiece.PieceType.KNIGHT) {
-                            sb.append('n').append('|');
-                        }
-                        if (piece.getPieceType() == ChessPiece.PieceType.BISHOP) {
-                            sb.append('b').append('|');
-                        }
-                    } else {
-                        //Print whatever it is
-                        if (piece.getPieceType() == ChessPiece.PieceType.PAWN) {
-                            sb.append('P').append('|');
-                        }
-                        if (piece.getPieceType() == ChessPiece.PieceType.KING) {
-                            sb.append('K').append('|');
-                        }
-                        if (piece.getPieceType() == ChessPiece.PieceType.QUEEN) {
-                            sb.append('Q').append('|');
-                        }
-                        if (piece.getPieceType() == ChessPiece.PieceType.ROOK) {
-                            sb.append('R').append('|');
-                        }
-                        if (piece.getPieceType() == ChessPiece.PieceType.KNIGHT) {
-                            sb.append('N').append('|');
-                        }
-                        if (piece.getPieceType() == ChessPiece.PieceType.BISHOP) {
-                            sb.append('B').append('|');
-                        }
-                    }
+            for (int column = 0; column < 8; column++) {
+                if (board[row][column] != null) {
+                    sb.append(board[row][column].toString()); //Remember to update pieces for this
                 }
+                else{
+                    sb.append(" ");
+                }
+
             }
-            sb.append('\n');
         }
         return sb.toString();
     }
 
-    //Create a debugging MAIN function
-    public static void main(String[] args) {
-        // Create an 8 by 8 array of ChessPiece objects
-        ChessBoard chess_board = new ChessBoard();
-        chess_board.resetBoard();
 
-        //Print out the chess board
-        System.out.println(chess_board.toString());
-    }
-
-    //Overide the to equal function
+    //Overide
     @Override
     public boolean equals(Object o) {
-        //Equals in memory
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ChessBoard that = (ChessBoard) o;
-
-        //Check to see if the positions match
         return that.toString().equals(this.toString());
     }
 
-    //Overide the hash Fucntion
     @Override
-    public int hashCode() {
-        return 31 * toString().hashCode();
+    public int hashCode(){
+        return 31 * this.toString().hashCode();
     }
 }

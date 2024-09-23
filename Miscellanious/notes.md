@@ -35,4 +35,11 @@ git push
 
 ###  Packages
 - To be able to compare objects, you will need to implement the comparable interface. It will tell you if things are greater or less than
-- 
+
+
+# Phase 1 Notes
+## DDD (Domain Driven Design)
+- What are the actors?
+- What are the objects
+- How do the objects interact with the obejects?
+- We only need to include things that our domain needs to know. 

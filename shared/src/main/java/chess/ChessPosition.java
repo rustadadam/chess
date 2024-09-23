@@ -8,11 +8,9 @@ package chess;
  */
 public class ChessPosition {
 
-    //Add Rows and col
     private int row;
     private int col;
 
-    // ------- CONSTRUCTOR _-------
     public ChessPosition(int row, int col) {
         this.row = row;
         this.col = col;
@@ -24,6 +22,7 @@ public class ChessPosition {
      */
     public int getRow() {
         return row;
+        //throw new RuntimeException("Not implemented");
     }
 
     /**
@@ -32,31 +31,26 @@ public class ChessPosition {
      */
     public int getColumn() {
         return col;
+        //throw new RuntimeException("Not implemented");
     }
 
-    //Overide the to string funciton
+
+    //Overide
     @Override
     public String toString() {
-        return "ChessPosition:" + row + "," + col;
+        return row + "," + col;
     }
 
-    //Overide the to equal function
     @Override
     public boolean equals(Object o) {
-        //Equals in memory
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ChessPosition that = (ChessPosition) o;
-
-        //Check to see if the positions match
         return row == that.row && col == that.col;
     }
 
-    //Overide the hash Fucntion
     @Override
-    public int hashCode() {
+    public int hashCode(){
         return 31 * row + col;
     }
-
-
 }

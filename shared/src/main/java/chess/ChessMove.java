@@ -8,25 +8,26 @@ package chess;
  */
 public class ChessMove {
 
-    //Create the variables
-    ChessPosition startPosition;
-    ChessPosition endPosition;
-    ChessPiece.PieceType promotionPiece;
+    private ChessPosition start;
+    private ChessPosition end;
+    private ChessPiece.PieceType type;
 
     public ChessMove(ChessPosition startPosition, ChessPosition endPosition,
                      ChessPiece.PieceType promotionPiece) {
 
-        //Initialize the board
-        this.startPosition = startPosition;
-        this.endPosition = endPosition;
-        this.promotionPiece = promotionPiece;
+        this.start = startPosition;
+        this.end = endPosition;
+        this.type = promotionPiece;
     }
+
 
     /**
      * @return ChessPosition of starting location
      */
     public ChessPosition getStartPosition() {
-        return startPosition;
+        //Idex on one
+        return start;
+
         //throw new RuntimeException("Not implemented");
     }
 
@@ -34,7 +35,7 @@ public class ChessMove {
      * @return ChessPosition of ending location
      */
     public ChessPosition getEndPosition() {
-        return endPosition;
+        return end;
         //throw new RuntimeException("Not implemented");
     }
 
@@ -45,49 +46,34 @@ public class ChessMove {
      * @return Type of piece to promote a pawn to, or null if no promotion
      */
     public ChessPiece.PieceType getPromotionPiece() {
-        return promotionPiece;
+        return type;
         //throw new RuntimeException("Not implemented");
     }
 
+    //Add Overides
     @Override
     public String toString() {
-        if (promotionPiece == null) {
-            return "Chess move: " + startPosition.toString() + " - " + endPosition.toString();
-
-        } else {
-            return "Chess move: " + startPosition.toString() + " - " + endPosition.toString() + " - " + promotionPiece.toString();
+        if (type == null) {
+            return getStartPosition().toString() + " to " + getEndPosition().toString();
+        }
+        else{
+            return getStartPosition().toString() + " to " + getEndPosition().toString() + " prom: " + type;
         }
     }
 
-    @Override
-    public int hashCode() {
-        if (promotionPiece == null) {
-            return 31 * (startPosition.hashCode() + endPosition.hashCode() + 101);
-        } else {
-            return 31 * (startPosition.hashCode() + endPosition.hashCode() + promotionPiece.hashCode());
-        }
-    }
 
+    //Overide
     @Override
     public boolean equals(Object o) {
-        //Determine if memory is the same
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ChessMove that = (ChessMove) o;
-
-        //If all of these equal they are the same
-        if (this.promotionPiece == null) {
-            //Both will have to be false
-            if (that.promotionPiece != null) {
-                return false;
-            }
-
-            //Compare start and end positions
-            return this.startPosition.equals(that.startPosition) && this.endPosition.equals(that.endPosition);
-
-        }
-
-        //Compare all the the positions
-        return this.startPosition.equals(that.startPosition) && this.endPosition.equals(that.endPosition) && this.promotionPiece.equals(that.promotionPiece);
+        return that.toString().equals(this.toString());
     }
+
+    @Override
+    public int hashCode(){
+        return 31 * this.toString().hashCode();
+    }
+
 }
