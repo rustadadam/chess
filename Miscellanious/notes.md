@@ -43,3 +43,31 @@ git push
 - What are the objects
 - How do the objects interact with the obejects?
 - We only need to include things that our domain needs to know. 
+- SIMPLICITY is important!!
+
+### Abstraction and Encapsulation
+- It is key to Domain Driven Design
+- Helps create classes that can be created in different ways. 
+- Encapsulation is like wrapping them... you "Has-a"
+- Inheritance is like "Is-a
+
+## Simplicity
+- Decomposition: Its like one bite at a time... splitting a big project into littler pieces
+- KISS: "Keep it simple Stupid"
+- YAGNI: "Your are not going to need it"
+- DRY: "Dont repeat yourself"
+- Additionally, you want high cohesian but low coupling
+- POLA: Principle of least Astonishment
+
+## SOLID
+### Single Resposibility
+- For each object, the actor only has one reason to use that object
+### Open Closed
+- It means that its open to be extended, but closed to being changed. 
+- This allows for reuse
+### Liskov Substition
+- This is the idea that you can change any class that implementing something and subsitute it with another class that also implemetned it and won't crash.
+### Interface segregation
+- You break interfaces into parts
+### Dependency inversion
+- Don't need things on a route or like cars. Instead of defining within class, you pass things in.
