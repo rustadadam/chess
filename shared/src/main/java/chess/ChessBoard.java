@@ -22,7 +22,12 @@ public class ChessBoard {
      * @param piece    the piece to add
      */
     public void addPiece(ChessPosition position, ChessPiece piece) {
-        board[position.getRow()-1][position.getColumn()-1] = piece;
+        board[position.getRow() - 1][position.getColumn() - 1] = piece;
+        //throw new RuntimeException("Not implemented");
+    }
+
+    public void removePiece(ChessPosition position) {
+        board[position.getRow() - 1][position.getColumn() - 1] = null;
         //throw new RuntimeException("Not implemented");
     }
 
@@ -36,11 +41,11 @@ public class ChessBoard {
     public ChessPiece getPiece(ChessPosition position) {
 
         //Check if off board
-        if (position.getColumn()-1 < 0 || position.getColumn()-1 > 7){
+        if (position.getColumn() - 1 < 0 || position.getColumn() - 1 > 7) {
             return null;
         }
         //Remember 0 indexing
-        return board[position.getRow() -1][position.getColumn()-1];
+        return board[position.getRow() - 1][position.getColumn() - 1];
 
         //throw new RuntimeException("Not implemented");
     }
@@ -101,7 +106,7 @@ public class ChessBoard {
         StringBuilder sb = new StringBuilder();
 
         //Loop through rows
-        for (int row = 0; row < 8; row++ ) {
+        for (int row = 0; row < 8; row++) {
 
             sb.append("|"); //Add baord columns
 
@@ -109,8 +114,7 @@ public class ChessBoard {
             for (int column = 0; column < 8; column++) {
                 if (board[row][column] != null) {
                     sb.append(board[row][column].toString()); //Remember to update pieces for this
-                }
-                else{
+                } else {
                     sb.append(" ");
                 }
 
@@ -130,7 +134,7 @@ public class ChessBoard {
     }
 
     @Override
-    public int hashCode(){
+    public int hashCode() {
         return 31 * this.toString().hashCode();
     }
 }

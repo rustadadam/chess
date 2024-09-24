@@ -11,9 +11,10 @@ import java.util.Collection;
 public class ChessGame {
 
     boolean is_white_turn;
+    ChessBoard board;
 
     public ChessGame() {
-        is_white_turn = true;
+        this.is_white_turn = true;
 
     }
 
@@ -35,7 +36,8 @@ public class ChessGame {
      * @param team the team whose turn it is
      */
     public void setTeamTurn(TeamColor team) {
-        throw new RuntimeException("Not implemented");
+        is_white_turn = team == TeamColor.WHITE;
+        //throw new RuntimeException("Not implemented");
     }
 
     /**
@@ -54,7 +56,12 @@ public class ChessGame {
      * startPosition
      */
     public Collection<ChessMove> validMoves(ChessPosition startPosition) {
-        throw new RuntimeException("Not implemented");
+
+        //Get the peice
+        ChessPiece piece = board.getPiece(startPosition);
+
+        //Return its moves
+        return piece.availableMoves;
     }
 
     /**
@@ -64,7 +71,34 @@ public class ChessGame {
      * @throws InvalidMoveException if move is invalid
      */
     public void makeMove(ChessMove move) throws InvalidMoveException {
-        throw new RuntimeException("Not implemented");
+
+        //Check Valid moves
+        Collection<ChessMove> possible_moves = validMoves(move.getStartPosition());
+
+        //Check to see if move is in possible_moves
+        if (!possible_moves.contains(move)) { //Could see if it puts the king in check
+
+            //Return error
+            throw new InvalidMoveException();
+
+        }
+
+        //Make the move
+
+        //Get the piece
+        ChessPiece piece = board.getPiece(move.getStartPosition());
+
+        //Remove piece at location
+        board.removePiece(move.getStartPosition());
+
+        //Add the piece at the new location
+        board.addPiece(move.getEndPosition(), piece);
+
+        //Change whose turn it is
+        is_white_turn = !is_white_turn;
+
+
+        //throw new RuntimeException("Not implemented");
     }
 
     /**
@@ -115,4 +149,25 @@ public class ChessGame {
     public ChessBoard getBoard() {
         throw new RuntimeException("Not implemented");
     }
+
+    // Override functions
+    @Override
+    public String toString() {
+        return board.toString() + "\n Turn: " + getTeamTurn();
+    }
+
+    //Overide
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ChessGame that = (ChessGame) o;
+        return that.toString().equals(this.toString());
+    }
+
+    @Override
+    public int hashCode(){
+        return 31 * this.toString().hashCode();
+    }
+}
 }
