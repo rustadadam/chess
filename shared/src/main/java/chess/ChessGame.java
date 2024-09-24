@@ -10,7 +10,10 @@ import java.util.Collection;
  */
 public class ChessGame {
 
+    boolean is_white_turn;
+
     public ChessGame() {
+        is_white_turn = true;
 
     }
 
@@ -18,7 +21,12 @@ public class ChessGame {
      * @return Which team's turn it is
      */
     public TeamColor getTeamTurn() {
-        throw new RuntimeException("Not implemented");
+        if (is_white_turn) {
+            return TeamColor.WHITE;
+        } else {
+            return TeamColor.BLACK;
+        }
+        //throw new RuntimeException("Not implemented");
     }
 
     /**
