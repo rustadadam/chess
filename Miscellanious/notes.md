@@ -71,3 +71,13 @@ git push
 - You break interfaces into parts
 ### Dependency inversion
 - Don't need things on a route or like cars. Instead of defining within class, you pass things in.
+
+## Classes Lecture
+- static keyword on a class definition means it can be called outside the class, and that it knows nothing about the class its in. Its like it was in another file
+- singleton is a design structure that allow allows one object of a class
+- Any inner class without the keyword static can reference parts of the class
+- Closure is the term is that an inner class can reference variables on the stack -- within the scope. It remembers the creation state of when it was made
+- Anonymous classses are new interface -- (its like a one time use class)
+- Lambda is like an anymous class (or method) with closure
+- A functional interface only has one method
+- lambda functions are like this (a,b) -> a + b

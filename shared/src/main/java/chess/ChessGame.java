@@ -13,8 +13,17 @@ public class ChessGame {
     boolean is_white_turn;
     ChessBoard board;
 
+    Collection<ChessMove> all_white_moves;
+    Collection<ChessMove> all_black_moves;
+
     public ChessGame() {
         this.is_white_turn = true;
+
+        //Create a chess board
+        this.board = new ChessBoard();
+        board.resetBoard();
+
+        //Get all white and black moves
 
     }
 
@@ -29,6 +38,14 @@ public class ChessGame {
         }
         //throw new RuntimeException("Not implemented");
     }
+
+//    public Collection<ChessMove> find_all_moves(TeamColor color) {
+//        Collection<ChessPiece> pieces = board.getPieces(color);
+//
+//        for (ChessPiece piece : pieces) {
+//            piece.
+//        }
+//    }
 
     /**
      * Set's which teams turn it is
@@ -97,8 +114,6 @@ public class ChessGame {
         //Change whose turn it is
         is_white_turn = !is_white_turn;
 
-
-        //throw new RuntimeException("Not implemented");
     }
 
     /**
