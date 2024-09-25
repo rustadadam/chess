@@ -52,7 +52,7 @@ public class ChessPiece {
     }
 
     //Move helper
-    public void move_help(ChessBoard board, ChessPosition myPosition, int move_row, int move_col, boolean repeat){
+    public void move_help(ChessBoard board, ChessPosition myPosition, int move_row, int move_col, boolean repeat) {
 
         //Continue
         boolean shouldContinue = true;
@@ -60,7 +60,7 @@ public class ChessPiece {
         int adjust_col = move_col;
 
         while (shouldContinue) {
-            if (!repeat){
+            if (!repeat) {
                 shouldContinue = false;
             }
 
@@ -68,11 +68,11 @@ public class ChessPiece {
             ChessPosition newPosition = new ChessPosition(myPosition.getRow() + adjust_row, myPosition.getColumn() + adjust_col);
 
 
-            if (newPosition.getRow() > 8 || newPosition.getRow() < 1){
+            if (newPosition.getRow() > 8 || newPosition.getRow() < 1) {
                 shouldContinue = false;
                 break;
             }
-            if (newPosition.getColumn() > 8 || newPosition.getColumn() < 1){
+            if (newPosition.getColumn() > 8 || newPosition.getColumn() < 1) {
                 shouldContinue = false;
                 break;
             }
@@ -80,15 +80,14 @@ public class ChessPiece {
             //New move
             ChessMove move = new ChessMove(myPosition, newPosition, null);
 
-            if (board.getPiece(newPosition) == null){
+            if (board.getPiece(newPosition) == null) {
                 //We can add move!
                 availableMoves.add(move);
                 adjust_row += move_row;
                 adjust_col += move_col;
-            }
-            else{
+            } else {
                 //Position is occupeied
-                if (board.getPiece(newPosition).getTeamColor() != color){
+                if (board.getPiece(newPosition).getTeamColor() != color) {
                     //Enemy color//We can add move!
                     availableMoves.add(move);
                     adjust_row += move_row;
@@ -102,11 +101,11 @@ public class ChessPiece {
         }
     }
 
-    public void checkPromotion(ChessBoard board, ChessPosition myPosition, ChessPosition newPosition){
-        if (newPosition.getRow() == 8 || newPosition.getRow() == 1){
+    public void checkPromotion(ChessBoard board, ChessPosition myPosition, ChessPosition newPosition) {
+        if (newPosition.getRow() == 8 || newPosition.getRow() == 1) {
             //You get promoted!
-            for (ChessPiece.PieceType peice_type : ChessPiece.PieceType.values()){
-                if (peice_type != ChessPiece.PieceType.KING && peice_type != ChessPiece.PieceType.PAWN){
+            for (ChessPiece.PieceType peice_type : ChessPiece.PieceType.values()) {
+                if (peice_type != ChessPiece.PieceType.KING && peice_type != ChessPiece.PieceType.PAWN) {
                     //Add the moves!
                     ChessMove move = new ChessMove(myPosition, newPosition, peice_type);
                     availableMoves.add(move);
@@ -125,6 +124,11 @@ public class ChessPiece {
      * @return Collection of valid moves
      */
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
+        //Check to see if already called
+        if (availableMoves.size() > 0) {
+            return availableMoves;
+        }
+
         //Add Rook moves
         if (type == ChessPiece.PieceType.ROOK || type == ChessPiece.PieceType.QUEEN) {
             move_help(board, myPosition, 1, 0, true);
@@ -170,12 +174,12 @@ public class ChessPiece {
 
                 //check to move forward
                 ChessPosition newPosition = new ChessPosition(myPosition.getRow() - 1, myPosition.getColumn());
-                if (board.getPiece(newPosition) == null){
+                if (board.getPiece(newPosition) == null) {
                     ChessMove move = new ChessMove(myPosition, newPosition, null);
                     checkPromotion(board, myPosition, newPosition);
 
                     //No promotion
-                    if (availableMoves.size() < 3){
+                    if (availableMoves.size() < 3) {
                         availableMoves.add(move);
                     }
 
@@ -199,7 +203,7 @@ public class ChessPiece {
                         checkPromotion(board, myPosition, newPosition);
 
                         //No promotion
-                        if (availableMoves.size() < 3){
+                        if (availableMoves.size() < 3) {
                             availableMoves.add(move);
                         }
                     }
@@ -212,16 +216,16 @@ public class ChessPiece {
                         checkPromotion(board, myPosition, newPosition);
                     }
                 }
-            } else{
+            } else {
                 //check to move forward
                 ChessPosition newPosition = new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn());
-                if (board.getPiece(newPosition) == null){
+                if (board.getPiece(newPosition) == null) {
                     ChessMove move = new ChessMove(myPosition, newPosition, null);
 
                     checkPromotion(board, myPosition, newPosition);
 
                     //No promotion
-                    if (availableMoves.size() < 3){
+                    if (availableMoves.size() < 3) {
                         availableMoves.add(move);
                     }
 
@@ -244,7 +248,7 @@ public class ChessPiece {
                         checkPromotion(board, myPosition, newPosition);
 
                         //No promotion
-                        if (availableMoves.size() < 3){
+                        if (availableMoves.size() < 3) {
                             availableMoves.add(move);
                         }
                     }
@@ -322,7 +326,7 @@ public class ChessPiece {
     }
 
     @Override
-    public int hashCode(){
+    public int hashCode() {
         return 31 * this.toString().hashCode() + this.color.hashCode();
     }
 }

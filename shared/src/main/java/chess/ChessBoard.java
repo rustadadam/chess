@@ -75,8 +75,10 @@ public class ChessBoard {
                 ChessPiece piece = getPiece(position);
 
                 //Make sure the its a king
-                if (piece.getPieceType() == ChessPiece.PieceType.KING && piece.getTeamColor() == color) {
-                    return position;
+                if (piece != null) {
+                    if (piece.getPieceType() == ChessPiece.PieceType.KING && piece.getTeamColor() == color) {
+                        return position;
+                    }
                 }
             }
         }

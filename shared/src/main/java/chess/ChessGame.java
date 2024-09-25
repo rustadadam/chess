@@ -22,7 +22,7 @@ public class ChessGame {
 
         //Create a chess board
         this.board = new ChessBoard();
-        setBoard(board);
+        board.resetBoard();
 
         //Get all possible white and black moves
         all_white_moves = board.find_all_moves(TeamColor.WHITE);
@@ -90,7 +90,7 @@ public class ChessGame {
         //check to see if the king is in check
 
         //Set start position to null
-        board.removePiece(startPosition);
+        board.removePiece(startPosition); //NOTE!!! THIS doesn't work if its the king moving
 
         //If not in check, we can return moves
         if (!isInCheck(piece.getTeamColor())) {
@@ -228,7 +228,11 @@ public class ChessGame {
      * @param board the new board to use
      */
     public void setBoard(ChessBoard board) {
-        board.resetBoard();
+        this.board = board;
+
+        //Get all possible white and black moves
+        all_white_moves = board.find_all_moves(TeamColor.WHITE);
+        all_black_moves = board.find_all_moves(TeamColor.BLACK);
         //throw new RuntimeException("Not implemented");
     }
 
@@ -238,7 +242,8 @@ public class ChessGame {
      * @return the chessboard
      */
     public ChessBoard getBoard() {
-        throw new RuntimeException("Not implemented");
+        return board;
+        //throw new RuntimeException("Not implemented");
     }
 
     // Override functions
