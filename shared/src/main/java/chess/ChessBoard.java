@@ -56,12 +56,34 @@ public class ChessBoard {
 
                     //Add those moves to our move set
                     all_moves.addAll(piece_moves);
-
                 }
             }
         }
 
         return all_moves;
+    }
+
+    public ChessPosition find_king_pos(ChessGame.TeamColor color) {
+
+        for (int row = 1; row < 9; row++) {
+            for (int column = 1; column < 9; column++) {
+
+                //Create chess board position
+                ChessPosition position = new ChessPosition(row, column);
+
+                //Get piece there
+                ChessPiece piece = getPiece(position);
+
+                //Make sure the its a king
+                if (piece.getPieceType() == ChessPiece.PieceType.KING && piece.getTeamColor() == color) {
+                    return position;
+                }
+            }
+        }
+
+        // This will never run.
+        return null;
+
     }
 
 

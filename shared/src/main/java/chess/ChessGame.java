@@ -1,5 +1,6 @@
 package chess;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 /**
@@ -21,10 +22,11 @@ public class ChessGame {
 
         //Create a chess board
         this.board = new ChessBoard();
-        board.resetBoard();
+        setBoard(board);
 
-        //Get all white and black moves
-
+        //Get all possible white and black moves
+        all_white_moves = board.find_all_moves(TeamColor.WHITE);
+        all_black_moves = board.find_all_moves(TeamColor.BLACK);
     }
 
     /**
@@ -77,8 +79,58 @@ public class ChessGame {
         //Get the peice
         ChessPiece piece = board.getPiece(startPosition);
 
+        if (piece == null) {
+            return null;
+        }
+
+        // get all possible moves
+        Collection<ChessMove> all_moves = piece.pieceMoves(board, startPosition);
+
+        //We need to check to see if the peice is blocking a check //We can do this by "pre-moving" the peice, and then
+        //check to see if the king is in check
+
+        //Set start position to null
+        board.removePiece(startPosition);
+
+        //If not in check, we can return moves
+        if (!isInCheck(piece.getTeamColor())) {
+            board.addPiece(startPosition, piece);
+            return all_moves;
+        }
+
+        // Possible moves
+        Collection<ChessMove> valid_moves = new ArrayList<>();
+
+        //Loop through each move
+        for (ChessMove move : all_moves) {
+            board.addPiece(move.getEndPosition(), piece);
+
+            if (piece.getTeamColor() == TeamColor.BLACK) {
+                //Get all possible white and black moves
+                all_black_moves = board.find_all_moves(TeamColor.BLACK);
+            } else {
+                all_white_moves = board.find_all_moves(TeamColor.WHITE);
+            }
+
+            //If not in check, we can add the move
+            if (!isInCheck(piece.getTeamColor())) {
+                valid_moves.add(move);
+            }
+
+            //remove the piece
+            board.removePiece(move.getEndPosition());
+
+        }
+
+        //Replace the piece
+        board.addPiece(startPosition, piece);
+
+        //Get all possible white and black moves
+        all_black_moves = board.find_all_moves(TeamColor.BLACK);
+        all_white_moves = board.find_all_moves(TeamColor.WHITE);
+
         //Return its moves
-        return piece.availableMoves;
+        return valid_moves;
     }
 
     /**
@@ -113,7 +165,6 @@ public class ChessGame {
 
         //Change whose turn it is
         is_white_turn = !is_white_turn;
-
     }
 
     /**
@@ -122,8 +173,32 @@ public class ChessGame {
      * @param teamColor which team to check for check
      * @return True if the specified team is in check
      */
-    public boolean isInCheck(TeamColor teamColor) {
-        throw new RuntimeException("Not implemented");
+    public boolean isInCheck(TeamColor teamColor) { //NOTE: pinned peices?
+        // Find the king position
+        ChessPosition king_pos = board.find_king_pos(teamColor);
+
+        //Get enemy move set
+        Collection<ChessMove> enemy_move_set;
+
+        if (teamColor == TeamColor.WHITE) {
+            enemy_move_set = all_black_moves;
+        } else {
+            enemy_move_set = all_white_moves;
+        }
+
+        //Convert those to positions
+        Collection<ChessPosition> enemy_pos = new ArrayList<>();
+        for (ChessMove move : enemy_move_set) {
+            enemy_pos.add(move.getEndPosition());
+        }
+
+        if (enemy_pos.contains(king_pos)) {
+            return true;
+        } else {
+            return false;
+        }
+
+        //throw new RuntimeException("Not implemented");
     }
 
     /**
@@ -153,7 +228,8 @@ public class ChessGame {
      * @param board the new board to use
      */
     public void setBoard(ChessBoard board) {
-        throw new RuntimeException("Not implemented");
+        board.resetBoard();
+        //throw new RuntimeException("Not implemented");
     }
 
     /**
@@ -181,8 +257,8 @@ public class ChessGame {
     }
 
     @Override
-    public int hashCode(){
+    public int hashCode() {
         return 31 * this.toString().hashCode();
     }
 }
-}
+
