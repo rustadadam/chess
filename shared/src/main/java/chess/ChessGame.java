@@ -12,6 +12,8 @@ import java.util.Collection;
 public class ChessGame {
 
     boolean is_white_turn;
+    boolean white_in_check;
+    boolean black_in_check;
     ChessBoard board;
 
     Collection<ChessMove> all_white_moves;
@@ -27,6 +29,10 @@ public class ChessGame {
         //Get all possible white and black moves
         all_white_moves = board.find_all_moves(TeamColor.WHITE);
         all_black_moves = board.find_all_moves(TeamColor.BLACK);
+
+        //Set check
+        white_in_check = false;
+        black_in_check = false;
     }
 
     /**
@@ -67,6 +73,23 @@ public class ChessGame {
         BLACK
     }
 
+
+    private void update_move_set(TeamColor color) {
+        if (color == TeamColor.WHITE) {
+            all_white_moves = board.find_all_moves(TeamColor.WHITE);
+        } else {
+            all_black_moves = board.find_all_moves(TeamColor.BLACK);
+        }
+    }
+
+    private void update_opp_move_set(TeamColor color) {
+        if (color != TeamColor.WHITE) {
+            all_white_moves = board.find_all_moves(TeamColor.WHITE);
+        } else {
+            all_black_moves = board.find_all_moves(TeamColor.BLACK);
+        }
+    }
+
     /**
      * Gets a valid moves for a piece at the given location
      *
@@ -97,8 +120,7 @@ public class ChessGame {
         Collection<ChessMove> temp_white_moves = all_white_moves;
 
         // Update move set
-        all_black_moves = board.find_all_moves(TeamColor.BLACK);
-        all_white_moves = board.find_all_moves(TeamColor.WHITE);
+        update_opp_move_set(piece.getTeamColor());
 
         //If not in check, we can return moves. MAJOR shortcut
         if (!isInCheck(piece.getTeamColor()) && piece.getPieceType() != ChessPiece.PieceType.KING) {
@@ -111,19 +133,22 @@ public class ChessGame {
 
         //Loop through each move
         for (ChessMove move : all_moves) {
+            //If it takes a piece, we need to return it
+            ChessPiece taken_piece = board.getPiece(move.getEndPosition());
+
+            //Add the piece to its move
             board.addPiece(move.getEndPosition(), piece);
 
             // Update move set
-            this.all_black_moves = board.find_all_moves(TeamColor.BLACK);
-            this.all_white_moves = board.find_all_moves(TeamColor.WHITE);
+            update_opp_move_set(piece.getTeamColor());
 
             //If not in check, we can add the move
             if (!isInCheck(piece.getTeamColor())) {
                 valid_moves.add(move);
             }
 
-            //remove the piece
-            board.removePiece(move.getEndPosition());
+            //readd the taken peice
+            board.addPiece(move.getEndPosition(), taken_piece);
 
         }
 
@@ -239,6 +264,19 @@ public class ChessGame {
         //Get all possible white and black moves
         all_white_moves = board.find_all_moves(TeamColor.WHITE);
         all_black_moves = board.find_all_moves(TeamColor.BLACK);
+
+        //Check if they are in check
+        if (isInCheck(TeamColor.WHITE)) {
+            white_in_check = true;
+        } else {
+            white_in_check = false;
+        }
+        if (isInCheck(TeamColor.BLACK)) {
+            black_in_check = true;
+        } else {
+            black_in_check = false;
+        }
+
         //throw new RuntimeException("Not implemented");
     }
 
