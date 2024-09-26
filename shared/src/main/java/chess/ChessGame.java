@@ -90,10 +90,18 @@ public class ChessGame {
         //check to see if the king is in check
 
         //Set start position to null
-        board.removePiece(startPosition); //NOTE!!! THIS doesn't work if its the king moving
+        board.removePiece(startPosition);
 
-        //If not in check, we can return moves
-        if (!isInCheck(piece.getTeamColor())) {
+        //Store these values
+        Collection<ChessMove> temp_black_moves = all_black_moves;
+        Collection<ChessMove> temp_white_moves = all_white_moves;
+
+        // Update move set
+        all_black_moves = board.find_all_moves(TeamColor.BLACK);
+        all_white_moves = board.find_all_moves(TeamColor.WHITE);
+
+        //If not in check, we can return moves. MAJOR shortcut
+        if (!isInCheck(piece.getTeamColor()) && piece.getPieceType() != ChessPiece.PieceType.KING) {
             board.addPiece(startPosition, piece);
             return all_moves;
         }
@@ -105,12 +113,9 @@ public class ChessGame {
         for (ChessMove move : all_moves) {
             board.addPiece(move.getEndPosition(), piece);
 
-            if (piece.getTeamColor() == TeamColor.BLACK) {
-                //Get all possible white and black moves
-                all_black_moves = board.find_all_moves(TeamColor.BLACK);
-            } else {
-                all_white_moves = board.find_all_moves(TeamColor.WHITE);
-            }
+            // Update move set
+            this.all_black_moves = board.find_all_moves(TeamColor.BLACK);
+            this.all_white_moves = board.find_all_moves(TeamColor.WHITE);
 
             //If not in check, we can add the move
             if (!isInCheck(piece.getTeamColor())) {
@@ -125,9 +130,10 @@ public class ChessGame {
         //Replace the piece
         board.addPiece(startPosition, piece);
 
-        //Get all possible white and black moves
-        all_black_moves = board.find_all_moves(TeamColor.BLACK);
-        all_white_moves = board.find_all_moves(TeamColor.WHITE);
+        //update what we need too
+        all_black_moves = temp_black_moves;
+        all_white_moves = temp_white_moves;
+
 
         //Return its moves
         return valid_moves;

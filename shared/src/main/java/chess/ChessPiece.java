@@ -126,7 +126,7 @@ public class ChessPiece {
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
         //Check to see if already called
         if (availableMoves.size() > 0) {
-            return availableMoves;
+            availableMoves = new ArrayList<>();
         }
 
         //Add Rook moves
