@@ -204,7 +204,7 @@ public class ChessGame {
      * @param teamColor which team to check for check
      * @return True if the specified team is in check
      */
-    public boolean isInCheck(TeamColor teamColor) { //NOTE: pinned peices?
+    public boolean isInCheck(TeamColor teamColor) {
         // Find the king position
         ChessPosition king_pos = board.find_king_pos(teamColor);
 
@@ -239,7 +239,15 @@ public class ChessGame {
      * @return True if the specified team is in checkmate
      */
     public boolean isInCheckmate(TeamColor teamColor) {
-        throw new RuntimeException("Not implemented");
+        //check if in check
+        if (!isInCheck(teamColor)) {
+            return false;
+        }
+
+        //Check if there is a valid move
+        return !is_there_a_valid_move(teamColor);
+
+        //throw new RuntimeException("Not implemented");
     }
 
     /**
@@ -250,7 +258,46 @@ public class ChessGame {
      * @return True if the specified team is in stalemate, otherwise false
      */
     public boolean isInStalemate(TeamColor teamColor) {
-        throw new RuntimeException("Not implemented");
+
+        //check if in check
+        if (isInCheck(teamColor)) {
+            return false;
+        }
+
+        //Check if there is a valid move
+        return !is_there_a_valid_move(teamColor);
+
+        //throw new RuntimeException("Not implemented");
+    }
+
+    private boolean is_there_a_valid_move(TeamColor color) {
+        //Returns all valid moves
+
+        //Create moves to return
+        Collection<ChessMove> all_moves = new ArrayList<>();
+
+        for (int row = 1; row < 9; row++) {
+            for (int column = 1; column < 9; column++) {
+
+                //Create chess board position
+                ChessPosition position = new ChessPosition(row, column);
+
+                //Get piece there
+                ChessPiece piece = board.getPiece(position);
+
+                //Make sure the peice exsists
+                if (piece != null && piece.getTeamColor() == color) {
+
+                    //Check to see if you can move
+                    if (!validMoves(position).isEmpty()) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
+
     }
 
     /**
