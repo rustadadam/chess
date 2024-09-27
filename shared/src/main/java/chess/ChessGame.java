@@ -208,6 +208,11 @@ public class ChessGame {
         //Remove piece at location
         board.removePiece(move.getStartPosition());
 
+        //Change piece to its promotion
+        if (move.getPromotionPiece() != null) {
+            piece.type = move.getPromotionPiece(); //High Coupling. BAD code design
+        }
+
         //Add the piece at the new location
         board.addPiece(move.getEndPosition(), piece);
 
