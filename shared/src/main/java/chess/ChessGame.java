@@ -219,8 +219,8 @@ public class ChessGame {
         //Change whose turn it is
         is_white_turn = !is_white_turn;
 
-        //update_move_set(TeamColor.WHITE);
-        //update_move_set(TeamColor.BLACK);
+        update_move_set(TeamColor.WHITE);
+        update_move_set(TeamColor.BLACK);
     }
 
     /**
