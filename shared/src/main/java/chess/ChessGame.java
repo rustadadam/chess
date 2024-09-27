@@ -30,9 +30,6 @@ public class ChessGame {
         all_white_moves = board.find_all_moves(TeamColor.WHITE);
         all_black_moves = board.find_all_moves(TeamColor.BLACK);
 
-        //Set check
-        white_in_check = false;
-        black_in_check = false;
     }
 
     /**
@@ -175,18 +172,38 @@ public class ChessGame {
         //Check Valid moves
         Collection<ChessMove> possible_moves = validMoves(move.getStartPosition());
 
+        //Check to see if there are possible_moves
         //Check to see if move is in possible_moves
-        if (!possible_moves.contains(move)) { //Could see if it puts the king in check
+        if (possible_moves == null) {
 
             //Return error
             throw new InvalidMoveException();
 
         }
 
-        //Make the move
+        //Check to see if move is in possible_moves
+        if (!possible_moves.contains(move)) {
+
+            //Return error
+            throw new InvalidMoveException();
+
+        }
 
         //Get the piece
         ChessPiece piece = board.getPiece(move.getStartPosition());
+
+        //Check to see if there is a piece there
+        if (piece == null) {
+            throw new InvalidMoveException();
+        }
+
+        //Check if its their turn
+        if ((piece.getTeamColor() == TeamColor.WHITE) != is_white_turn) {
+
+            //Return error
+            throw new InvalidMoveException();
+
+        }
 
         //Remove piece at location
         board.removePiece(move.getStartPosition());
@@ -196,6 +213,9 @@ public class ChessGame {
 
         //Change whose turn it is
         is_white_turn = !is_white_turn;
+
+        //update_move_set(TeamColor.WHITE);
+        //update_move_set(TeamColor.BLACK);
     }
 
     /**
@@ -312,19 +332,6 @@ public class ChessGame {
         all_white_moves = board.find_all_moves(TeamColor.WHITE);
         all_black_moves = board.find_all_moves(TeamColor.BLACK);
 
-        //Check if they are in check
-        if (isInCheck(TeamColor.WHITE)) {
-            white_in_check = true;
-        } else {
-            white_in_check = false;
-        }
-        if (isInCheck(TeamColor.BLACK)) {
-            black_in_check = true;
-        } else {
-            black_in_check = false;
-        }
-
-        //throw new RuntimeException("Not implemented");
     }
 
     /**
