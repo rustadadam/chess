@@ -81,3 +81,17 @@ git push
 - Lambda is like an anymous class (or method) with closure
 - A functional interface only has one method
 - lambda functions are like this (a,b) -> a + b
+
+## IO stream
+- It follows first in, first out. 
+- Think of it like a stream.
+
+## Gemerics
+- Is a way to create arrays, and you can restrict the array. Therefore an new ArrayList<Integer>(); can only hold integers
+
+## Serialization
+- It takes objects and makes them something writeable. 
+- json is an example of a serialized file
+- yml is another one like json that uses whitespace. 
+- json stores objects and is like a map
+- gson (goodles version) unserializes json 
