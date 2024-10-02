@@ -40,8 +40,9 @@ git push
 # Phase 1 Notes
 ## DDD (Domain Driven Design)
 - What are the actors?
-- What are the objects
-- How do the objects interact with the obejects?
+- What tasks do the actors want to acomplish
+- What are the objects the actors use?
+- How do the objects interact with the actors?
 - We only need to include things that our domain needs to know. 
 - SIMPLICITY is important!!
 
@@ -50,6 +51,7 @@ git push
 - Helps create classes that can be created in different ways. 
 - Encapsulation is like wrapping them... you "Has-a"
 - Inheritance is like "Is-a
+- Cohesian is like "I only do those things I need to do"
 
 ## Simplicity
 - Decomposition: Its like one bite at a time... splitting a big project into littler pieces
@@ -95,3 +97,8 @@ git push
 - yml is another one like json that uses whitespace. 
 - json stores objects and is like a map
 - gson (goodles version) unserializes json 
+
+## UML
+- You can group, create players, and objects
+- 
+
