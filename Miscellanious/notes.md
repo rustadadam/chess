@@ -100,5 +100,15 @@ git push
 
 ## UML
 - You can group, create players, and objects
--  
+
+
+# Project 3
+## HTTP (hyper text transport protocol)... if with an s means secure
+- Client to server protocol means Client has to talk first.
+- They have a domain name and a port. The domain name is like the costal city, and port is the peir
+- URL stands for Uniform Resource Locator
+- HTTP uses requests. It has a method (post), path, version. It then has a bunch of headers to make it a map
+
+## Web API
+
 
