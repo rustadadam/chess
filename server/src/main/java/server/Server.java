@@ -1,9 +1,30 @@
 package server;
 
+
+import dataaccess.DataAccessException;
+import dataaccess.MemoryAuthDAO;
+import service.AuthService;
+import service.GameService;
+import service.UserService;
 import spark.*;
-=
+import spark.Request;
+import spark.Response;
+import spark.Service;
+
 
 public class Server {
+    private final AuthService authService;
+    private final GameService gameService;
+    private final UserService userService;
+    //private final WebSocketHandler webSocketHandler;
+
+    public Server() {
+        this.authService = new AuthService();
+        this.gameService = new GameService();
+        this.userService = new UserService();
+        //webSocketHandler = new WebSocketHandler();
+    }
+
 
     public int run(int desiredPort) {
         Spark.port(desiredPort);
@@ -16,12 +37,12 @@ public class Server {
         Spark.delete("/db", this::clear_db);
 
         //Register Endpoint ? Where do I put the body stuff?
-        Spark.post("/user", (req, res) ->
-            {  {String username = req.queryParams("username");
-                String password = req.queryParams("password");
-                String email = req.queryParams("email");
-                return (username, password, email)}
-            );
+//        Spark.post("/user", (req, res) ->
+//            {  {String username = req.queryParams("username");
+//                String password = req.queryParams("password");
+//                String email = req.queryParams("email");
+//                return (username, password, email)}
+//            );
 
         //This line initializes the server and can be removed once you have a functioning endpoint
         Spark.init();
@@ -30,16 +51,12 @@ public class Server {
         return Spark.port();
     }
 
-    private Object clear_db(Request req, Response res) throws ResponseException {
-        var id = Integer.parseInt(req.params(":id"));
-        var pet = service.getPet(id);
-        if (pet != null) {
-            service.deletePet(id);
-            webSocketHandler.makeNoise(pet.name(), pet.sound());
-            res.status(204);
-        } else {
-            res.status(404);
-        }
+
+    private Object clear_db(Request req, Response res) throws DataAccessException {
+        //Call the delete functions
+        userService.deleteAllUserData();
+        gameService.deleteAllGames();
+        authService.deleteAllAuth();
         return "";
     }
 
@@ -48,3 +65,4 @@ public class Server {
         Spark.awaitStop();
     }
 }
+
