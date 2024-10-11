@@ -1,14 +1,15 @@
 package dataaccess;
 
 import model.UserData;
+import model.UserData;
 
 public interface UserDAO {
 
-    void insertUser(UserData u) throws DataAccessException;
+    void addUser(UserData data) throws DataAccessException;
 
-    UserData findUserByName(String name);              // Find a user by ID
+    UserData getUser(String id) throws DataAccessException;
 
-    void updateUser(User user);             // Update an existing user
+    void deleteUser(String id) throws DataAccessException;
 
-    void deleteUser(int id);                // Delete a user by ID
+    void deleteAllUser() throws DataAccessException;
 }

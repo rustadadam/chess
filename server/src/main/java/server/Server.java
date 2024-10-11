@@ -55,7 +55,7 @@ public class Server {
     private Object clear_db(Request req, Response res) throws DataAccessException {
         //Call the delete functions
         userService.deleteAllUserData();
-        gameService.deleteAllGames();
+        gameService.deleteAllGame();
         authService.deleteAllAuth();
         return "";
     }

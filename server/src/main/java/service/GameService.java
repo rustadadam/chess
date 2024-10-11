@@ -12,7 +12,7 @@ public class GameService {
         this.dataAccess = new MemoryGameDAO();
     }
 
-    public void deleteAllAuth() throws DataAccessException {
+    public void deleteAllGame() throws DataAccessException {
         //Delete all Auth in the memory
         dataAccess.deleteAllGame();
     }
