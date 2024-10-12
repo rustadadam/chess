@@ -39,14 +39,11 @@ public class Server {
         //Clear endpoint
         Spark.delete("/db", this::clear_db);
 
+        //Logout endpoint
+        Spark.delete("/session", this::logout);
+
         //Register Endpoint ? Where do I put the body stuff?
         Spark.post("/user", this::register);
-//      Spark.post("/user", (req, res) ->
-//            {  {String username = req.queryParams("username");
-//                String password = req.queryParams("password");
-//                String email = req.queryParams("email");
-//                return (username, password, email)}
-//            );
 
         //This line initializes the server and can be removed once you have a functioning endpoint
         Spark.init();
@@ -66,10 +63,21 @@ public class Server {
 
     private Object login(Request req, Response res) throws DataAccessException {
         //Verify password
-        Boolean is_correct = userService.verifyPassword(req);
+        boolean is_correct = userService.verifyPassword(req);
+
+        if (!is_correct) {throw DataAccessException}; //Check the error here
 
         //Get the auth
         AuthData newAuth = authService.getAuth(req);
+
+        //Return here
+        return newAuth;
+    }
+
+    private Object logout(Request req, Response res) throws DataAccessException {
+
+        //delete the auth
+        authService.logout(req);
 
         //Return here
         return "";

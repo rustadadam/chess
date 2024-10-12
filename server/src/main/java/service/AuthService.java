@@ -32,4 +32,9 @@ public class AuthService {
         AuthData data = new AuthData(authToken, username);
 
     }
+
+    public void logout(Request req) throws DataAccessException {
+        String username = req.queryParams("username");
+        dataAccess.deleteAuth(username);
+    }
 }
