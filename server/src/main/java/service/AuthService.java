@@ -4,6 +4,8 @@ package service;
 import dataaccess.AuthDAO;
 import dataaccess.DataAccessException;
 import dataaccess.MemoryAuthDAO;
+import model.AuthData;
+import spark.Request;
 
 public class AuthService {
 
@@ -16,5 +18,13 @@ public class AuthService {
     public void deleteAllAuth() throws DataAccessException {
         //Delete all Auth in the memory
         dataAccess.deleteAllAuth();
+    }
+
+    public AuthData getAuth(Request req) throws DataAccessException {
+        //Build out the request
+        String username = req.queryParams("username");
+        String password = req.queryParams("password");
+
+        
     }
 }

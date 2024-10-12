@@ -7,19 +7,20 @@ import java.util.HashMap;
 
 public class MemoryAuthDAO implements AuthDAO {
 
-    final private HashMap<Integer, AuthData> authTable = new HashMap<>();
+    final private HashMap<String, String> authTable = new HashMap<>();
 
     public void addAuth(AuthData data) {
-        int id = data.getUserID();
+        String token = data.authToken();
+        String username = data.userName();
 
-        authTable.put(id, data);
+        authTable.put(username, token);
     }
 
-    public AuthData getAuth(int id) {
+    public String getAuth(String id) {
         return authTable.get(id);
     }
 
-    public void deleteAuth(int id) {
+    public void deleteAuth(String id) {
         authTable.remove(id);
     }
 

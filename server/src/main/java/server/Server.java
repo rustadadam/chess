@@ -64,14 +64,21 @@ public class Server {
         return "";
     }
 
+    private Object login(Request req, Response res) throws DataAccessException {
+        //Get the auth
+        AuthData newAuth = authService.getAuth(req);
+
+        //Return here
+        return "";
+    }
+
+
     private Object register(Request req, Response res) throws DataAccessException {
-        //Call the delete functions
+        //Get the user
         UserData newUser = userService.register(req);
 
-        gameService.deleteAllGame();
-
-        authService.deleteAllAuth();
-        return "";
+        //returns the same things as the login
+        return login(req, res);
     }
 
     public void stop() {
