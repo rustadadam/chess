@@ -15,7 +15,7 @@ public class MemoryGameDAO implements GameDAO {
 //        gameTable.put(id, data);
     }
 
-    public GameData getGame(int id) {
+    public GameData getGame(String id) {
         return gameTable.get(id);
     }
 
@@ -23,7 +23,7 @@ public class MemoryGameDAO implements GameDAO {
         return gameTable;
     }
 
-    public void deleteGame(int id) {
+    public void deleteGame(String id) {
         gameTable.remove(id);
     }
 

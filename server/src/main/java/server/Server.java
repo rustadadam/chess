@@ -42,6 +42,9 @@ public class Server {
         //List Games  endpoint
         Spark.get("/game", this::listGames);
 
+        //Create Game endpoint
+        Spark.post("/game", this::createGame);
+
         //Logout endpoint
         Spark.delete("/session", this::logout);
 
@@ -67,6 +70,14 @@ public class Server {
     private Object listGames(Request req, Response res) throws DataAccessException {
         //Call the get games function
         return gameService.getGames();
+    }
+
+    private Object createGame(Request req, Response res) throws DataAccessException {
+        //Call the create game function
+        GameData game = gameService.createGame(req);
+
+        //Return just the id
+        return game.gameID();
     }
 
     private Object login(Request req, Response res) throws DataAccessException {
