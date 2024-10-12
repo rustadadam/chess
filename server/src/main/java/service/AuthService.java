@@ -31,6 +31,16 @@ public class AuthService {
         //Create authdata to return
         AuthData data = new AuthData(authToken, username);
 
+        //Create auth if its null
+        if (data.authToken() == null) {
+            AuthData withToken = new AuthData("NewToken", data.userName()); //Check to see if this exists
+            dataAccess.addAuth(withToken);
+            return withToken;
+        }
+
+        return data;
+
+
     }
 
     public void logout(Request req) throws DataAccessException {

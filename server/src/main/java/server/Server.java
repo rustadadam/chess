@@ -39,6 +39,9 @@ public class Server {
         //Clear endpoint
         Spark.delete("/db", this::clear_db);
 
+        //List Games  endpoint
+        Spark.get("/game", this::listGames);
+
         //Logout endpoint
         Spark.delete("/session", this::logout);
 
@@ -59,6 +62,11 @@ public class Server {
         gameService.deleteAllGame();
         authService.deleteAllAuth();
         return "";
+    }
+
+    private Object listGames(Request req, Response res) throws DataAccessException {
+        //Call the get games function
+        return gameService.getGames();
     }
 
     private Object login(Request req, Response res) throws DataAccessException {

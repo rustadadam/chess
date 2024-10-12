@@ -19,6 +19,10 @@ public class MemoryGameDAO implements GameDAO {
         return gameTable.get(id);
     }
 
+    public HashMap<Integer, GameData> getGames() {
+        return gameTable;
+    }
+
     public void deleteGame(int id) {
         gameTable.remove(id);
     }
