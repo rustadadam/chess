@@ -22,6 +22,25 @@ public class UserService {
         dataAccess.deleteAllUser();
     }
 
+    public boolean verifyPassword(Request req) throws DataAccessException {
+        //Get data from requests
+        String username = req.queryParams("username");
+        String password = req.queryParams("password");
+
+        // Find if username exsists
+        UserData data = dataAccess.getUser(username);
+
+        //If data doesn't exist
+        if (data == null) {throw Error}; //Check for which error
+
+        //Check password
+        if (data.password().equals(password)) {
+            return true;
+        }
+
+        return false;
+    }
+
     public UserData register(Request req) throws DataAccessException {
         //Get data from requests
         String username = req.queryParams("username");
@@ -33,6 +52,9 @@ public class UserService {
 
         //If data does exsist
         if (data != null) {throw Error}; //Check for which error
+
+        if (password == null){throw Error};
+        if (email == null){throw Error};
 
         //Create new user data
         UserData newUser = new UserData(username, password, email);

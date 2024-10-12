@@ -65,6 +65,9 @@ public class Server {
     }
 
     private Object login(Request req, Response res) throws DataAccessException {
+        //Verify password
+        Boolean is_correct = userService.verifyPassword(req);
+
         //Get the auth
         AuthData newAuth = authService.getAuth(req);
 

@@ -25,6 +25,11 @@ public class AuthService {
         String username = req.queryParams("username");
         String password = req.queryParams("password");
 
-        
+        //Find if user exists
+        String authToken = dataAccess.getAuth(username);
+
+        //Create authdata to return
+        AuthData data = new AuthData(authToken, username);
+
     }
 }
