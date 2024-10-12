@@ -10,6 +10,9 @@ import spark.*;
 import spark.Request;
 import spark.Response;
 import spark.Service;
+import model.UserData; // I use these as the request objects
+import model.AuthData;
+import model.GameData;
 
 
 public class Server {
@@ -37,7 +40,8 @@ public class Server {
         Spark.delete("/db", this::clear_db);
 
         //Register Endpoint ? Where do I put the body stuff?
-//        Spark.post("/user", (req, res) ->
+        Spark.post("/user", this::register);
+//      Spark.post("/user", (req, res) ->
 //            {  {String username = req.queryParams("username");
 //                String password = req.queryParams("password");
 //                String email = req.queryParams("email");
@@ -56,6 +60,16 @@ public class Server {
         //Call the delete functions
         userService.deleteAllUserData();
         gameService.deleteAllGame();
+        authService.deleteAllAuth();
+        return "";
+    }
+
+    private Object register(Request req, Response res) throws DataAccessException {
+        //Call the delete functions
+        UserData newUser = userService.register(req);
+
+        gameService.deleteAllGame();
+
         authService.deleteAllAuth();
         return "";
     }
