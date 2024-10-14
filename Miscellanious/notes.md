@@ -109,6 +109,13 @@ git push
 - URL stands for Uniform Resource Locator
 - HTTP uses requests. It has a method (post), path, version. It then has a bunch of headers to make it a map
 
-## Web API
+## Code Quality
+- Goals of Design at the lowest level: It works today, and it will work tomorrow
+- Goals of Quality: 1. Can I understand it today and tomorrow, quickly at the right level? Can I enhance it?
+- We want to follow the conventions of the team we are in 
+- Simplicity over clever or concise
+- Documentation isn't as good as clear code, but is helpful. Its like having the code twice. 
+- Helpful concepts: Use Symbols, Reduce Parameters, Be consistent, and single return
+- Refactoring: change code that doesn't affect its runtime. 
 
 

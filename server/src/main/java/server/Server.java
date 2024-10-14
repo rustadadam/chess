@@ -39,6 +39,7 @@ public class Server {
         //Clear endpoint
         Spark.delete("/db", this::clear_db);
 
+
         //List Games  endpoint
         Spark.get("/game", this::listGames);
 
