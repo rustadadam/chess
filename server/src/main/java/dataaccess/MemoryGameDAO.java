@@ -2,7 +2,6 @@ package dataaccess;
 
 import model.GameData;
 
-import java.util.Collection;
 import java.util.HashMap;
 
 public class MemoryGameDAO implements GameDAO {
@@ -15,7 +14,24 @@ public class MemoryGameDAO implements GameDAO {
 //        gameTable.put(id, data);
     }
 
-    public GameData getGame(String id) {
+    public void addPlayerToGameData(int gameID, String userName, boolean addWhite) throws DataAccessException {
+        GameData game = gameTable.get(gameID);
+        if (game == null) {
+            throw new DataAccessException("Game doesn't exist");
+        }
+
+        GameData updatedGame;
+        if (addWhite) {
+            updatedGame = new GameData(game.gameID(), userName, game.blackUserName(), game.gameName(), game.game());
+        } else {
+            updatedGame = new GameData(game.gameID(), game.whiteUserName(), userName, game.gameName(), game.game());
+        }
+
+        gameTable.put(gameID, updatedGame);
+    }
+
+
+    public GameData getGame(int id) {
         return gameTable.get(id);
     }
 
@@ -23,7 +39,7 @@ public class MemoryGameDAO implements GameDAO {
         return gameTable;
     }
 
-    public void deleteGame(String id) {
+    public void deleteGame(int id) {
         gameTable.remove(id);
     }
 

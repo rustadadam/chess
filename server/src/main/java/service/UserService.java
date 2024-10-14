@@ -31,7 +31,9 @@ public class UserService {
         UserData data = dataAccess.getUser(username);
 
         //If data doesn't exist
-        if (data == null) {throw Error}; //Check for which error
+        if (data == null) {
+            throw new DataAccessException("ERROR");
+        } //Check for which new DataAccessException("ERROR");
 
         //Check password
         if (data.password().equals(password)) {
@@ -51,10 +53,18 @@ public class UserService {
         UserData data = dataAccess.getUser(username);
 
         //If data does exsist
-        if (data != null) {throw Error}; //Check for which error
-
-        if (password == null){throw Error};
-        if (email == null){throw Error};
+        if (data != null) {
+            throw new DataAccessException("ERROR");
+        }
+        ; //Check for which new DataAccessException("ERROR");
+        if (password == null) {
+            throw new DataAccessException("ERROR");
+        }
+        ;
+        if (email == null) {
+            throw new DataAccessException("ERROR");
+        }
+        ;
 
         //Create new user data
         UserData newUser = new UserData(username, password, email);

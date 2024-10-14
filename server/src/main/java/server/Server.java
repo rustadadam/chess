@@ -43,6 +43,9 @@ public class Server {
         //List Games  endpoint
         Spark.get("/game", this::listGames);
 
+        //Join Game
+        Spark.put("/game", this::joinGame);
+
         //Create Game endpoint
         Spark.post("/game", this::createGame);
 
@@ -74,6 +77,13 @@ public class Server {
     }
 
     private Object createGame(Request req, Response res) throws DataAccessException {
+        //Let the server handle it all
+        GameData game = gameService.joinGame(req);
+
+        return "";
+    }
+
+    private Object joinGame(Request req, Response res) throws DataAccessException {
         //Call the create game function
         GameData game = gameService.createGame(req);
 
@@ -85,7 +95,9 @@ public class Server {
         //Verify password
         boolean is_correct = userService.verifyPassword(req);
 
-        if (!is_correct) {throw DataAccessException}; //Check the error here
+        if (!is_correct) {
+            throw new DataAccessException("Error");
+        } //Check the error here
 
         //Get the auth
         AuthData newAuth = authService.getAuth(req);
