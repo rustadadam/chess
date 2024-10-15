@@ -55,7 +55,7 @@ public class Server {
         //Logout endpoint
         Spark.delete("/session", this::logout);
 
-        //Register Endpoint ? Where do I put the body stuff?
+        //Register Endpoint
         Spark.post("/user", this::register);
 
         //This line initializes the server and can be removed once you have a functioning endpoint
@@ -99,7 +99,7 @@ public class Server {
         boolean is_correct = userService.verifyPassword(req);
 
         if (!is_correct) {
-            throw new DataAccessException("Error");
+            throw new DataAccessException("Wrong Password");
         } //Check the error here
 
         //Get the auth
