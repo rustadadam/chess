@@ -7,10 +7,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import passoff.WrappedRequest;
 import service.AuthService;
-import service.GameService;
 import service.UserService;
 
-public class loginTests {
+public class LoginTests {
 
     @Test
     @DisplayName("Succesfully login a User")
