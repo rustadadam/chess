@@ -4,6 +4,7 @@ import model.UserData;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Objects;
 
 public class MemoryUserDAO implements UserDAO {
 
@@ -25,6 +26,19 @@ public class MemoryUserDAO implements UserDAO {
 
     public void deleteAllUser() {
         userTable.clear();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        MemoryUserDAO that = (MemoryUserDAO) o;
+        return Objects.equals(userTable, that.userTable);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(userTable);
     }
 
 }

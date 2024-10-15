@@ -37,7 +37,7 @@ public class Server {
         // Register your endpoints and handle exceptions here.
 
         //Clear endpoint
-        Spark.delete("/db", this::clear_db);
+        Spark.delete("/db", this::clearDataBase);
 
 
         //List Games  endpoint
@@ -48,6 +48,9 @@ public class Server {
 
         //Create Game endpoint
         Spark.post("/game", this::createGame);
+
+        //Login
+        Spark.post("/session", this::login);
 
         //Logout endpoint
         Spark.delete("/session", this::logout);
@@ -63,7 +66,7 @@ public class Server {
     }
 
 
-    private Object clear_db(Request req, Response res) throws DataAccessException {
+    private Object clearDataBase(Request req, Response res) throws DataAccessException {
         //Call the delete functions
         userService.deleteAllUserData();
         gameService.deleteAllGame();

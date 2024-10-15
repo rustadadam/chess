@@ -10,6 +10,7 @@ import spark.Request;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Objects;
 
 public class GameService {
 
@@ -82,5 +83,18 @@ public class GameService {
     public void deleteAllGame() throws DataAccessException {
         //Delete all Auth in the memory
         dataAccess.deleteAllGame();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        GameService that = (GameService) o;
+        return Objects.equals(dataAccess, that.dataAccess);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(dataAccess);
     }
 }

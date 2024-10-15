@@ -8,6 +8,8 @@ import model.UserData;
 import spark.Request;
 import spark.Response;
 
+import java.util.Objects;
+
 
 public class UserService {
 
@@ -78,5 +80,18 @@ public class UserService {
 
 
     public void logout(AuthData auth) {
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UserService that = (UserService) o;
+        return Objects.equals(dataAccess, that.dataAccess);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(dataAccess);
     }
 }

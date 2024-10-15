@@ -4,6 +4,7 @@ import model.AuthData;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Objects;
 
 public class MemoryAuthDAO implements AuthDAO {
 
@@ -26,6 +27,20 @@ public class MemoryAuthDAO implements AuthDAO {
 
     public void deleteAllAuth() {
         authTable.clear();
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        MemoryAuthDAO that = (MemoryAuthDAO) o;
+        return Objects.equals(authTable, that.authTable);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(authTable);
     }
 
 }
