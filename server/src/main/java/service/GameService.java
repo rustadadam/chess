@@ -85,6 +85,13 @@ public class GameService {
         dataAccess.deleteAllGame();
     }
 
+    private void checkAuth(Request req) throws DataAccessException {
+        AuthData authData = req.session().attribute("authData");
+        if (authData == null) {
+            throw new DataAccessException("You have no authentication");
+        }
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
