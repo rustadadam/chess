@@ -34,7 +34,7 @@ public class UserService {
 
         //If data doesn't exist
         if (data == null) {
-            throw new DataAccessException("ERROR");
+            throw new DataAccessException("User not found");
         } //Check for which new DataAccessException("ERROR");
 
         //Check password
@@ -56,15 +56,15 @@ public class UserService {
 
         //If data does exsist
         if (data != null) {
-            throw new DataAccessException("ERROR");
+            throw new DataAccessException("Cannot create new user");
         }
         ; //Check for which new DataAccessException("ERROR");
         if (password == null) {
-            throw new DataAccessException("ERROR");
+            throw new DataAccessException("Password not provided");
         }
         ;
         if (email == null) {
-            throw new DataAccessException("ERROR");
+            throw new DataAccessException("Email not provided");
         }
         ;
 
