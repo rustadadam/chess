@@ -51,9 +51,9 @@ public class ClearTest {
         authService.deleteAllAuth();
 
         //Check to see if there is no data
-        Assertions.assertSame(userService, userServiceEmpty);
-        Assertions.assertSame(gameService, gameServiceEmpty);
-        Assertions.assertSame(authService, authServiceEmpty);
+        Assertions.assertTrue(userService.equals(userServiceEmpty), "Failed on User Service");
+        Assertions.assertTrue(gameService.equals(gameServiceEmpty), "Failed on Game Service");
+        Assertions.assertTrue(authService.equals(authServiceEmpty), "Failed on Auth Service");
     }
 
 }
