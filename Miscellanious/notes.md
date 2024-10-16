@@ -118,4 +118,7 @@ git push
 - Helpful concepts: Use Symbols, Reduce Parameters, Be consistent, and single return
 - Refactoring: change code that doesn't affect its runtime. 
 
+## Test Driven Development (TDD)
+- Tests help everything
+- @ParameterizedTest checks multiple parameter sets. 
 
