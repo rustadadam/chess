@@ -38,9 +38,6 @@ public class ClearTest {
         //Create data -- We wrap it so it works like a request
         WrappedRequest req = new WrappedRequest();
         req.setQueryParam("gameName", "FirstGame");
-        req.setQueryParam("username", "adam");
-        req.setQueryParam("password", "AdamIsAwesome");
-        req.setQueryParam("email", "coolio.email.com");
 
         UserData userData = new UserData("adam", "AdamIsAwesome", "coolio.email.com");
 

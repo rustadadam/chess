@@ -33,7 +33,7 @@ public class LoginTests {
         userService.register(userData);
 
         //Make the same calls to the handler as LOGIN
-        boolean is_correct = userService.verifyPassword(req);
+        boolean is_correct = userService.verifyPassword(userData);
 
         Assertions.assertTrue(is_correct, "Incorrect password");
 
@@ -54,14 +54,8 @@ public class LoginTests {
 
         //Create the following like the test does
         UserService userService = new UserService();
-        AuthService authService = new AuthService();
 
-        //Create data -- We wrap it so it works like a request
-        WrappedRequest req = new WrappedRequest();
-        req.setQueryParam("username", "adam");
-        req.setQueryParam("password", "AdamIsAwesome");
-        req.setQueryParam("email", "coolio.email.com");
-
+        //Create data
         UserData userData = new UserData("adam", "AdamIsAwesome", "coolio.email.com");
 
         //Register the person
@@ -70,8 +64,8 @@ public class LoginTests {
 
         //Give a bad user
         try {
-            req.setQueryParam("username", "Kevin");
-            userService.verifyPassword(req);
+            UserData userData2 = new UserData("kevin", "AdamIsAwesome", "coolio.email.com");
+            userService.verifyPassword(userData2);
             Assertions.fail("Username does not exist");
 
         } catch (Exception e) {
@@ -80,9 +74,8 @@ public class LoginTests {
         }
 
         //Give wrong password
-        req.setQueryParam("username", "adam");
-        req.setQueryParam("password", "CrazyPassword");
-        boolean is_correct = userService.verifyPassword(req);
+        UserData userData3 = new UserData("adam", "lame", "coolio.email.com");
+        boolean is_correct = userService.verifyPassword(userData3);
 
         Assertions.assertFalse(is_correct, "Incorrect password registered as correct");
     }

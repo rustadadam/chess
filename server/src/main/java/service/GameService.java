@@ -41,6 +41,10 @@ public class GameService {
 //            throw new DataAccessException("Game Exists");
 //        } //Check how to do Error
 
+        if (gameName == null || gameName.isEmpty()) {
+            throw new DataAccessException("Invalid game name");
+        }
+
         GameData new_game = new GameData(gameID++, null, null, gameName, new ChessGame());
 
         dataAccess.addGame(new_game);

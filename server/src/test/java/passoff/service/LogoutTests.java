@@ -32,7 +32,7 @@ public class LogoutTests {
 
         //Register the person and then login (verify password function)
         userService.register(userData);
-        userService.verifyPassword(req);
+        userService.verifyPassword(userData);
         authService.getAuth(req);
 
         // Now log them out
@@ -52,19 +52,14 @@ public class LogoutTests {
         AuthService authService = new AuthService();
         AuthService authServiceEmpty = new AuthService();
 
-        //Create data -- We wrap it so it works like a request
-        WrappedRequest req = new WrappedRequest();
-        req.setQueryParam("username", "adam");
-        req.setQueryParam("password", "AdamIsAwesome");
-        req.setQueryParam("email", "coolio.email.com");
-
+        //Create data
         UserData userData = new UserData("adam", "AdamIsAwesome", "coolio.email.com");
-
+        AuthData authData = new AuthData("myToken", "adam")
 
         //Register the person and then login
         userService.register(userData);
-        userService.verifyPassword(req);
-        authService.getAuth(req);
+        userService.verifyPassword(userData);
+        authService.getAuth(authData);
 
         // Now log out the wrong person
         UserData userData2 = new UserData("Kevin", "AdamIsAwesome", "coolio.email.com");

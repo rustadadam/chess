@@ -33,6 +33,12 @@ public class Server {
         //webSocketHandler = new WebSocketHandler();
     }
 
+    public static void main(String[] args) {
+        var s = new Server();
+        var port = s.run(8080);
+        System.out.println("Running on port: " + port);
+    }
+
 
     public int run(int desiredPort) {
         Spark.port(desiredPort);
@@ -81,7 +87,7 @@ public class Server {
 
     private Object listGames(Request req, Response res) throws DataAccessException {
         //Call the get games function
-        return gameService.getGames();
+        return new Gson().toJson(gameService.getGames());
     }
 
     private Object createGame(Request req, Response res) throws DataAccessException {
@@ -96,12 +102,14 @@ public class Server {
         GameData game = gameService.createGame(req);
 
         //Return just the id
-        return game.gameID();
+        return new Gson().toJson(game.gameID());
     }
 
     private Object login(Request req, Response res) throws DataAccessException {
         //Verify password
-        boolean is_correct = userService.verifyPassword(req);
+        UserData newUser = gson.fromJson(req.body(), UserData.class);
+
+        boolean is_correct = userService.verifyPassword(newUser);
 
         if (!is_correct) {
             throw new DataAccessException("Wrong Password");

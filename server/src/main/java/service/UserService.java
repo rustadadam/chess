@@ -25,10 +25,10 @@ public class UserService {
         dataAccess.deleteAllUser();
     }
 
-    public boolean verifyPassword(Request req) throws DataAccessException {
+    public boolean verifyPassword(UserData userData) throws DataAccessException {
         //Get data from requests
-        String username = req.queryParams("username");
-        String password = req.queryParams("password");
+        String username = userData.username();
+        String password = userData.password();
 
         // Find if username exsists
         UserData data = dataAccess.getUser(username);
