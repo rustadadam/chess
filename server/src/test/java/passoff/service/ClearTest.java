@@ -1,6 +1,7 @@
 package passoff.service;
 
 import dataaccess.DataAccessException;
+import model.UserData;
 import passoff.WrappedRequest;
 import service.AuthService;
 import service.GameService;
@@ -41,8 +42,10 @@ public class ClearTest {
         req.setQueryParam("password", "AdamIsAwesome");
         req.setQueryParam("email", "coolio.email.com");
 
+        UserData userData = new UserData("adam", "AdamIsAwesome", "coolio.email.com");
 
-        userService.register(req);
+
+        userService.register(userData);
         gameService.createGame(req);
 
         //Call the following

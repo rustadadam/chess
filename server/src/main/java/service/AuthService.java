@@ -5,6 +5,7 @@ import dataaccess.AuthDAO;
 import dataaccess.DataAccessException;
 import dataaccess.MemoryAuthDAO;
 import model.AuthData;
+import model.UserData;
 import spark.Request;
 
 import java.util.Objects;
@@ -45,9 +46,9 @@ public class AuthService {
 
     }
 
-    public void logout(Request req) throws DataAccessException {
-        String username = req.queryParams("username");
-        dataAccess.deleteAuth(username);
+    public void logout(UserData user) throws DataAccessException {
+//        String username = req.queryParams("username");
+        dataAccess.deleteAuth(user.username());
     }
 
     @Override

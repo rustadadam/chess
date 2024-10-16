@@ -1,6 +1,7 @@
 package server;
 
 
+import com.google.gson.Gson;
 import dataaccess.DataAccessException;
 import dataaccess.MemoryAuthDAO;
 import service.AuthService;
@@ -13,12 +14,16 @@ import spark.Service;
 import model.UserData; // I use these as the request objects
 import model.AuthData;
 import model.GameData;
+import com.google.gson.Gson;
+
+import java.util.Map;
 
 
 public class Server {
     private final AuthService authService;
     private final GameService gameService;
     private final UserService userService;
+    private final Gson gson = new Gson();
     //private final WebSocketHandler webSocketHandler;
 
     public Server() {
@@ -106,13 +111,15 @@ public class Server {
         AuthData newAuth = authService.getAuth(req);
 
         //Return here
-        return newAuth;
+        return new Gson().toJson(newAuth);
     }
 
     private Object logout(Request req, Response res) throws DataAccessException {
 
+        UserData newUser = gson.fromJson(req.body(), UserData.class);
+
         //delete the auth
-        authService.logout(req);
+        authService.logout(newUser);
 
         //Return here
         return "";
@@ -120,8 +127,11 @@ public class Server {
 
 
     private Object register(Request req, Response res) throws DataAccessException {
-        //Get the user
-        UserData newUser = userService.register(req);
+
+        UserData newUser = gson.fromJson(req.body(), UserData.class);
+
+        //Add the user
+        userService.register(newUser);
 
         //returns the same things as the login
         return login(req, res);

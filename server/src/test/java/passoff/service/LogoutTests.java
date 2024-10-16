@@ -2,6 +2,7 @@ package passoff.service;
 
 import dataaccess.DataAccessException;
 import model.AuthData;
+import model.UserData;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -26,13 +27,16 @@ public class LogoutTests {
         req.setQueryParam("password", "AdamIsAwesome");
         req.setQueryParam("email", "coolio.email.com");
 
+        UserData userData = new UserData("adam", "AdamIsAwesome", "coolio.email.com");
+
+
         //Register the person and then login (verify password function)
-        userService.register(req);
+        userService.register(userData);
         userService.verifyPassword(req);
         authService.getAuth(req);
 
         // Now log them out
-        authService.logout(req);
+        authService.logout(userData);
 
         //Check to see if both Authservice's databases's is empty
         Assertions.assertEquals(authServiceEmpty, authService, "Logout failed");
@@ -54,14 +58,18 @@ public class LogoutTests {
         req.setQueryParam("password", "AdamIsAwesome");
         req.setQueryParam("email", "coolio.email.com");
 
+        UserData userData = new UserData("adam", "AdamIsAwesome", "coolio.email.com");
+
+
         //Register the person and then login
-        userService.register(req);
+        userService.register(userData);
         userService.verifyPassword(req);
         authService.getAuth(req);
 
         // Now log out the wrong person
-        req.setQueryParam("username", "Kevin");
-        authService.logout(req);
+        UserData userData2 = new UserData("Kevin", "AdamIsAwesome", "coolio.email.com");
+
+        authService.logout(userData2);
 
         //Check to see if both Authservice's databases's is empty
         Assertions.assertNotEquals(authServiceEmpty, authService, "Logout happened when it shouldn't have");

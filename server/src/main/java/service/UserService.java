@@ -1,5 +1,6 @@
 package service;
 
+import com.google.gson.Gson;
 import dataaccess.DataAccessException;
 import dataaccess.UserDAO;
 import dataaccess.MemoryUserDAO;
@@ -45,33 +46,27 @@ public class UserService {
         return false;
     }
 
-    public UserData register(Request req) throws DataAccessException {
-        //Get data from requests
-        String username = req.queryParams("username");
-        String password = req.queryParams("password");
-        String email = req.queryParams("email");
-
+    public void register(UserData userData) throws DataAccessException {
         // Find if username exsists
-        UserData data = dataAccess.getUser(username);
+        UserData oldData = dataAccess.getUser(userData.username());
 
         //If data does exsist
-        if (data != null) {
+        if (oldData != null) {
             throw new DataAccessException("Cannot create new user");
         }
         ; //Check for which new DataAccessException("ERROR");
-        if (password == null) {
+        if (userData.password() == null) {
             throw new DataAccessException("Password not provided");
         }
         ;
-        if (email == null) {
+        if (userData.email() == null) {
             throw new DataAccessException("Email not provided");
         }
         ;
 
         //Create new user data
-        UserData newUser = new UserData(username, password, email);
-        dataAccess.addUser(newUser);
-        return newUser;
+        dataAccess.addUser(userData);
+        // return newUser;
     }
 
 //

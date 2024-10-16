@@ -2,6 +2,7 @@ package passoff.service;
 
 import dataaccess.DataAccessException;
 import model.AuthData;
+import model.UserData;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -25,8 +26,11 @@ public class LoginTests {
         req.setQueryParam("password", "AdamIsAwesome");
         req.setQueryParam("email", "coolio.email.com");
 
+        UserData userData = new UserData("adam", "AdamIsAwesome", "coolio.email.com");
+
+
         //Register the person so we can login them in
-        userService.register(req);
+        userService.register(userData);
 
         //Make the same calls to the handler as LOGIN
         boolean is_correct = userService.verifyPassword(req);
@@ -58,8 +62,10 @@ public class LoginTests {
         req.setQueryParam("password", "AdamIsAwesome");
         req.setQueryParam("email", "coolio.email.com");
 
+        UserData userData = new UserData("adam", "AdamIsAwesome", "coolio.email.com");
+
         //Register the person
-        userService.register(req);
+        userService.register(userData);
 
 
         //Give a bad user
