@@ -29,6 +29,7 @@ public class LogoutTests {
         //Register the person and then login (verify password function)
         userService.register(req);
         userService.verifyPassword(req);
+        authService.getAuth(req);
 
         // Now log them out
         authService.logout(req);
@@ -56,6 +57,7 @@ public class LogoutTests {
         //Register the person and then login
         userService.register(req);
         userService.verifyPassword(req);
+        authService.getAuth(req);
 
         // Now log out the wrong person
         req.setQueryParam("username", "Kevin");
