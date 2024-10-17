@@ -20,10 +20,7 @@ public class CreateGameTests {
         GameService gameService = new GameService();
 
         //Add game
-        WrappedRequest req = new WrappedRequest();
-        req.setQueryParam("gameName", "myGame");
-
-        gameService.createGame(req);
+        gameService.createGame("myGame");
 
         //Check that the game was added
         Collection<GameData> games = gameService.getGames();

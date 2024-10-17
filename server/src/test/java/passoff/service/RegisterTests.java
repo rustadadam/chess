@@ -20,19 +20,13 @@ public class RegisterTests {
         UserService userService = new UserService();
         AuthService authService = new AuthService();
 
-        //Create data -- We wrap it so it works like a request
-        WrappedRequest req = new WrappedRequest();
-        req.setQueryParam("username", "adam");
-        req.setQueryParam("password", "AdamIsAwesome");
-        req.setQueryParam("email", "coolio.email.com");
-
         UserData userData = new UserData("adam", "AdamIsAwesome", "coolio.email.com");
 
         //Register the person
         userService.register(userData);
 
         //Get the auth
-        AuthData authData = authService.getAuth(req);
+        AuthData authData = authService.getAuth(userData.username());
 
         //Check the username
         Assertions.assertTrue(authData.userName().equals("adam"), "Usernames do not match");

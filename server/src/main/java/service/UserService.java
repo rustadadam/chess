@@ -74,8 +74,8 @@ public class UserService {
 //    }
 
 
-    public void logout(AuthData auth) {
-    }
+//    public void logout() throws DataAccessException {
+//    }
 
     @Override
     public boolean equals(Object o) {

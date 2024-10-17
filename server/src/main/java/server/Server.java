@@ -76,6 +76,13 @@ public class Server {
         return Spark.port();
     }
 
+    private String verifyAuth(Request req, Response res) throws DataAccessException {
+        //Returns the username associated with the auth
+
+        String authToken = gson.fromJson(req.headers("authToken"), String.class);
+
+        return authService.verifyAuth(authToken);
+    }
 
     private Object clearDataBase(Request req, Response res) throws DataAccessException {
         //Call the delete functions
@@ -90,16 +97,22 @@ public class Server {
         return new Gson().toJson(gameService.getGames());
     }
 
-    private Object createGame(Request req, Response res) throws DataAccessException {
+    private Object joinGame(Request req, Response res) throws DataAccessException {
+        String userName = verifyAuth(req, res);
+        String playerColor = gson.fromJson(req.params("playerColor"), String.class);
+        int gameID = gson.fromJson(req.params("gameID"), Integer.class);
+
         //Let the server handle it all
-        GameData game = gameService.joinGame(req);
+        gameService.joinGame(userName, playerColor, gameID);
 
         return "";
     }
 
-    private Object joinGame(Request req, Response res) throws DataAccessException {
+    private Object createGame(Request req, Response res) throws DataAccessException {
+        String gameName = gson.fromJson(req.body(), String.class);
+
         //Call the create game function
-        GameData game = gameService.createGame(req);
+        GameData game = gameService.createGame(gameName);
 
         //Return just the id
         return new Gson().toJson(game.gameID());
@@ -116,18 +129,17 @@ public class Server {
         } //Check the error here
 
         //Get the auth
-        AuthData newAuth = authService.getAuth(req);
+        AuthData newAuth = authService.getAuth(newUser.username());
 
         //Return here
         return new Gson().toJson(newAuth);
     }
 
     private Object logout(Request req, Response res) throws DataAccessException {
-
-        UserData newUser = gson.fromJson(req.body(), UserData.class);
+        String userName = verifyAuth(req, res);
 
         //delete the auth
-        authService.logout(newUser);
+        authService.logout(userName);
 
         //Return here
         return "";

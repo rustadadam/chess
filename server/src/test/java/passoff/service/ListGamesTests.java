@@ -26,10 +26,7 @@ public class ListGamesTests {
         Assertions.assertEquals(gameService.getGames().size(), 0, "Games already exist.");
 
         //Add game
-        WrappedRequest req = new WrappedRequest();
-        req.setQueryParam("gameName", "myGame");
-
-        gameService.createGame(req);
+        gameService.createGame("myGame");
 
         //Check game size
         Collection<GameData> games = gameService.getGames();
@@ -53,10 +50,7 @@ public class ListGamesTests {
         Assertions.assertEquals(gameService.getGames().size(), 0, "Games already exist.");
 
         //Add game
-        WrappedRequest req = new WrappedRequest();
-        req.setQueryParam("gameName", "myGame");
-
-        gameService.createGame(req);
+        gameService.createGame("myGame");
 
         //Check game size
         Collection<GameData> games = gameService.getGames();

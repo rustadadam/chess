@@ -35,15 +35,11 @@ public class ClearTest {
         GameService gameService = new GameService();
         AuthService authService = new AuthService();
 
-        //Create data -- We wrap it so it works like a request
-        WrappedRequest req = new WrappedRequest();
-        req.setQueryParam("gameName", "FirstGame");
-
         UserData userData = new UserData("adam", "AdamIsAwesome", "coolio.email.com");
 
 
         userService.register(userData);
-        gameService.createGame(req);
+        gameService.createGame("MyGame");
 
         //Call the following
         userService.deleteAllUserData();

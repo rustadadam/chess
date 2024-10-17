@@ -21,13 +21,7 @@ public class LoginTests {
         AuthService authService = new AuthService();
 
         //Create data -- We wrap it so it works like a request
-        WrappedRequest req = new WrappedRequest();
-        req.setQueryParam("username", "adam");
-        req.setQueryParam("password", "AdamIsAwesome");
-        req.setQueryParam("email", "coolio.email.com");
-
         UserData userData = new UserData("adam", "AdamIsAwesome", "coolio.email.com");
-
 
         //Register the person so we can login them in
         userService.register(userData);
@@ -38,7 +32,7 @@ public class LoginTests {
         Assertions.assertTrue(is_correct, "Incorrect password");
 
         //Get the auth
-        AuthData newAuth = authService.getAuth(req);
+        AuthData newAuth = authService.getAuth(userData.username());
 
         //Check the username
         Assertions.assertTrue(newAuth.userName().equals("adam"), "Usernames do not match");

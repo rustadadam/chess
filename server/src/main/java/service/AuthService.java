@@ -23,10 +23,7 @@ public class AuthService {
         dataAccess.deleteAllAuth();
     }
 
-    public AuthData getAuth(Request req) throws DataAccessException {
-        //Build out the request
-        String username = req.queryParams("username");
-        String password = req.queryParams("password");
+    public AuthData getAuth(String username) throws DataAccessException {
 
         //Find if user exists
         String authToken = dataAccess.getAuth(username);
@@ -46,9 +43,12 @@ public class AuthService {
 
     }
 
-    public void logout(UserData user) throws DataAccessException {
-//        String username = req.queryParams("username");
-        dataAccess.deleteAuth(user.username());
+    public void logout(String user) throws DataAccessException {
+        dataAccess.deleteAuth(user);
+    }
+
+    public String verifyAuth(String authToken) throws DataAccessException {
+        return dataAccess.getUserFromAuth(authToken);
     }
 
     @Override

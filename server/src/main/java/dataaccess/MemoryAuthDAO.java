@@ -21,6 +21,21 @@ public class MemoryAuthDAO implements AuthDAO {
         return authTable.get(id);
     }
 
+    public String getUserFromAuth(String authToken) throws DataAccessException {
+        if (!authTable.containsValue(authToken)) {
+            throw new DataAccessException("No Auth Token exists");
+        }
+
+        for (String user : authTable.keySet()) {
+            if (authToken.equals(authTable.get(user))) {
+                return user;
+            }
+        }
+
+        //This will never run -- but we need the return statement
+        return null;
+    }
+
     public void deleteAuth(String id) {
         authTable.remove(id);
     }

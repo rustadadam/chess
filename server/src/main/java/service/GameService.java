@@ -31,8 +31,7 @@ public class GameService {
         return gamesCollection;
     }
 
-    public GameData createGame(Request req) throws DataAccessException {
-        String gameName = req.queryParams("gameName");
+    public GameData createGame(String gameName) throws DataAccessException {
 
         //See if game already exists -- I Don't think I need to do that
 //        GameData game = dataAccess.getGame(gameName);
@@ -52,13 +51,10 @@ public class GameService {
         return new_game;
     }
 
-    public GameData joinGame(Request req) throws DataAccessException {
-        String playerColor = req.queryParams("playerColor");
-        String userName = req.queryParams("userName");
-        int joinGameID = Integer.parseInt(req.queryParams("gameID"));
+    public GameData joinGame(String userName, String playerColor, int gameID) throws DataAccessException {
 
         //See if game already exists
-        GameData game = dataAccess.getGame(joinGameID);
+        GameData game = dataAccess.getGame(gameID);
 
         if (game == null) {
             throw new DataAccessException("Game Exists"); //Check this

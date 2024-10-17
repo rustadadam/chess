@@ -33,10 +33,10 @@ public class LogoutTests {
         //Register the person and then login (verify password function)
         userService.register(userData);
         userService.verifyPassword(userData);
-        authService.getAuth(req);
+        authService.getAuth(userData.username());
 
         // Now log them out
-        authService.logout(userData);
+        authService.logout(userData.username());
 
         //Check to see if both Authservice's databases's is empty
         Assertions.assertEquals(authServiceEmpty, authService, "Logout failed");
@@ -54,17 +54,17 @@ public class LogoutTests {
 
         //Create data
         UserData userData = new UserData("adam", "AdamIsAwesome", "coolio.email.com");
-        AuthData authData = new AuthData("myToken", "adam")
+        AuthData authData = new AuthData("myToken", "adam");
 
         //Register the person and then login
         userService.register(userData);
         userService.verifyPassword(userData);
-        authService.getAuth(authData);
+        authService.getAuth(authData.userName());
 
         // Now log out the wrong person
         UserData userData2 = new UserData("Kevin", "AdamIsAwesome", "coolio.email.com");
 
-        authService.logout(userData2);
+        authService.logout(userData2.username());
 
         //Check to see if both Authservice's databases's is empty
         Assertions.assertNotEquals(authServiceEmpty, authService, "Logout happened when it shouldn't have");
