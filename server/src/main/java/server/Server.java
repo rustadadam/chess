@@ -35,7 +35,7 @@ public class Server {
 
     public static void main(String[] args) {
         var s = new Server();
-        var port = s.run(8080);
+        var port = s.run(0);
         System.out.println("Running on port: " + port);
     }
 
@@ -78,8 +78,8 @@ public class Server {
 
     private String verifyAuth(Request req, Response res) throws DataAccessException {
         //Returns the username associated with the auth
-
-        String authToken = gson.fromJson(req.headers("authToken"), String.class);
+        //var headers = req.headers();
+        String authToken = gson.fromJson(req.headers("Authorization"), String.class);
 
         return authService.verifyAuth(authToken);
     }
@@ -109,10 +109,12 @@ public class Server {
     }
 
     private Object createGame(Request req, Response res) throws DataAccessException {
-        String gameName = gson.fromJson(req.body(), String.class);
+        String userName = verifyAuth(req, res);
+
+        GameData data = gson.fromJson(req.body(), GameData.class);
 
         //Call the create game function
-        GameData game = gameService.createGame(gameName);
+        GameData game = gameService.createGame(data.gameName());
 
         //Return just the id
         return new Gson().toJson(game.gameID());
