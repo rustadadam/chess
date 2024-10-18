@@ -8,10 +8,7 @@ import model.AuthData;
 import model.GameData;
 import spark.Request;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Objects;
+import java.util.*;
 
 public class GameService {
 
@@ -19,16 +16,16 @@ public class GameService {
     private int gameID;
 
     public GameService() {
-        this.gameID = 0;
+        this.gameID = 1000;
         this.dataAccess = new MemoryGameDAO();
     }
 
 
-    public Collection<GameData> getGames() throws DataAccessException {
+    public Map<String, Collection<GameData>> getGames() throws DataAccessException {
         HashMap<Integer, GameData> games = dataAccess.getGames();
-        
+
         // Create a new collection to store the modified GameData objects
-        Collection<GameData> gamesCollection = new ArrayList<>();
+        Collection<GameData> gamesCollection = new HashSet<>();
 
         for (GameData gameData : games.values()) {
             // Clone each GameData object and set the game field to null
@@ -37,12 +34,16 @@ public class GameService {
                     gameData.whiteUsername(),
                     gameData.blackUsername(),
                     gameData.gameName(),
-                    null // Set the 'game' field to null
+                    null
             );
             gamesCollection.add(newGameData);
         }
 
-        return gamesCollection;
+        // Create a map to hold the error message
+        Map<String, Collection<GameData>> gameList = new HashMap<>();
+        gameList.put("games", gamesCollection);
+
+        return gameList;
     }
 
     public GameData createGame(String gameName) throws DataAccessException {
@@ -55,14 +56,14 @@ public class GameService {
 //        } //Check how to do Error
 
         if (gameName == null || gameName.isEmpty()) {
-            throw new DataAccessException("Invalid game name");
+            throw new DataAccessException("Error: bad request");
         }
 
-        GameData new_game = new GameData(gameID++, null, null, gameName, new ChessGame());
+        GameData newGame = new GameData(gameID++, null, null, gameName, new ChessGame());
 
-        dataAccess.addGame(new_game);
+        dataAccess.addGame(newGame);
 
-        return new_game;
+        return newGame;
     }
 
     public GameData joinGame(String userName, String playerColor, int gameID) throws DataAccessException {
@@ -71,23 +72,23 @@ public class GameService {
         GameData game = dataAccess.getGame(gameID);
 
         if (game == null) {
-            throw new DataAccessException("Game Exists"); //Check this
+            throw new DataAccessException("Error: bad request"); //Check this
         }
 
         if (playerColor == null) {
-            throw new DataAccessException("Player Color is null"); //NOTE, spectator mode?
-        } else if (playerColor.equals("white")) {
+            throw new DataAccessException("Error: bad request"); //NOTE, spectator mode?
+        } else if (playerColor.equalsIgnoreCase("white")) {
             if (game.whiteUsername() == null) {
                 //Add player to game. :)
                 dataAccess.addPlayerToGameData(game.gameID(), userName, true);
             } else {
-                throw new DataAccessException("There is already white player");
+                throw new DataAccessException("Error: already taken");
             }
         } else {
             if (game.blackUsername() == null) {
                 dataAccess.addPlayerToGameData(game.gameID(), userName, false);
             } else {
-                throw new DataAccessException("There is already black player");
+                throw new DataAccessException("Error: already taken");
             }
         }
 
@@ -102,7 +103,7 @@ public class GameService {
     private void checkAuth(Request req) throws DataAccessException {
         AuthData authData = req.session().attribute("authData");
         if (authData == null) {
-            throw new DataAccessException("You have no authentication");
+            throw new DataAccessException("Error: unauthorized");
         }
     }
 

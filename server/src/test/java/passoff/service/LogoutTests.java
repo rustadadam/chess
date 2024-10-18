@@ -64,10 +64,7 @@ public class LogoutTests {
         // Now log out the wrong person
         UserData userData2 = new UserData("Kevin", "AdamIsAwesome", "coolio.email.com");
 
-        authService.logout(userData2.username());
-
-        //Check to see if both Authservice's databases's is empty
-        Assertions.assertNotEquals(authServiceEmpty, authService, "Logout happened when it shouldn't have");
+        Assertions.assertThrows(DataAccessException.class, () -> userService.verifyPassword(userData2));
 
     }
 }

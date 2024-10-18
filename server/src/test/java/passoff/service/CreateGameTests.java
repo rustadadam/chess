@@ -9,6 +9,7 @@ import passoff.WrappedRequest;
 import service.GameService;
 
 import java.util.Collection;
+import java.util.Map;
 
 public class CreateGameTests {
 
@@ -23,11 +24,11 @@ public class CreateGameTests {
         gameService.createGame("myGame");
 
         //Check that the game was added
-        Collection<GameData> games = gameService.getGames();
+        Map<String, Collection<GameData>> games = gameService.getGames();
         Assertions.assertEquals(1, games.size(), "Game was not added.");
 
         //Check if info is right
-        for (GameData gameData : games) {
+        for (GameData gameData : games.get("games")) {
             Assertions.assertNotNull(gameData.gameID(), "Game ID was not added.");
             Assertions.assertNotNull(gameData.gameName(), "Game name was not added.");
             Assertions.assertNull(gameData.blackUsername(), "Black user name was incorrectly added.");

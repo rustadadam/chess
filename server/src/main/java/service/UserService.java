@@ -35,7 +35,7 @@ public class UserService {
 
         //If data doesn't exist
         if (data == null) {
-            throw new DataAccessException("User not found");
+            throw new DataAccessException("Error: unauthorized");
         } //Check for which new DataAccessException("ERROR");
 
         //Check password
@@ -43,7 +43,7 @@ public class UserService {
             return true;
         }
 
-        return false;
+        throw new DataAccessException("Error: unauthorized");
     }
 
     public void register(UserData userData) throws DataAccessException {
@@ -52,15 +52,15 @@ public class UserService {
 
         //If data does exsist
         if (oldData != null) {
-            throw new DataAccessException("Cannot create new user");
+            throw new DataAccessException("Error: already taken");
         }
         ; //Check for which new DataAccessException("ERROR");
         if (userData.password() == null) {
-            throw new DataAccessException("Password not provided");
+            throw new DataAccessException("Error: bad request");
         }
         ;
         if (userData.email() == null) {
-            throw new DataAccessException("Email not provided");
+            throw new DataAccessException("Error: bad request");
         }
         ;
 

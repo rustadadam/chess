@@ -4,6 +4,7 @@ package server;
 import com.google.gson.Gson;
 import dataaccess.DataAccessException;
 import dataaccess.MemoryAuthDAO;
+import model.GameRequest;
 import service.AuthService;
 import service.GameService;
 import service.UserService;
@@ -19,6 +20,7 @@ import com.google.gson.Gson;
 import java.util.HashMap;
 
 import java.util.Map;
+import java.util.Objects;
 
 
 public class Server {
@@ -79,11 +81,21 @@ public class Server {
         return Spark.port();
     }
 
-    private Object errorHandler(Exception e) {
+    private Object errorHandler(Exception e, Response res) {
 
         // Create a map to hold the error message
         Map<String, String> errorMap = new HashMap<>();
-        errorMap.put("message", "Error: " + e.getMessage());
+        errorMap.put("message", e.getMessage());
+
+        if (Objects.equals(e.getMessage(), "Error: bad request")) {
+            res.status(400);
+        } else if (Objects.equals(e.getMessage(), "Error: unauthorized")) {
+            res.status(401);
+        } else if (Objects.equals(e.getMessage(), "Error: already taken")) {
+            res.status(403);
+        } else {
+            res.status(500);
+        }
 
         // Convert the map to JSON and return
         return new Gson().toJson(errorMap);
@@ -91,10 +103,13 @@ public class Server {
     }
 
     private String verifyAuth(Request req, Response res) throws DataAccessException {
+        try {
+            String authToken = gson.fromJson(req.headers("Authorization"), String.class);
 
-        String authToken = gson.fromJson(req.headers("Authorization"), String.class);
-
-        return authService.verifyAuth(authToken);
+            return authService.verifyAuth(authToken);
+        } catch (Exception e) {
+            throw new DataAccessException("Error: unauthorized");
+        }
 
     }
 
@@ -106,7 +121,7 @@ public class Server {
             authService.deleteAllAuth();
             return "";
         } catch (Exception e) {
-            return errorHandler(e);
+            return errorHandler(e, res);
         }
     }
 
@@ -115,22 +130,26 @@ public class Server {
         try {
             return new Gson().toJson(gameService.getGames());
         } catch (Exception e) {
-            return errorHandler(e);
+            return errorHandler(e, res);
         }
     }
 
     private Object joinGame(Request req, Response res) {
         try {
             String userName = verifyAuth(req, res);
-            String playerColor = gson.fromJson(req.params("playerColor"), String.class);
-            int gameID = gson.fromJson(req.params("gameID"), Integer.class);
+
+            GameRequest data = new Gson().fromJson(req.body(), GameRequest.class);
+
+            // Access the fields using getter methods
+            String playerColor = data.getPlayerColor();
+            int gameID = data.getGameID();
 
             //Let the server handle it all
             gameService.joinGame(userName, playerColor, gameID);
 
             return "";
         } catch (Exception e) {
-            return errorHandler(e);
+            return errorHandler(e, res);
         }
     }
 
@@ -144,9 +163,12 @@ public class Server {
             GameData game = gameService.createGame(data.gameName());
 
             //Return just the id
-            return new Gson().toJson(game.gameID());
+            Map<String, Integer> gameMap = new HashMap<>();
+            gameMap.put("gameID", game.gameID());
+
+            return new Gson().toJson(gameMap);
         } catch (Exception e) {
-            return errorHandler(e);
+            return errorHandler(e, res);
         }
     }
 
@@ -155,9 +177,9 @@ public class Server {
             //Verify password
             UserData newUser = gson.fromJson(req.body(), UserData.class);
 
-            boolean is_correct = userService.verifyPassword(newUser);
+            boolean isCorrect = userService.verifyPassword(newUser);
 
-            if (!is_correct) {
+            if (!isCorrect) {
                 throw new DataAccessException("Wrong Password");
             } //Check the error here
 
@@ -167,7 +189,7 @@ public class Server {
             //Return here
             return new Gson().toJson(newAuth);
         } catch (Exception e) {
-            return errorHandler(e);
+            return errorHandler(e, res);
         }
     }
 
@@ -181,7 +203,7 @@ public class Server {
             //Return here
             return "";
         } catch (Exception e) {
-            return errorHandler(e);
+            return errorHandler(e, res);
         }
 
     }
@@ -195,7 +217,7 @@ public class Server {
             //returns the same things as the login
             return login(req, res);
         } catch (Exception e) {
-            return errorHandler(e);
+            return errorHandler(e, res);
         }
     }
 

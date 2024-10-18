@@ -23,13 +23,13 @@ public class ListGamesTests {
         GameService gameService = new GameService();
 
         //We have no games yet
-        Assertions.assertEquals(gameService.getGames().size(), 0, "Games already exist.");
+        Assertions.assertEquals(gameService.getGames().get("games").size(), 0, "Games already exist.");
 
         //Add game
         gameService.createGame("myGame");
 
         //Check game size
-        Collection<GameData> games = gameService.getGames();
+        Collection<GameData> games = gameService.getGames().get("games");
         Assertions.assertEquals(1, games.size(), "Incorrect number of games.");
 
         //Check if info is right
@@ -47,13 +47,13 @@ public class ListGamesTests {
         GameService gameService = new GameService();
 
         //We have no games yet
-        Assertions.assertEquals(gameService.getGames().size(), 0, "Games already exist.");
+        Assertions.assertEquals(gameService.getGames().get("games").size(), 0, "Games already exist.");
 
         //Add game
         gameService.createGame("myGame");
 
         //Check game size
-        Collection<GameData> games = gameService.getGames();
+        Collection<GameData> games = gameService.getGames().get("games");
         Assertions.assertEquals(1, games.size(), "Incorrect number of games.");
 
         //Check if info is right

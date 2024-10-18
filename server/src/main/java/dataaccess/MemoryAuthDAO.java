@@ -23,7 +23,7 @@ public class MemoryAuthDAO implements AuthDAO {
 
     public String getUserFromAuth(String authToken) throws DataAccessException {
         if (!authTable.containsValue(authToken)) {
-            throw new DataAccessException("No Auth Token exists");
+            throw new DataAccessException("Error: unauthorized");
         }
 
         for (String user : authTable.keySet()) {

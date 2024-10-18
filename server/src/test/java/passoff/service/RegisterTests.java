@@ -52,7 +52,7 @@ public class RegisterTests {
             Assertions.fail("Registration should fail");
 
         } catch (Exception e) {
-            Assertions.assertEquals("Password not provided", e.getMessage(), "User not found Error not given");
+            Assertions.assertEquals("Error: bad request", e.getMessage(), "User not found Error not given");
 
         }
 
@@ -66,7 +66,7 @@ public class RegisterTests {
             Assertions.fail("Registration should fail");
 
         } catch (Exception e) {
-            Assertions.assertEquals("Email not provided", e.getMessage(), "User not found Error not given");
+            Assertions.assertEquals("Error: bad request", e.getMessage(), "User not found Error not given");
         }
 
         //Create data
@@ -80,7 +80,7 @@ public class RegisterTests {
             Assertions.fail("Registration already taken");
 
         } catch (Exception e) {
-            Assertions.assertEquals("Cannot create new user", e.getMessage(), "User not found Error not given");
+            Assertions.assertEquals("Error: already taken", e.getMessage(), "User not found Error not given");
         }
 
 

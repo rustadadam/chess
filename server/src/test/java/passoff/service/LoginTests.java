@@ -63,14 +63,12 @@ public class LoginTests {
             Assertions.fail("Username does not exist");
 
         } catch (Exception e) {
-            Assertions.assertEquals("User not found", e.getMessage(), "User not found Error not given");
+            Assertions.assertEquals("Error: unauthorized", e.getMessage(), "User not found Error not given");
 
         }
 
         //Give wrong password
         UserData userData3 = new UserData("adam", "lame", "coolio.email.com");
-        boolean is_correct = userService.verifyPassword(userData3);
-
-        Assertions.assertFalse(is_correct, "Incorrect password registered as correct");
+        Assertions.assertThrows(DataAccessException.class, () -> userService.verifyPassword(userData3));
     }
 }

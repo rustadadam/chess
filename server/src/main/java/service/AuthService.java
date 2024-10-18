@@ -6,16 +6,21 @@ import dataaccess.DataAccessException;
 import dataaccess.MemoryAuthDAO;
 import model.AuthData;
 import model.UserData;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import spark.Request;
 
 import java.util.Objects;
 
 public class AuthService {
 
+    private static final Logger log = LoggerFactory.getLogger(AuthService.class);
     private final AuthDAO dataAccess;
+    private Integer authCounter;
 
     public AuthService() {
         this.dataAccess = new MemoryAuthDAO();
+        this.authCounter = 1111111;
     }
 
     public void deleteAllAuth() throws DataAccessException {
@@ -25,26 +30,32 @@ public class AuthService {
 
     public AuthData getAuth(String username) throws DataAccessException {
 
+        authCounter++;
+
         //Find if user exists
         String authToken = dataAccess.getAuth(username);
 
-        //Create authdata to return
-        AuthData data = new AuthData(authToken, username);
 
         //Create auth if its null
-        if (data.authToken() == null) {
-            AuthData withToken = new AuthData("NewToken", username); //Check to see if this exists
-            dataAccess.addAuth(withToken);
-            return withToken;
+        if (authToken != null) {
+            logout(username);
         }
 
-        return data;
-
+        AuthData withToken = new AuthData(authCounter.toString(), username);//Check to see if this exists
+        dataAccess.addAuth(withToken);
+        return withToken;
 
     }
 
     public void logout(String user) throws DataAccessException {
-        dataAccess.deleteAuth(user);
+        //Find if user exists -- Simply to throw error if its null
+        String authToken = dataAccess.getAuth(user);
+
+        if (authToken != null) {
+            dataAccess.deleteAuth(user);
+        } else {
+            throw new DataAccessException("Error: unauthorized");
+        }
     }
 
     public String verifyAuth(String authToken) throws DataAccessException {
