@@ -16,6 +16,8 @@ import model.AuthData;
 import model.GameData;
 import com.google.gson.Gson;
 
+import java.util.HashMap;
+
 import java.util.Map;
 
 
@@ -47,9 +49,10 @@ public class Server {
 
         // Register your endpoints and handle exceptions here.
 
+        //Wrap to send exceptions
+
         //Clear endpoint
         Spark.delete("/db", this::clearDataBase);
-
 
         //List Games  endpoint
         Spark.get("/game", this::listGames);
@@ -76,87 +79,124 @@ public class Server {
         return Spark.port();
     }
 
+    private Object errorHandler(Exception e) {
+
+        // Create a map to hold the error message
+        Map<String, String> errorMap = new HashMap<>();
+        errorMap.put("message", "Error: " + e.getMessage());
+
+        // Convert the map to JSON and return
+        return new Gson().toJson(errorMap);
+
+    }
+
     private String verifyAuth(Request req, Response res) throws DataAccessException {
-        //Returns the username associated with the auth
-        //var headers = req.headers();
+
         String authToken = gson.fromJson(req.headers("Authorization"), String.class);
 
         return authService.verifyAuth(authToken);
+
     }
 
-    private Object clearDataBase(Request req, Response res) throws DataAccessException {
-        //Call the delete functions
-        userService.deleteAllUserData();
-        gameService.deleteAllGame();
-        authService.deleteAllAuth();
-        return "";
+    private Object clearDataBase(Request req, Response res) {
+        try {
+            //Call the delete functions
+            userService.deleteAllUserData();
+            gameService.deleteAllGame();
+            authService.deleteAllAuth();
+            return "";
+        } catch (Exception e) {
+            return errorHandler(e);
+        }
     }
 
-    private Object listGames(Request req, Response res) throws DataAccessException {
+    private Object listGames(Request req, Response res) {
         //Call the get games function
-        return new Gson().toJson(gameService.getGames());
+        try {
+            return new Gson().toJson(gameService.getGames());
+        } catch (Exception e) {
+            return errorHandler(e);
+        }
     }
 
-    private Object joinGame(Request req, Response res) throws DataAccessException {
-        String userName = verifyAuth(req, res);
-        String playerColor = gson.fromJson(req.params("playerColor"), String.class);
-        int gameID = gson.fromJson(req.params("gameID"), Integer.class);
+    private Object joinGame(Request req, Response res) {
+        try {
+            String userName = verifyAuth(req, res);
+            String playerColor = gson.fromJson(req.params("playerColor"), String.class);
+            int gameID = gson.fromJson(req.params("gameID"), Integer.class);
 
-        //Let the server handle it all
-        gameService.joinGame(userName, playerColor, gameID);
+            //Let the server handle it all
+            gameService.joinGame(userName, playerColor, gameID);
 
-        return "";
+            return "";
+        } catch (Exception e) {
+            return errorHandler(e);
+        }
     }
 
-    private Object createGame(Request req, Response res) throws DataAccessException {
-        String userName = verifyAuth(req, res);
+    private Object createGame(Request req, Response res) {
+        try {
+            String userName = verifyAuth(req, res);
 
-        GameData data = gson.fromJson(req.body(), GameData.class);
+            GameData data = gson.fromJson(req.body(), GameData.class);
 
-        //Call the create game function
-        GameData game = gameService.createGame(data.gameName());
+            //Call the create game function
+            GameData game = gameService.createGame(data.gameName());
 
-        //Return just the id
-        return new Gson().toJson(game.gameID());
+            //Return just the id
+            return new Gson().toJson(game.gameID());
+        } catch (Exception e) {
+            return errorHandler(e);
+        }
     }
 
     private Object login(Request req, Response res) throws DataAccessException {
-        //Verify password
-        UserData newUser = gson.fromJson(req.body(), UserData.class);
+        try {
+            //Verify password
+            UserData newUser = gson.fromJson(req.body(), UserData.class);
 
-        boolean is_correct = userService.verifyPassword(newUser);
+            boolean is_correct = userService.verifyPassword(newUser);
 
-        if (!is_correct) {
-            throw new DataAccessException("Wrong Password");
-        } //Check the error here
+            if (!is_correct) {
+                throw new DataAccessException("Wrong Password");
+            } //Check the error here
 
-        //Get the auth
-        AuthData newAuth = authService.getAuth(newUser.username());
+            //Get the auth
+            AuthData newAuth = authService.getAuth(newUser.username());
 
-        //Return here
-        return new Gson().toJson(newAuth);
+            //Return here
+            return new Gson().toJson(newAuth);
+        } catch (Exception e) {
+            return errorHandler(e);
+        }
     }
 
     private Object logout(Request req, Response res) throws DataAccessException {
-        String userName = verifyAuth(req, res);
+        try {
+            String userName = verifyAuth(req, res);
 
-        //delete the auth
-        authService.logout(userName);
+            //delete the auth
+            authService.logout(userName);
 
-        //Return here
-        return "";
+            //Return here
+            return "";
+        } catch (Exception e) {
+            return errorHandler(e);
+        }
+
     }
 
 
     private Object register(Request req, Response res) throws DataAccessException {
-
-        UserData newUser = gson.fromJson(req.body(), UserData.class);
-
-        //Add the user
-        userService.register(newUser);
-
-        //returns the same things as the login
-        return login(req, res);
+        try {
+            UserData newUser = gson.fromJson(req.body(), UserData.class);
+            //Add the user
+            userService.register(newUser);
+            //returns the same things as the login
+            return login(req, res);
+        } catch (Exception e) {
+            return errorHandler(e);
+        }
     }
 
     public void stop() {

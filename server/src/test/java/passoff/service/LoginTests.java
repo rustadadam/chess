@@ -35,7 +35,7 @@ public class LoginTests {
         AuthData newAuth = authService.getAuth(userData.username());
 
         //Check the username
-        Assertions.assertTrue(newAuth.userName().equals("adam"), "Usernames do not match");
+        Assertions.assertTrue(newAuth.username().equals("adam"), "Usernames do not match");
 
         // Check we have an Auth Token
         Assertions.assertFalse(newAuth.authToken().equals(null), "Auth token is null");

@@ -22,9 +22,9 @@ public class MemoryGameDAO implements GameDAO {
 
         GameData updatedGame;
         if (addWhite) {
-            updatedGame = new GameData(game.gameID(), userName, game.blackUserName(), game.gameName(), game.game());
+            updatedGame = new GameData(game.gameID(), userName, game.blackUsername(), game.gameName(), game.game());
         } else {
-            updatedGame = new GameData(game.gameID(), game.whiteUserName(), userName, game.gameName(), game.game());
+            updatedGame = new GameData(game.gameID(), game.whiteUsername(), userName, game.gameName(), game.game());
         }
 
         gameTable.put(gameID, updatedGame);

@@ -12,7 +12,7 @@ public class MemoryAuthDAO implements AuthDAO {
 
     public void addAuth(AuthData data) {
         String token = data.authToken();
-        String username = data.userName();
+        String username = data.username();
 
         authTable.put(username, token);
     }

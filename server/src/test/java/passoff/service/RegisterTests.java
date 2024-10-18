@@ -29,7 +29,7 @@ public class RegisterTests {
         AuthData authData = authService.getAuth(userData.username());
 
         //Check the username
-        Assertions.assertTrue(authData.userName().equals("adam"), "Usernames do not match");
+        Assertions.assertTrue(authData.username().equals("adam"), "Usernames do not match");
 
         // Check we have an Auth Token
         Assertions.assertFalse(authData.authToken().equals(null), "Auth token is null");

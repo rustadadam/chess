@@ -59,7 +59,7 @@ public class LogoutTests {
         //Register the person and then login
         userService.register(userData);
         userService.verifyPassword(userData);
-        authService.getAuth(authData.userName());
+        authService.getAuth(authData.username());
 
         // Now log out the wrong person
         UserData userData2 = new UserData("Kevin", "AdamIsAwesome", "coolio.email.com");

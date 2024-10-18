@@ -33,7 +33,7 @@ public class AuthService {
 
         //Create auth if its null
         if (data.authToken() == null) {
-            AuthData withToken = new AuthData("NewToken", data.userName()); //Check to see if this exists
+            AuthData withToken = new AuthData("NewToken", username); //Check to see if this exists
             dataAccess.addAuth(withToken);
             return withToken;
         }

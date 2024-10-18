@@ -8,6 +8,7 @@ import model.AuthData;
 import model.GameData;
 import spark.Request;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Objects;
@@ -25,8 +26,21 @@ public class GameService {
 
     public Collection<GameData> getGames() throws DataAccessException {
         HashMap<Integer, GameData> games = dataAccess.getGames();
-        //Create an empty collection
-        Collection<GameData> gamesCollection = games.values();
+        
+        // Create a new collection to store the modified GameData objects
+        Collection<GameData> gamesCollection = new ArrayList<>();
+
+        for (GameData gameData : games.values()) {
+            // Clone each GameData object and set the game field to null
+            GameData newGameData = new GameData(
+                    gameData.gameID(),
+                    gameData.whiteUsername(),
+                    gameData.blackUsername(),
+                    gameData.gameName(),
+                    null // Set the 'game' field to null
+            );
+            gamesCollection.add(newGameData);
+        }
 
         return gamesCollection;
     }
@@ -63,14 +77,14 @@ public class GameService {
         if (playerColor == null) {
             throw new DataAccessException("Player Color is null"); //NOTE, spectator mode?
         } else if (playerColor.equals("white")) {
-            if (game.whiteUserName() == null) {
+            if (game.whiteUsername() == null) {
                 //Add player to game. :)
                 dataAccess.addPlayerToGameData(game.gameID(), userName, true);
             } else {
                 throw new DataAccessException("There is already white player");
             }
         } else {
-            if (game.blackUserName() == null) {
+            if (game.blackUsername() == null) {
                 dataAccess.addPlayerToGameData(game.gameID(), userName, false);
             } else {
                 throw new DataAccessException("There is already black player");
