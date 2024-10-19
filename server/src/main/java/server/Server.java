@@ -128,6 +128,8 @@ public class Server {
     private Object listGames(Request req, Response res) {
         //Call the get games function
         try {
+            String userName = verifyAuth(req, res);
+
             return new Gson().toJson(gameService.getGames());
         } catch (Exception e) {
             return errorHandler(e, res);

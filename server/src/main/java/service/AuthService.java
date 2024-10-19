@@ -37,12 +37,17 @@ public class AuthService {
 
 
         //Create auth if its null
-        if (authToken != null) {
-            logout(username);
+        while (authToken != null) {
+            //logout(username);
+            //To create extra usernames so all auths work
+            username = "@" + username;
+            authToken = dataAccess.getAuth(username);
         }
 
         AuthData withToken = new AuthData(authCounter.toString(), username);//Check to see if this exists
         dataAccess.addAuth(withToken);
+        withToken = new AuthData(authCounter.toString(), username.replaceAll("@", ""));//Check to see if this exists
+
         return withToken;
 
     }
@@ -59,7 +64,9 @@ public class AuthService {
     }
 
     public String verifyAuth(String authToken) throws DataAccessException {
-        return dataAccess.getUserFromAuth(authToken);
+        String username = dataAccess.getUserFromAuth(authToken);
+
+        return username.replaceAll("@", "");
     }
 
     @Override
