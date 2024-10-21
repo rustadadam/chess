@@ -38,7 +38,6 @@ public class ListGamesTests {
         }
     }
 
-    // TODO: how would I test a fail case? Is there anyway user can give error here?
     @Test
     @DisplayName("Failure listing all games")
     public void failListGamesTest() throws DataAccessException {
