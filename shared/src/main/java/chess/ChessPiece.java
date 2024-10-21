@@ -183,13 +183,7 @@ public class ChessPiece {
             newPosition = new ChessPosition(myPosition.getRow() - 1, myPosition.getColumn() - 1);
             findPawnHelper(board, myPosition, newPosition);
             newPosition = new ChessPosition(myPosition.getRow() - 1, myPosition.getColumn() + 1);
-            if (board.getPiece(newPosition) != null) {
-                if (board.getPiece(newPosition).getTeamColor() != color) {
-                    ChessMove move = new ChessMove(myPosition, newPosition, null);
-                    availableMoves.add(move);
-                    checkPromotion(board, myPosition, newPosition);
-                }
-            }
+            checkPromotionHelper(board, myPosition, newPosition);
         } else {
             //check to move forward
             ChessPosition newPosition = new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn());
@@ -211,13 +205,7 @@ public class ChessPiece {
             newPosition = new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn() - 1);
             findPawnHelper(board, myPosition, newPosition);
             newPosition = new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn() + 1);
-            if (board.getPiece(newPosition) != null) {
-                if (board.getPiece(newPosition).getTeamColor() != color) {
-                    ChessMove move = new ChessMove(myPosition, newPosition, null);
-                    availableMoves.add(move);
-                    checkPromotion(board, myPosition, newPosition);
-                }
-            }
+            checkPromotionHelper(board, myPosition, newPosition);
         }
     }
 
@@ -229,6 +217,16 @@ public class ChessPiece {
                 if (availableMoves.size() < 3) {
                     availableMoves.add(move);
                 }
+            }
+        }
+    }
+
+    public void checkPromotionHelper(ChessBoard board, ChessPosition myPosition, ChessPosition newPosition) {
+        if (board.getPiece(newPosition) != null) {
+            if (board.getPiece(newPosition).getTeamColor() != color) {
+                ChessMove move = new ChessMove(myPosition, newPosition, null);
+                availableMoves.add(move);
+                checkPromotion(board, myPosition, newPosition);
             }
         }
     }
