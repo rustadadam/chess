@@ -1,4 +1,4 @@
-package passoff.service;
+package service;
 
 import dataaccess.DataAccessException;
 import model.AuthData;
