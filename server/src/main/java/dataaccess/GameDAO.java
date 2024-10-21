@@ -13,7 +13,5 @@ public interface GameDAO {
 
     void addPlayerToGameData(int gameID, String userName, boolean addWhite) throws DataAccessException;
 
-    void deleteGame(int id) throws DataAccessException;
-
     void deleteAllGame() throws DataAccessException;
 }

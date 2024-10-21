@@ -44,13 +44,6 @@ public class ChessGame {
         //throw new RuntimeException("Not implemented");
     }
 
-//    public Collection<ChessMove> find_allMoves(TeamColor color) {
-//        Collection<ChessPiece> pieces = board.getPieces(color);
-//
-//        for (ChessPiece piece : pieces) {
-//            piece.
-//        }
-//    }
 
     /**
      * Set's which teams turn it is
@@ -170,19 +163,19 @@ public class ChessGame {
     public void makeMove(ChessMove move) throws InvalidMoveException {
 
         //Check Valid moves
-        Collection<ChessMove> possible_moves = validMoves(move.getStartPosition());
+        Collection<ChessMove> possibleMoves = validMoves(move.getStartPosition());
 
-        //Check to see if there are possible_moves
-        //Check to see if move is in possible_moves
-        if (possible_moves == null) {
+        //Check to see if there are possibleMoves
+        //Check to see if move is in possibleMoves
+        if (possibleMoves == null) {
 
             //Return error
             throw new InvalidMoveException();
 
         }
 
-        //Check to see if move is in possible_moves
-        if (!possible_moves.contains(move)) {
+        //Check to see if move is in possibleMoves
+        if (!possibleMoves.contains(move)) {
 
             //Return error
             throw new InvalidMoveException();
@@ -231,24 +224,24 @@ public class ChessGame {
      */
     public boolean isInCheck(TeamColor teamColor) {
         // Find the king position
-        ChessPosition king_pos = board.findKingPos(teamColor);
+        ChessPosition kingPos = board.findKingPos(teamColor);
 
         //Get enemy move set
-        Collection<ChessMove> enemy_move_set;
+        Collection<ChessMove> enemyMoveSet;
 
         if (teamColor == TeamColor.WHITE) {
-            enemy_move_set = allBlackMoves;
+            enemyMoveSet = allBlackMoves;
         } else {
-            enemy_move_set = allWhiteMoves;
+            enemyMoveSet = allWhiteMoves;
         }
 
         //Convert those to positions
-        Collection<ChessPosition> enemy_pos = new ArrayList<>();
-        for (ChessMove move : enemy_move_set) {
-            enemy_pos.add(move.getEndPosition());
+        Collection<ChessPosition> enemyPos = new ArrayList<>();
+        for (ChessMove move : enemyMoveSet) {
+            enemyPos.add(move.getEndPosition());
         }
 
-        if (enemy_pos.contains(king_pos)) {
+        if (enemyPos.contains(kingPos)) {
             return true;
         } else {
             return false;

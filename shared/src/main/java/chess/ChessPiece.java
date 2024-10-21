@@ -116,20 +116,10 @@ public class ChessPiece {
     }
 
 
-    /**
-     * Calculates all the positions a chess piece can move to
-     * Does not take into account moves that are illegal due to leaving the king in
-     * danger
-     *
-     * @return Collection of valid moves
-     */
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
-        //Check to see if already called
         if (availableMoves.size() > 0) {
             availableMoves = new ArrayList<>();
         }
-
-        //Add Rook moves
         if (type == ChessPiece.PieceType.ROOK || type == ChessPiece.PieceType.QUEEN) {
             moveHelp(board, myPosition, 1, 0, true);
             moveHelp(board, myPosition, 0, 1, true);
@@ -143,47 +133,34 @@ public class ChessPiece {
             moveHelp(board, myPosition, 1, -1, true);
         }
         if (type == ChessPiece.PieceType.KNIGHT) {
-
             moveHelp(board, myPosition, 2, -1, false);
             moveHelp(board, myPosition, 2, 1, false);
             moveHelp(board, myPosition, -2, 1, false);
             moveHelp(board, myPosition, -2, -1, false);
-
             moveHelp(board, myPosition, -1, 2, false);
             moveHelp(board, myPosition, 1, 2, false);
             moveHelp(board, myPosition, 1, -2, false);
             moveHelp(board, myPosition, -1, -2, false);
         }
-
         if (type == ChessPiece.PieceType.KING) {
-
             moveHelp(board, myPosition, 1, -1, false);
             moveHelp(board, myPosition, 1, 0, false);
             moveHelp(board, myPosition, 1, 1, false);
             moveHelp(board, myPosition, 0, -1, false);
-
             moveHelp(board, myPosition, 0, 1, false);
             moveHelp(board, myPosition, -1, -1, false);
             moveHelp(board, myPosition, -1, 0, false);
             moveHelp(board, myPosition, -1, 1, false);
         }
-
         if (type == ChessPiece.PieceType.PAWN) {
-            //Check color
-            if (color == ChessGame.TeamColor.BLACK) { //Black moves up
-
-                //check to move forward
+            if (color == ChessGame.TeamColor.BLACK) {
                 ChessPosition newPosition = new ChessPosition(myPosition.getRow() - 1, myPosition.getColumn());
                 if (board.getPiece(newPosition) == null) {
                     ChessMove move = new ChessMove(myPosition, newPosition, null);
                     checkPromotion(board, myPosition, newPosition);
-
-                    //No promotion
                     if (availableMoves.size() < 3) {
                         availableMoves.add(move);
                     }
-
-                    //check to move forward twice
                     if (myPosition.getRow() == 7) {
                         newPosition = new ChessPosition(myPosition.getRow() - 2, myPosition.getColumn());
                         if (board.getPiece(newPosition) == null) {
@@ -193,16 +170,11 @@ public class ChessPiece {
                         }
                     }
                 }
-
-
-                //Check to capture
                 newPosition = new ChessPosition(myPosition.getRow() - 1, myPosition.getColumn() - 1);
                 if (board.getPiece(newPosition) != null) {
                     if (board.getPiece(newPosition).getTeamColor() != color) {
                         ChessMove move = new ChessMove(myPosition, newPosition, null);
                         checkPromotion(board, myPosition, newPosition);
-
-                        //No promotion
                         if (availableMoves.size() < 3) {
                             availableMoves.add(move);
                         }
@@ -221,15 +193,10 @@ public class ChessPiece {
                 ChessPosition newPosition = new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn());
                 if (board.getPiece(newPosition) == null) {
                     ChessMove move = new ChessMove(myPosition, newPosition, null);
-
                     checkPromotion(board, myPosition, newPosition);
-
-                    //No promotion
                     if (availableMoves.size() < 3) {
                         availableMoves.add(move);
                     }
-
-                    //check to move forward twice
                     if (myPosition.getRow() == 2) {
                         newPosition = new ChessPosition(myPosition.getRow() + 2, myPosition.getColumn());
                         if (board.getPiece(newPosition) == null) {
@@ -239,15 +206,11 @@ public class ChessPiece {
                         }
                     }
                 }
-
-                //Check to capture
                 newPosition = new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn() - 1);
                 if (board.getPiece(newPosition) != null) {
                     if (board.getPiece(newPosition).getTeamColor() != color) {
                         ChessMove move = new ChessMove(myPosition, newPosition, null);
                         checkPromotion(board, myPosition, newPosition);
-
-                        //No promotion
                         if (availableMoves.size() < 3) {
                             availableMoves.add(move);
                         }

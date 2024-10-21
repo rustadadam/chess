@@ -36,7 +36,7 @@ public class JoinGameTests {
 
     @Test
     @DisplayName("Fail Join Games")
-    public void FailCreateJoinTest() throws DataAccessException {
+    public void failCreateJoinTest() throws DataAccessException {
 
         //Create the following like the test does
         GameService gameService = new GameService();
