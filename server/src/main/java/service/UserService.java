@@ -68,11 +68,15 @@ public class UserService {
         dataAccess.addUser(userData);
         // return newUser;
     }
-    
+
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         UserService that = (UserService) o;
         return Objects.equals(dataAccess, that.dataAccess);
     }

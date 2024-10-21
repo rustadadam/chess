@@ -47,7 +47,7 @@ public class GameService {
     }
 
     public GameData createGame(String gameName) throws DataAccessException {
-        
+
         if (gameName == null || gameName.isEmpty()) {
             throw new DataAccessException("Error: bad request");
         }
@@ -95,8 +95,12 @@ public class GameService {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         GameService that = (GameService) o;
         return Objects.equals(dataAccess, that.dataAccess);
     }
