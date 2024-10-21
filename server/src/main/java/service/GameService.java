@@ -92,7 +92,7 @@ public class GameService {
             }
         }
 
-        return game;
+        return dataAccess.getGame(gameID);
     }
 
     public void deleteAllGame() throws DataAccessException {
