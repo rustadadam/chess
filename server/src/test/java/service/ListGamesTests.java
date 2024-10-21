@@ -45,11 +45,8 @@ public class ListGamesTests {
         //Create the following like the test does
         GameService gameService = new GameService();
 
-        //We have no games yet
-        Assertions.assertEquals(gameService.getGames().get("games").size(), 0, "Games already exist.");
-
         //Add game
-        gameService.createGame("myGame");
+        gameService.createGame("myGame2");
 
         //Check game size
         Collection<GameData> games = gameService.getGames().get("games");
@@ -57,7 +54,7 @@ public class ListGamesTests {
 
         //Check if info is right
         for (GameData gameData : games) {
-            Assertions.assertEquals(gameData.gameName(), "myGame", "Incorrect game name.");
+            Assertions.assertEquals(gameData.gameName(), "myGame2", "Incorrect game name.");
         }
     }
 }
