@@ -10,6 +10,7 @@ import spark.Request;
 
 import java.util.*;
 
+//Game services!
 public class GameService {
 
     private GameDAO dataAccess;
