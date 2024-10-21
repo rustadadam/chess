@@ -68,15 +68,7 @@ public class UserService {
         dataAccess.addUser(userData);
         // return newUser;
     }
-
-//
-//    public AuthData login(UserData user) {
-//    }
-
-
-//    public void logout() throws DataAccessException {
-//    }
-
+    
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -52,10 +52,10 @@ public class ChessBoard {
                 if (piece != null && piece.getTeamColor() == color) {
 
                     //Find where that piece can move
-                    Collection<ChessMove> piece_moves = piece.pieceMoves(this, position);
+                    Collection<ChessMove> pieceMoves = piece.pieceMoves(this, position);
 
                     //Add those moves to our move set
-                    allMoves.addAll(piece_moves);
+                    allMoves.addAll(pieceMoves);
                 }
             }
         }
@@ -185,8 +185,12 @@ public class ChessBoard {
     //Overide
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         ChessBoard that = (ChessBoard) o;
         return that.toString().equals(this.toString());
     }

@@ -14,8 +14,7 @@ import java.util.Objects;
 
 public class AuthService {
 
-    private static final Logger log = LoggerFactory.getLogger(AuthService.class);
-    private final AuthDAO dataAccess;
+    private AuthDAO dataAccess;
     private Integer authCounter;
 
     public AuthService() {

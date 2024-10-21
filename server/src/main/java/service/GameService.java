@@ -47,14 +47,7 @@ public class GameService {
     }
 
     public GameData createGame(String gameName) throws DataAccessException {
-
-        //See if game already exists -- I Don't think I need to do that
-//        GameData game = dataAccess.getGame(gameName);
-//
-//        if (game != null) {
-//            throw new DataAccessException("Game Exists");
-//        } //Check how to do Error
-
+        
         if (gameName == null || gameName.isEmpty()) {
             throw new DataAccessException("Error: bad request");
         }

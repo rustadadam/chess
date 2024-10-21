@@ -55,8 +55,7 @@ public class ChessMove {
     public String toString() {
         if (type == null) {
             return getStartPosition().toString() + " to " + getEndPosition().toString();
-        }
-        else{
+        } else {
             return getStartPosition().toString() + " to " + getEndPosition().toString() + " prom: " + type;
         }
     }
@@ -65,14 +64,18 @@ public class ChessMove {
     //Overide
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         ChessMove that = (ChessMove) o;
         return that.toString().equals(this.toString());
     }
 
     @Override
-    public int hashCode(){
+    public int hashCode() {
         return 31 * this.toString().hashCode();
     }
 

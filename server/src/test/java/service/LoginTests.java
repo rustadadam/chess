@@ -27,9 +27,9 @@ public class LoginTests {
         userService.register(userData);
 
         //Make the same calls to the handler as LOGIN
-        boolean is_correct = userService.verifyPassword(userData);
+        boolean isCorrect = userService.verifyPassword(userData);
 
-        Assertions.assertTrue(is_correct, "Incorrect password");
+        Assertions.assertTrue(isCorrect, "Incorrect password");
 
         //Get the auth
         AuthData newAuth = authService.getAuth(userData.username());

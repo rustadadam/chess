@@ -11,18 +11,15 @@ public class MemoryUserDAO implements UserDAO {
     final private HashMap<String, UserData> userTable = new HashMap<>();
 
     public void addUser(UserData data) {
-        String userName = data.username();
+        String username = data.username();
 
-        userTable.put(userName, data);
+        userTable.put(username, data);
     }
 
-    public UserData getUser(String Username) {
-        return userTable.get(Username);
+    public UserData getUser(String username) {
+        return userTable.get(username);
     }
-
-    public void deleteUser(String Username) {
-        userTable.remove(Username);
-    }
+    
 
     public void deleteAllUser() {
         userTable.clear();
