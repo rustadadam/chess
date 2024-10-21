@@ -161,11 +161,13 @@ public class ChessPiece {
                     if (availableMoves.size() < 3) {
                         availableMoves.add(move);
                     }
-                    newPosition = new ChessPosition(myPosition.getRow() - 2, myPosition.getColumn());
-                    if (myPosition.getRow() == 7 && board.getPiece(newPosition) == null) {
-                        move = new ChessMove(myPosition, newPosition, null);
-                        availableMoves.add(move);
-                        checkPromotion(board, myPosition, newPosition);
+                    if (myPosition.getRow() == 7) {
+                        newPosition = new ChessPosition(myPosition.getRow() - 2, myPosition.getColumn());
+                        if (board.getPiece(newPosition) == null) {
+                            move = new ChessMove(myPosition, newPosition, null);
+                            availableMoves.add(move);
+                            checkPromotion(board, myPosition, newPosition);
+                        }
                     }
                 }
                 newPosition = new ChessPosition(myPosition.getRow() - 1, myPosition.getColumn() - 1);
@@ -205,18 +207,22 @@ public class ChessPiece {
                     }
                 }
                 newPosition = new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn() - 1);
-                if (board.getPiece(newPosition) != null && board.getPiece(newPosition).getTeamColor() != color) {
-                    ChessMove move = new ChessMove(myPosition, newPosition, null);
-                    checkPromotion(board, myPosition, newPosition);
-                    if (availableMoves.size() < 3) {
-                        availableMoves.add(move);
+                if (board.getPiece(newPosition) != null) {
+                    if (board.getPiece(newPosition).getTeamColor() != color) {
+                        ChessMove move = new ChessMove(myPosition, newPosition, null);
+                        checkPromotion(board, myPosition, newPosition);
+                        if (availableMoves.size() < 3) {
+                            availableMoves.add(move);
+                        }
                     }
                 }
                 newPosition = new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn() + 1);
-                if (board.getPiece(newPosition).getTeamColor() != color && board.getPiece(newPosition) != null) {
-                    ChessMove move = new ChessMove(myPosition, newPosition, null);
-                    availableMoves.add(move);
-                    checkPromotion(board, myPosition, newPosition);
+                if (board.getPiece(newPosition) != null) {
+                    if (board.getPiece(newPosition).getTeamColor() != color) {
+                        ChessMove move = new ChessMove(myPosition, newPosition, null);
+                        availableMoves.add(move);
+                        checkPromotion(board, myPosition, newPosition);
+                    }
                 }
             }
         }
