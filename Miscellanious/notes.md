@@ -122,3 +122,14 @@ git push
 - Tests help everything
 - @ParameterizedTest checks multiple parameter sets. 
 
+# SQL
+- Its a declaritve language gives the intent
+- Imperative language would be like Java
+
+## MySQL
+- MySQL implements SQL
+- When you create a table, you have to set a key to primary. It has to be unique. 
+- You can make the speed of searching on type, you can index it --> which significantly speeds up the query
+- https://github.com/softwareconstruction240/softwareconstruction/blob/main/instruction/db-sql/example-code/initialize.sql
+- Create database with database manager
+
