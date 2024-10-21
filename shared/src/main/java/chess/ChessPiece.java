@@ -52,12 +52,12 @@ public class ChessPiece {
     }
 
     //Move helper
-    public void move_help(ChessBoard board, ChessPosition myPosition, int move_row, int move_col, boolean repeat) {
+    public void moveHelp(ChessBoard board, ChessPosition myPosition, int moveRow, int moveCol, boolean repeat) {
 
         //Continue
         boolean shouldContinue = true;
-        int adjust_row = move_row;
-        int adjust_col = move_col;
+        int adjustRow = moveRow;
+        int adjustCol = moveCol;
 
         while (shouldContinue) {
             if (!repeat) {
@@ -65,7 +65,7 @@ public class ChessPiece {
             }
 
             //Make the moves
-            ChessPosition newPosition = new ChessPosition(myPosition.getRow() + adjust_row, myPosition.getColumn() + adjust_col);
+            ChessPosition newPosition = new ChessPosition(myPosition.getRow() + adjustRow, myPosition.getColumn() + adjustCol);
 
 
             if (newPosition.getRow() > 8 || newPosition.getRow() < 1) {
@@ -83,15 +83,15 @@ public class ChessPiece {
             if (board.getPiece(newPosition) == null) {
                 //We can add move!
                 availableMoves.add(move);
-                adjust_row += move_row;
-                adjust_col += move_col;
+                adjustRow += moveRow;
+                adjustCol += moveCol;
             } else {
                 //Position is occupeied
                 if (board.getPiece(newPosition).getTeamColor() != color) {
                     //Enemy color//We can add move!
                     availableMoves.add(move);
-                    adjust_row += move_row;
-                    adjust_col += move_col;
+                    adjustRow += moveRow;
+                    adjustCol += moveCol;
                 }
 
                 //This happens regardless
@@ -104,10 +104,10 @@ public class ChessPiece {
     public void checkPromotion(ChessBoard board, ChessPosition myPosition, ChessPosition newPosition) {
         if (newPosition.getRow() == 8 || newPosition.getRow() == 1) {
             //You get promoted!
-            for (ChessPiece.PieceType peice_type : ChessPiece.PieceType.values()) {
-                if (peice_type != ChessPiece.PieceType.KING && peice_type != ChessPiece.PieceType.PAWN) {
+            for (ChessPiece.PieceType peiceType : ChessPiece.PieceType.values()) {
+                if (peiceType != ChessPiece.PieceType.KING && peiceType != ChessPiece.PieceType.PAWN) {
                     //Add the moves!
-                    ChessMove move = new ChessMove(myPosition, newPosition, peice_type);
+                    ChessMove move = new ChessMove(myPosition, newPosition, peiceType);
                     availableMoves.add(move);
                 }
             }
@@ -131,41 +131,41 @@ public class ChessPiece {
 
         //Add Rook moves
         if (type == ChessPiece.PieceType.ROOK || type == ChessPiece.PieceType.QUEEN) {
-            move_help(board, myPosition, 1, 0, true);
-            move_help(board, myPosition, 0, 1, true);
-            move_help(board, myPosition, -1, 0, true);
-            move_help(board, myPosition, 0, -1, true);
+            moveHelp(board, myPosition, 1, 0, true);
+            moveHelp(board, myPosition, 0, 1, true);
+            moveHelp(board, myPosition, -1, 0, true);
+            moveHelp(board, myPosition, 0, -1, true);
         }
         if (type == ChessPiece.PieceType.BISHOP || type == ChessPiece.PieceType.QUEEN) {
-            move_help(board, myPosition, 1, 1, true);
-            move_help(board, myPosition, -1, -1, true);
-            move_help(board, myPosition, -1, 1, true);
-            move_help(board, myPosition, 1, -1, true);
+            moveHelp(board, myPosition, 1, 1, true);
+            moveHelp(board, myPosition, -1, -1, true);
+            moveHelp(board, myPosition, -1, 1, true);
+            moveHelp(board, myPosition, 1, -1, true);
         }
         if (type == ChessPiece.PieceType.KNIGHT) {
 
-            move_help(board, myPosition, 2, -1, false);
-            move_help(board, myPosition, 2, 1, false);
-            move_help(board, myPosition, -2, 1, false);
-            move_help(board, myPosition, -2, -1, false);
+            moveHelp(board, myPosition, 2, -1, false);
+            moveHelp(board, myPosition, 2, 1, false);
+            moveHelp(board, myPosition, -2, 1, false);
+            moveHelp(board, myPosition, -2, -1, false);
 
-            move_help(board, myPosition, -1, 2, false);
-            move_help(board, myPosition, 1, 2, false);
-            move_help(board, myPosition, 1, -2, false);
-            move_help(board, myPosition, -1, -2, false);
+            moveHelp(board, myPosition, -1, 2, false);
+            moveHelp(board, myPosition, 1, 2, false);
+            moveHelp(board, myPosition, 1, -2, false);
+            moveHelp(board, myPosition, -1, -2, false);
         }
 
         if (type == ChessPiece.PieceType.KING) {
 
-            move_help(board, myPosition, 1, -1, false);
-            move_help(board, myPosition, 1, 0, false);
-            move_help(board, myPosition, 1, 1, false);
-            move_help(board, myPosition, 0, -1, false);
+            moveHelp(board, myPosition, 1, -1, false);
+            moveHelp(board, myPosition, 1, 0, false);
+            moveHelp(board, myPosition, 1, 1, false);
+            moveHelp(board, myPosition, 0, -1, false);
 
-            move_help(board, myPosition, 0, 1, false);
-            move_help(board, myPosition, -1, -1, false);
-            move_help(board, myPosition, -1, 0, false);
-            move_help(board, myPosition, -1, 1, false);
+            moveHelp(board, myPosition, 0, 1, false);
+            moveHelp(board, myPosition, -1, -1, false);
+            moveHelp(board, myPosition, -1, 0, false);
+            moveHelp(board, myPosition, -1, 1, false);
         }
 
         if (type == ChessPiece.PieceType.PAWN) {

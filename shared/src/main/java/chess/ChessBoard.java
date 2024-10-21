@@ -35,9 +35,9 @@ public class ChessBoard {
     }
 
     // Create a function that returns all the pieces of the given color
-    public Collection<ChessMove> find_all_moves(ChessGame.TeamColor color) {
+    public Collection<ChessMove> findAllMoves(ChessGame.TeamColor color) {
         //Create moves to return
-        Collection<ChessMove> all_moves = new ArrayList<>();
+        Collection<ChessMove> allMoves = new ArrayList<>();
 
         for (int row = 1; row < 9; row++) {
             for (int column = 1; column < 9; column++) {
@@ -55,15 +55,15 @@ public class ChessBoard {
                     Collection<ChessMove> piece_moves = piece.pieceMoves(this, position);
 
                     //Add those moves to our move set
-                    all_moves.addAll(piece_moves);
+                    allMoves.addAll(piece_moves);
                 }
             }
         }
 
-        return all_moves;
+        return allMoves;
     }
 
-    public ChessPosition find_king_pos(ChessGame.TeamColor color) {
+    public ChessPosition findKingPos(ChessGame.TeamColor color) {
 
         for (int row = 1; row < 9; row++) {
             for (int column = 1; column < 9; column++) {

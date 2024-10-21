@@ -11,24 +11,24 @@ import java.util.Collection;
  */
 public class ChessGame {
 
-    boolean is_white_turn;
-    boolean white_in_check;
-    boolean black_in_check;
+    boolean isWhiteTurn;
+    boolean whiteInCheck;
+    boolean blackInCheck;
     ChessBoard board;
 
-    Collection<ChessMove> all_white_moves;
-    Collection<ChessMove> all_black_moves;
+    Collection<ChessMove> allWhiteMoves;
+    Collection<ChessMove> allBlackMoves;
 
     public ChessGame() {
-        this.is_white_turn = true;
+        this.isWhiteTurn = true;
 
         //Create a chess board
         this.board = new ChessBoard();
         board.resetBoard();
 
         //Get all possible white and black moves
-        all_white_moves = board.find_all_moves(TeamColor.WHITE);
-        all_black_moves = board.find_all_moves(TeamColor.BLACK);
+        allWhiteMoves = board.findAllMoves(TeamColor.WHITE);
+        allBlackMoves = board.findAllMoves(TeamColor.BLACK);
 
     }
 
@@ -36,7 +36,7 @@ public class ChessGame {
      * @return Which team's turn it is
      */
     public TeamColor getTeamTurn() {
-        if (is_white_turn) {
+        if (isWhiteTurn) {
             return TeamColor.WHITE;
         } else {
             return TeamColor.BLACK;
@@ -44,7 +44,7 @@ public class ChessGame {
         //throw new RuntimeException("Not implemented");
     }
 
-//    public Collection<ChessMove> find_all_moves(TeamColor color) {
+//    public Collection<ChessMove> find_allMoves(TeamColor color) {
 //        Collection<ChessPiece> pieces = board.getPieces(color);
 //
 //        for (ChessPiece piece : pieces) {
@@ -58,7 +58,7 @@ public class ChessGame {
      * @param team the team whose turn it is
      */
     public void setTeamTurn(TeamColor team) {
-        is_white_turn = team == TeamColor.WHITE;
+        isWhiteTurn = team == TeamColor.WHITE;
         //throw new RuntimeException("Not implemented");
     }
 
@@ -71,19 +71,19 @@ public class ChessGame {
     }
 
 
-    private void update_move_set(TeamColor color) {
+    private void updateMoveSet(TeamColor color) {
         if (color == TeamColor.WHITE) {
-            all_white_moves = board.find_all_moves(TeamColor.WHITE);
+            allWhiteMoves = board.findAllMoves(TeamColor.WHITE);
         } else {
-            all_black_moves = board.find_all_moves(TeamColor.BLACK);
+            allBlackMoves = board.findAllMoves(TeamColor.BLACK);
         }
     }
 
-    private void update_opp_move_set(TeamColor color) {
+    private void updateOppMoveSet(TeamColor color) {
         if (color != TeamColor.WHITE) {
-            all_white_moves = board.find_all_moves(TeamColor.WHITE);
+            allWhiteMoves = board.findAllMoves(TeamColor.WHITE);
         } else {
-            all_black_moves = board.find_all_moves(TeamColor.BLACK);
+            allBlackMoves = board.findAllMoves(TeamColor.BLACK);
         }
     }
 
@@ -104,7 +104,7 @@ public class ChessGame {
         }
 
         // get all possible moves
-        Collection<ChessMove> all_moves = piece.pieceMoves(board, startPosition);
+        Collection<ChessMove> allMoves = piece.pieceMoves(board, startPosition);
 
         //We need to check to see if the peice is blocking a check //We can do this by "pre-moving" the peice, and then
         //check to see if the king is in check
@@ -113,39 +113,39 @@ public class ChessGame {
         board.removePiece(startPosition);
 
         //Store these values
-        Collection<ChessMove> temp_black_moves = all_black_moves;
-        Collection<ChessMove> temp_white_moves = all_white_moves;
+        Collection<ChessMove> tempBlackMoves = allBlackMoves;
+        Collection<ChessMove> tempWhiteMoves = allWhiteMoves;
 
         // Update move set
-        update_opp_move_set(piece.getTeamColor());
+        updateOppMoveSet(piece.getTeamColor());
 
         //If not in check, we can return moves. MAJOR shortcut
         if (!isInCheck(piece.getTeamColor()) && piece.getPieceType() != ChessPiece.PieceType.KING) {
             board.addPiece(startPosition, piece);
-            return all_moves;
+            return allMoves;
         }
 
         // Possible moves
-        Collection<ChessMove> valid_moves = new ArrayList<>();
+        Collection<ChessMove> validMoves = new ArrayList<>();
 
         //Loop through each move
-        for (ChessMove move : all_moves) {
+        for (ChessMove move : allMoves) {
             //If it takes a piece, we need to return it
-            ChessPiece taken_piece = board.getPiece(move.getEndPosition());
+            ChessPiece takenPiece = board.getPiece(move.getEndPosition());
 
             //Add the piece to its move
             board.addPiece(move.getEndPosition(), piece);
 
             // Update move set
-            update_opp_move_set(piece.getTeamColor());
+            updateOppMoveSet(piece.getTeamColor());
 
             //If not in check, we can add the move
             if (!isInCheck(piece.getTeamColor())) {
-                valid_moves.add(move);
+                validMoves.add(move);
             }
 
             //readd the taken peice
-            board.addPiece(move.getEndPosition(), taken_piece);
+            board.addPiece(move.getEndPosition(), takenPiece);
 
         }
 
@@ -153,12 +153,12 @@ public class ChessGame {
         board.addPiece(startPosition, piece);
 
         //update what we need too
-        all_black_moves = temp_black_moves;
-        all_white_moves = temp_white_moves;
+        allBlackMoves = tempBlackMoves;
+        allWhiteMoves = tempWhiteMoves;
 
 
         //Return its moves
-        return valid_moves;
+        return validMoves;
     }
 
     /**
@@ -198,7 +198,7 @@ public class ChessGame {
         }
 
         //Check if its their turn
-        if ((piece.getTeamColor() == TeamColor.WHITE) != is_white_turn) {
+        if ((piece.getTeamColor() == TeamColor.WHITE) != isWhiteTurn) {
 
             //Return error
             throw new InvalidMoveException();
@@ -217,10 +217,10 @@ public class ChessGame {
         board.addPiece(move.getEndPosition(), piece);
 
         //Change whose turn it is
-        is_white_turn = !is_white_turn;
+        isWhiteTurn = !isWhiteTurn;
 
-        update_move_set(TeamColor.WHITE);
-        update_move_set(TeamColor.BLACK);
+        updateMoveSet(TeamColor.WHITE);
+        updateMoveSet(TeamColor.BLACK);
     }
 
     /**
@@ -231,15 +231,15 @@ public class ChessGame {
      */
     public boolean isInCheck(TeamColor teamColor) {
         // Find the king position
-        ChessPosition king_pos = board.find_king_pos(teamColor);
+        ChessPosition king_pos = board.findKingPos(teamColor);
 
         //Get enemy move set
         Collection<ChessMove> enemy_move_set;
 
         if (teamColor == TeamColor.WHITE) {
-            enemy_move_set = all_black_moves;
+            enemy_move_set = allBlackMoves;
         } else {
-            enemy_move_set = all_white_moves;
+            enemy_move_set = allWhiteMoves;
         }
 
         //Convert those to positions
@@ -270,7 +270,7 @@ public class ChessGame {
         }
 
         //Check if there is a valid move
-        return !is_there_a_valid_move(teamColor);
+        return !isThereValidMove(teamColor);
 
         //throw new RuntimeException("Not implemented");
     }
@@ -290,16 +290,16 @@ public class ChessGame {
         }
 
         //Check if there is a valid move
-        return !is_there_a_valid_move(teamColor);
+        return !isThereValidMove(teamColor);
 
         //throw new RuntimeException("Not implemented");
     }
 
-    private boolean is_there_a_valid_move(TeamColor color) {
+    public boolean isThereValidMove(TeamColor color) {
         //Returns all valid moves
 
         //Create moves to return
-        Collection<ChessMove> all_moves = new ArrayList<>();
+        Collection<ChessMove> allMoves = new ArrayList<>();
 
         for (int row = 1; row < 9; row++) {
             for (int column = 1; column < 9; column++) {
@@ -334,8 +334,8 @@ public class ChessGame {
         this.board = board;
 
         //Get all possible white and black moves
-        all_white_moves = board.find_all_moves(TeamColor.WHITE);
-        all_black_moves = board.find_all_moves(TeamColor.BLACK);
+        allWhiteMoves = board.findAllMoves(TeamColor.WHITE);
+        allBlackMoves = board.findAllMoves(TeamColor.BLACK);
 
     }
 
