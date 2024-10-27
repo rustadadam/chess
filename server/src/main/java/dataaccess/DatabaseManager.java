@@ -1,5 +1,7 @@
 package dataaccess;
 
+import model.AuthData;
+import model.GameData;
 import model.UserData;
 
 import java.sql.*;
@@ -52,7 +54,7 @@ public class DatabaseManager {
         }
     }
 
-    private int executeUpdate(String statement, Object... params) throws DataAccessException {
+    static void executeUpdate(String statement, Object... params) throws DataAccessException {
         try (var conn = DatabaseManager.getConnection()) {
             try (var ps = conn.prepareStatement(statement, RETURN_GENERATED_KEYS)) {
                 for (var i = 0; i < params.length; i++) {
@@ -63,6 +65,10 @@ public class DatabaseManager {
                         ps.setInt(i + 1, p);
                     } else if (param instanceof UserData p) {
                         ps.setString(i + 1, p.toString());
+                    } else if (param instanceof AuthData p) {
+                        ps.setString(i + 1, p.toString());
+                    } else if (param instanceof GameData p) {
+                        ps.setString(i + 1, p.toString());
                     } else if (param == null) {
                         ps.setNull(i + 1, NULL);
                     }
@@ -71,10 +77,9 @@ public class DatabaseManager {
 
                 var rs = ps.getGeneratedKeys();
                 if (rs.next()) {
-                    return rs.getInt(1);
+                    rs.getInt(1);
                 }
 
-                return 0;
             }
         } catch (SQLException e) {
             throw new DataAccessException("unable to update database");
