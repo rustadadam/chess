@@ -17,6 +17,7 @@ import model.AuthData;
 import model.GameData;
 import com.google.gson.Gson;
 
+import java.sql.DatabaseMetaData;
 import java.util.HashMap;
 
 import java.util.Map;
