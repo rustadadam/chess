@@ -24,7 +24,7 @@ public class DatabaseUserDAO implements UserDAO {
     }
 
     public void addUser(UserData data) throws DataAccessException {
-        
+
     }
 
     public UserData getUser(String id) throws DataAccessException {
@@ -32,6 +32,7 @@ public class DatabaseUserDAO implements UserDAO {
     }
 
     public void deleteAllUser() throws DataAccessException {
-
+        var statement = "TRUNCATE UserData";
+        executeUpdate(statement);
     }
 }
