@@ -33,6 +33,20 @@ public class DatabaseManager {
         }
     }
 
+    // I added the below
+    static void configureDatabase(String[] createStatements) throws DataAccessException {
+        createDatabase();
+        try (var conn = getConnection()) {
+            for (var statement : createStatements) {
+                try (var preparedStatement = conn.prepareStatement(statement)) {
+                    preparedStatement.executeUpdate();
+                }
+            }
+        } catch (SQLException ex) {
+            throw new DataAccessException("SQL Error");
+        }
+    }
+
     /**
      * Creates the database if it does not already exist.
      */
