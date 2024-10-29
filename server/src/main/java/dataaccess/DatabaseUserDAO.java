@@ -116,6 +116,6 @@ public class DatabaseUserDAO implements UserDAO {
         String email = rs.getString("email");
         String password = rs.getString("password");
 
-        return new UserData(username, email, password);
+        return new UserData(username, password, email);
     }
 }

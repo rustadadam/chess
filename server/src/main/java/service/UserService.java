@@ -41,7 +41,7 @@ public class UserService {
         } //Check for which new DataAccessException("ERROR");
 
         //Check password
-        if (data.password().equals(password)) {
+        if (Objects.equals(data.password(), password)) {
             return true;
         }
 
