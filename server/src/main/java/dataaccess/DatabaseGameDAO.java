@@ -1,9 +1,12 @@
 package dataaccess;
 
 
+import chess.ChessGame;
 import com.google.gson.Gson;
 import model.GameData;
+import model.UserData;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 
@@ -66,6 +69,23 @@ public class DatabaseGameDAO implements GameDAO {
     }
 
     public void deleteAllGame() throws DataAccessException {
+        var statement = "TRUNCATE GameData";
+        DatabaseManager.executeUpdate(statement);
+    }
 
+    private GameData readGame(ResultSet rs) throws SQLException {
+        Gson gson = new Gson();
+
+        //Rebuild the user data
+        String whiteUsername = rs.getString("whiteUsername");
+        String blackUsername = rs.getString("blackUsername");
+        int gameID = rs.getInt("id");
+        String gameName = rs.getString("gameName");
+        String json = rs.getString("game_json");
+
+        ChessGame game = gson.fromJson(json, ChessGame.class);
+
+
+        return new GameData(gameID, whiteUsername, blackUsername, gameName, game);
     }
 }
