@@ -10,14 +10,6 @@ import service.GameService;
 import service.UserService;
 
 public class RegisterTests {
-    
-    @BeforeEach
-    public void setup() throws DataAccessException {
-        //Create the following like the test does
-        UserService userService = new UserService();
-        userService.deleteAllUserData();
-        AuthService authService = new AuthService();
-    }
 
     @Test
     @DisplayName("Successfully Register a new User")

@@ -1,6 +1,7 @@
 package service;
 
 import chess.ChessGame;
+import dataaccess.DatabaseGameDAO;
 import dataaccess.GameDAO;
 import dataaccess.DataAccessException;
 import dataaccess.MemoryGameDAO;
@@ -16,9 +17,9 @@ public class GameService {
     private GameDAO dataAccess;
     private int gameID;
 
-    public GameService() {
+    public GameService() throws DataAccessException {
         this.gameID = 1000;
-        this.dataAccess = new MemoryGameDAO();
+        this.dataAccess = new DatabaseGameDAO();//MemoryGameDAO();
     }
 
 

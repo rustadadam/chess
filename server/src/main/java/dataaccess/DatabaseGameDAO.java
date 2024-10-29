@@ -74,7 +74,26 @@ public class DatabaseGameDAO implements GameDAO {
     }
 
     public HashMap<Integer, GameData> getGames() throws DataAccessException {
-        return null;
+        //Create our game map
+        HashMap<Integer, GameData> gamesMap = new HashMap<>();
+
+        try (var conn = DatabaseManager.getConnection()) {
+            var statement = "SELECT * FROM GameData";
+            try (var ps = conn.prepareStatement(statement);
+                 var rs = ps.executeQuery()) {
+
+                int index = 1; //Start on one?
+                while (rs.next()) {
+                    GameData game = readGame(rs);
+                    gamesMap.put(index, game);
+                    index++;
+                }
+            }
+        } catch (Exception e) {
+            throw new DataAccessException("Failure to retrieve games: " + e.getMessage());
+        }
+
+        return gamesMap;
     }
 
     public void addPlayerToGameData(int gameID, String userName, boolean addWhite) throws DataAccessException {
@@ -88,7 +107,8 @@ public class DatabaseGameDAO implements GameDAO {
             updatedGame = new GameData(game.gameID(), userName, game.blackUsername(), game.gameName(), game.game());
         }
 
-        //Add the game back - note: I might need to delete the previous game
+        //Add the game back and delete the old one
+        DatabaseManager.executeUpdate("DELETE FROM GameData WHERE id=" + gameID);
         addGame(updatedGame);
 
     }
