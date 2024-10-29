@@ -3,6 +3,7 @@ package service;
 
 import dataaccess.AuthDAO;
 import dataaccess.DataAccessException;
+import dataaccess.DatabaseAuthDAO;
 import dataaccess.MemoryAuthDAO;
 import model.AuthData;
 import model.UserData;
@@ -17,8 +18,8 @@ public class AuthService {
     private AuthDAO dataAccess;
     private Integer authCounter;
 
-    public AuthService() {
-        this.dataAccess = new MemoryAuthDAO();
+    public AuthService() throws DataAccessException {
+        this.dataAccess = new DatabaseAuthDAO();//new MemoryAuthDAO();
         this.authCounter = 1111111;
     }
 

@@ -9,7 +9,7 @@ import service.AuthService;
 import service.GameService;
 import service.UserService;
 
-public class RegisterTests {
+public class RegisterTests extends MyTests {
 
     @Test
     @DisplayName("Successfully Register a new User")

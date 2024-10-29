@@ -10,7 +10,7 @@ import passoff.WrappedRequest;
 import service.AuthService;
 import service.UserService;
 
-public class LogoutTests {
+public class LogoutTests extends MyTests {
 
     @Test
     @DisplayName("Succesfully logout a User")
