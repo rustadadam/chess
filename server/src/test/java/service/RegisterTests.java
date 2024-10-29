@@ -3,15 +3,22 @@ package service;
 import dataaccess.DataAccessException;
 import model.AuthData;
 import model.UserData;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import passoff.WrappedRequest;
 import service.AuthService;
 import service.GameService;
 import service.UserService;
 
 public class RegisterTests {
+    
+    @BeforeEach
+    public void setup() throws DataAccessException {
+        //Create the following like the test does
+        UserService userService = new UserService();
+        userService.deleteAllUserData();
+        AuthService authService = new AuthService();
+    }
+
     @Test
     @DisplayName("Successfully Register a new User")
     public void successRegisterTest() throws DataAccessException {

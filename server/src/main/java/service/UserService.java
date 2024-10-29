@@ -2,6 +2,7 @@ package service;
 
 import com.google.gson.Gson;
 import dataaccess.DataAccessException;
+import dataaccess.DatabaseUserDAO;
 import dataaccess.UserDAO;
 import dataaccess.MemoryUserDAO;
 import model.AuthData;
@@ -16,8 +17,9 @@ public class UserService {
 
     private UserDAO dataAccess;
 
-    public UserService() {
-        this.dataAccess = new MemoryUserDAO();
+    public UserService() throws DataAccessException {
+        this.dataAccess = new DatabaseUserDAO();//Or we can do this new MemoryUserDAO();
+
     }
 
     public void deleteAllUserData() throws DataAccessException {

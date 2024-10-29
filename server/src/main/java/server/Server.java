@@ -32,10 +32,15 @@ public class Server {
     //private final WebSocketHandler webSocketHandler;
 
     public Server() {
-        this.authService = new AuthService();
-        this.gameService = new GameService();
-        this.userService = new UserService();
-        //webSocketHandler = new WebSocketHandler();
+        try {
+            this.authService = new AuthService();
+            this.gameService = new GameService();
+            this.userService = new UserService();
+            //webSocketHandler = new WebSocketHandler();
+        } catch (DataAccessException e) {
+            System.out.println("Error: " + e.getMessage());
+            throw new RuntimeException(e);
+        }
     }
 
     public static void main(String[] args) {
