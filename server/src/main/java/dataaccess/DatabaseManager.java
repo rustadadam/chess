@@ -70,7 +70,7 @@ public class DatabaseManager {
                     } else if (param instanceof GameData p) {
                         ps.setString(i + 1, p.toString());
                     } else if (param == null) {
-                        ps.setNull(i + 1, NULL);
+                        ps.setNull(i + 1, java.sql.Types.NULL);
                     }
                 }
                 ps.executeUpdate();

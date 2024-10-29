@@ -13,7 +13,7 @@ import service.UserService;
 
 import java.util.Collection;
 
-public class ListGamesTests {
+public class ListGamesTests extends MyTests {
 
     @Test
     @DisplayName("Successfully list all games")

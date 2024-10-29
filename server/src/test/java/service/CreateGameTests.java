@@ -11,7 +11,7 @@ import service.GameService;
 import java.util.Collection;
 import java.util.Map;
 
-public class CreateGameTests {
+public class CreateGameTests extends MyTests {
 
     @Test
     @DisplayName("Successfully Create games")

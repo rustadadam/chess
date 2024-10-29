@@ -32,7 +32,7 @@ public class DatabaseAuthDAO implements AuthDAO {
         String statement = "INSERT INTO AuthData (username, authToken) VALUES (?, ?)";
 
         //Add it to the table
-        DatabaseManager.executeUpdate(statement, data.username(), data.username(), data.authToken());
+        DatabaseManager.executeUpdate(statement, data.username(), data.authToken());
     }
 
     public String getAuth(String username) throws DataAccessException {

@@ -10,7 +10,7 @@ import passoff.WrappedRequest;
 import service.AuthService;
 import service.UserService;
 
-public class LoginTests {
+public class LoginTests extends MyTests {
 
     @Test
     @DisplayName("Succesfully login a User")

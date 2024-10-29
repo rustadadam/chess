@@ -11,7 +11,7 @@ import service.GameService;
 import java.util.Collection;
 import java.util.Map;
 
-public class JoinGameTests {
+public class JoinGameTests extends MyTests {
 
     @Test
     @DisplayName("Successfully join Games")
