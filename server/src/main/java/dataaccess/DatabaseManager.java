@@ -50,7 +50,7 @@ public class DatabaseManager {
                 }
             }
         } catch (SQLException ex) {
-            throw new DataAccessException("SQL Error");
+            throw new DataAccessException("SQL Error: " + ex.getMessage());
         }
     }
 

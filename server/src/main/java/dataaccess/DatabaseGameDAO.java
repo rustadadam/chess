@@ -5,6 +5,20 @@ import java.sql.SQLException;
 
 public class DatabaseGameDAO {
 
+    //Example Function. Can be deleted
+    public static void main(String[] args) throws Exception {
+
+        DatabaseManager.createDatabase();
+
+        try (var conn = DatabaseManager.getConnection()) {
+            try (var preparedStatement = conn.prepareStatement("SELECT 1+1")) {
+                var rs = preparedStatement.executeQuery();
+                rs.next();
+                System.out.println(rs.getInt(1));
+            }
+        }
+    }
+
     public DatabaseGameDAO() throws DataAccessException {
         // On init establish database
         String[] createStatements = {
