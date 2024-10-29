@@ -1,6 +1,7 @@
 package service;
 
 import dataaccess.DataAccessException;
+import model.GameData;
 import model.UserData;
 import passoff.WrappedRequest;
 import service.AuthService;
@@ -20,17 +21,13 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Locale;
 
-public class ClearTest {
+public class ClearTest extends MyTests {
 
     @Test
     @DisplayName("Clear Database")
     public void testClearDataBase() throws DataAccessException {
 
         //Create the following like the test does
-        UserService userServiceEmpty = new UserService();
-        GameService gameServiceEmpty = new GameService();
-        AuthService authServiceEmpty = new AuthService();
-
         UserService userService = new UserService();
         GameService gameService = new GameService();
         AuthService authService = new AuthService();
@@ -39,7 +36,7 @@ public class ClearTest {
 
 
         userService.register(userData);
-        gameService.createGame("MyGame");
+        GameData game = gameService.createGame("MyGame");
 
         //Call the following
         userService.deleteAllUserData();
@@ -47,9 +44,16 @@ public class ClearTest {
         authService.deleteAllAuth();
 
         //Check to see if there is no data
-        Assertions.assertTrue(userService.equals(userServiceEmpty), "Failed on User Service");
-        Assertions.assertTrue(gameService.equals(gameServiceEmpty), "Failed on Game Service");
-        Assertions.assertTrue(authService.equals(authServiceEmpty), "Failed on Auth Service");
+        Assertions.assertThrows(DataAccessException.class, () -> {
+            userService.verifyPassword(userData);
+        });
+        Assertions.assertThrows(DataAccessException.class, () -> {
+            gameService.joinGame("adam", "WHITE", game.gameID());
+        });
+        Assertions.assertThrows(DataAccessException.class, () -> {
+            authService.getAuth(userData.username());
+        });
+
     }
 
 }

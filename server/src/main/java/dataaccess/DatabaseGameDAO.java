@@ -37,7 +37,7 @@ public class DatabaseGameDAO implements GameDAO {
               `gameName` varchar(256) NOT NULL,
               `game_json` TEXT DEFAULT NULL,
               PRIMARY KEY (`id`),
-              INDEX(gameName)
+              INDEX(`gameName`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
             """
         };
