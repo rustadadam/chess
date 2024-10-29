@@ -84,8 +84,6 @@ public class DatabaseUserDAO implements UserDAO {
         //Create our query for the table
         String statement = "INSERT INTO UserData (username, email, password) VALUES (?, ?, ?)";
 
-        var json = new Gson().toJson(data);
-
         //Add it to the table
         DatabaseManager.executeUpdate(statement, data.username(), data.email(), data.password());
     }
