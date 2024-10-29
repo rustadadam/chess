@@ -57,6 +57,19 @@ public class DatabaseGameDAO implements GameDAO {
     }
 
     public GameData getGame(int id) throws DataAccessException {
+        try (var conn = DatabaseManager.getConnection()) {
+            var statement = "SELECT * FROM GameData WHERE id=?";
+            try (var ps = conn.prepareStatement(statement)) {
+                ps.setInt(1, id);
+                try (var rs = ps.executeQuery()) {
+                    if (rs.next()) {
+                        return readGame(rs);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            throw new DataAccessException("Unable to read data: " + e.getMessage());
+        }
         return null;
     }
 
@@ -65,6 +78,18 @@ public class DatabaseGameDAO implements GameDAO {
     }
 
     public void addPlayerToGameData(int gameID, String userName, boolean addWhite) throws DataAccessException {
+        //First get the game
+        GameData game = getGame(gameID);
+
+        GameData updatedGame;
+        if (!addWhite) {
+            updatedGame = new GameData(game.gameID(), game.whiteUsername(), userName, game.gameName(), game.game());
+        } else {
+            updatedGame = new GameData(game.gameID(), userName, game.blackUsername(), game.gameName(), game.game());
+        }
+
+        //Add the game back - note: I might need to delete the previous game
+        addGame(updatedGame);
 
     }
 
