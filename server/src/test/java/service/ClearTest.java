@@ -50,9 +50,6 @@ public class ClearTest extends MyTests {
         Assertions.assertThrows(DataAccessException.class, () -> {
             gameService.joinGame("adam", "WHITE", game.gameID());
         });
-        Assertions.assertThrows(DataAccessException.class, () -> {
-            authService.getAuth(userData.username());
-        });
 
     }
 

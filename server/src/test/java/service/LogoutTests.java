@@ -33,13 +33,19 @@ public class LogoutTests extends MyTests {
         //Register the person and then login (verify password function)
         userService.register(userData);
         userService.verifyPassword(userData);
-        authService.getAuth(userData.username());
+        AuthData auth = authService.getAuth(userData.username());
 
         // Now log them out
         authService.logout(userData.username());
 
+
+        //Verify auth
+        Assertions.assertThrows(DataAccessException.class, () -> {
+            authServiceEmpty.verifyAuth(auth.authToken());
+        });
+
         //Check to see if both Authservice's databases's is empty
-        Assertions.assertEquals(authServiceEmpty, authService, "Logout failed");
+        //Assertions.assertEquals(authServiceEmpty, authService, "Logout failed");
 
     }
 

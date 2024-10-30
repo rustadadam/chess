@@ -66,11 +66,11 @@ public class DatabaseAuthDAO implements AuthDAO {
         } catch (Exception e) {
             throw new DataAccessException("Unable to read data: " + e.getMessage());
         }
-        return null;
+        throw new DataAccessException("Error: bad request");
     }
 
     public void deleteAuth(String username) throws DataAccessException {
-        var statement = "DELETE FROM GameData WHERE username=?";
+        var statement = "DELETE FROM AuthData WHERE username=?";
         DatabaseManager.executeUpdate(statement, username);
     }
 
