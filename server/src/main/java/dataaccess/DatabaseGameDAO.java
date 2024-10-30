@@ -97,19 +97,23 @@ public class DatabaseGameDAO implements GameDAO {
     }
 
     public void addPlayerToGameData(int gameID, String userName, boolean addWhite) throws DataAccessException {
-        //First get the game
-        GameData game = getGame(gameID);
+        try {
+            //First get the game
+            GameData game = getGame(gameID);
 
-        GameData updatedGame;
-        if (!addWhite) {
-            updatedGame = new GameData(game.gameID(), game.whiteUsername(), userName, game.gameName(), game.game());
-        } else {
-            updatedGame = new GameData(game.gameID(), userName, game.blackUsername(), game.gameName(), game.game());
+            GameData updatedGame;
+            if (!addWhite) {
+                updatedGame = new GameData(game.gameID(), game.whiteUsername(), userName, game.gameName(), game.game());
+            } else {
+                updatedGame = new GameData(game.gameID(), userName, game.blackUsername(), game.gameName(), game.game());
+            }
+
+            //Add the game back and delete the old one
+            DatabaseManager.executeUpdate("DELETE FROM GameData WHERE id=" + gameID);
+            addGame(updatedGame);
+        } catch (Exception e) {
+            throw new DataAccessException("Failure to retrieve games: " + e.getMessage());
         }
-
-        //Add the game back and delete the old one
-        DatabaseManager.executeUpdate("DELETE FROM GameData WHERE id=" + gameID);
-        addGame(updatedGame);
 
     }
 

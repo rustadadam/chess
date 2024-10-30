@@ -15,22 +15,23 @@ public class RegisterTests extends MyTests {
     public void successRegisterTest() throws DataAccessException {
 
         //Create the following like the test does
-        UserService userService = new UserService();
-        AuthService authService = new AuthService();
+        DatabaseUserDAO user = new DatabaseUserDAO();
+        DatabaseAuthDAO auth = new DatabaseAuthDAO();
 
         UserData userData = new UserData("adam", "AdamIsAwesome", "coolio.email.com");
 
-        //Register the person
-        userService.register(userData);
 
-        //Get the auth
-        AuthData authData = authService.getAuth(userData.username());
+        AuthData authData = new AuthData("woagnsd", "adam");
+        auth.addAuth(authData);
+
+        //Register the person so we can login them in
+        user.addUser(userData);
 
         //Check the username
-        Assertions.assertTrue(authData.username().equals("adam"), "Usernames do not match");
+        Assertions.assertNotNull(auth.getAuth("adam"));
 
         // Check we have an Auth Token
-        Assertions.assertFalse(authData.authToken().equals(null), "Auth token is null");
+        Assertions.assertNotNull(user.getUser("adam"));
     }
 
     @Test
@@ -38,48 +39,17 @@ public class RegisterTests extends MyTests {
     public void registerFailureTest() throws DataAccessException {
 
         //Create the following like the test does
-        UserService userService = new UserService();
+        DatabaseUserDAO user = new DatabaseUserDAO();
 
-        //Create data
         UserData userData = new UserData("adam", null, "coolio.email.com");
 
+        //Register the person so we can login them in
+        Assertions.assertThrows(DataAccessException.class, () -> user.addUser(userData));
 
-        //Don't provide the password
-        try {
-            userService.register(userData);
-            Assertions.fail("Registration should fail");
+        UserData userData2 = new UserData("adam", "heyall", null);
 
-        } catch (Exception e) {
-            Assertions.assertEquals("Error: bad request", e.getMessage(), "User not found Error not given");
-
-        }
-
-        //Create data
-        UserData userData2 = new UserData("adam", "myPassword", null);
-
-
-        //Don't provide the correct password
-        try {
-            userService.register(userData2);
-            Assertions.fail("Registration should fail");
-
-        } catch (Exception e) {
-            Assertions.assertEquals("Error: bad request", e.getMessage(), "User not found Error not given");
-        }
-
-        //Create data
-        UserData userData3 = new UserData("adam", "myPassword", "myEmails");
-
-        //Register the person
-        userService.register(userData3);
-
-        try {
-            userService.register(userData3);
-            Assertions.fail("Registration already taken");
-
-        } catch (Exception e) {
-            Assertions.assertEquals("Error: already taken", e.getMessage(), "User not found Error not given");
-        }
+        //Register the person so we can login them in
+        Assertions.assertThrows(DataAccessException.class, () -> user.addUser(userData2));
 
 
     }

@@ -15,28 +15,23 @@ public class LoginTests extends MyTests {
     public void loginSucessTest() throws DataAccessException {
 
         //Create the following like the test does
-        UserService userService = new UserService();
-        AuthService authService = new AuthService();
+        DatabaseUserDAO user = new DatabaseUserDAO();
+        DatabaseAuthDAO auth = new DatabaseAuthDAO();
 
         //Create data -- We wrap it so it works like a request
         UserData userData = new UserData("adam", "AdamIsAwesome", "coolio.email.com");
 
         //Register the person so we can login them in
-        userService.register(userData);
+        user.addUser(userData);
 
-        //Make the same calls to the handler as LOGIN
-        boolean isCorrect = userService.verifyPassword(userData);
+        //Add auth
+        AuthData authData = new AuthData("woagnsd", "adam");
+        auth.addAuth(authData);
 
-        Assertions.assertTrue(isCorrect, "Incorrect password");
-
-        //Get the auth
-        AuthData newAuth = authService.getAuth(userData.username());
-
-        //Check the username
-        Assertions.assertTrue(newAuth.username().equals("adam"), "Usernames do not match");
+        String authToken = auth.getAuth("adam");
 
         // Check we have an Auth Token
-        Assertions.assertFalse(newAuth.authToken().equals(null), "Auth token is null");
+        Assertions.assertFalse(authToken.equals(null), "Auth token is null");
 
     }
 
@@ -45,28 +40,23 @@ public class LoginTests extends MyTests {
     public void loginFailureTest() throws DataAccessException {
 
         //Create the following like the test does
-        UserService userService = new UserService();
+        DatabaseUserDAO user = new DatabaseUserDAO();
+        DatabaseAuthDAO auth = new DatabaseAuthDAO();
 
         //Create data
-        UserData userData = new UserData("adam", "AdamIsAwesome", "coolio.email.com");
+        UserData userData = new UserData("john", "AdamIsAwesome", "coolio.email.com");
 
-        //Register the person
-        userService.register(userData);
+        //Register the person so we can login them in
+        user.addUser(userData);
 
+        //Add auth
+        AuthData authData = new AuthData("woagnsd", "john");
+        auth.addAuth(authData);
 
-        //Give a bad user
-        try {
-            UserData userData2 = new UserData("kevin", "AdamIsAwesome", "coolio.email.com");
-            userService.verifyPassword(userData2);
-            Assertions.fail("Username does not exist");
-
-        } catch (Exception e) {
-            Assertions.assertEquals("Error: unauthorized", e.getMessage(), "User not found Error not given");
-
-        }
+        String authToken = auth.getAuth("kevin");
+        Assertions.assertNull(authToken, "Auth token is null");
 
         //Give wrong password
-        UserData userData3 = new UserData("adam", "lame", "coolio.email.com");
-        Assertions.assertThrows(DataAccessException.class, () -> userService.verifyPassword(userData3));
+        Assertions.assertNotEquals(auth.getAuth("john"), auth.getAuth("kevin"));
     }
 }

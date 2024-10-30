@@ -38,21 +38,15 @@ public class JoinGameTests extends MyTests {
     public void failCreateJoinTest() throws DataAccessException {
 
         //Create the following like the test does
-        GameService gameService = new GameService();
+        DatabaseGameDAO gameDatabase = new DatabaseGameDAO();
 
         //Add game
-        gameService.createGame("myGame");
+        gameDatabase.addGame(new GameData(11212, null, null, "myGame", new ChessGame()));
 
-        //Check that the game was added
-        Map<String, Collection<GameData>> games = gameService.getGames();
-        Assertions.assertEquals(1, games.size(), "Game was not added.");
-
-        //Check if info is right
-        GameData joinedGame = gameService.joinGame("Adam", "WHITE", 1000);
-        Assertions.assertEquals("Adam", joinedGame.whiteUsername());
+        gameDatabase.addPlayerToGameData(11212, "Adam", true);
 
         //Throw Error
-        Assertions.assertThrows(DataAccessException.class, () -> gameService.joinGame("Kevin", "WHITE", 1000));
+        Assertions.assertThrows(DataAccessException.class, () -> gameDatabase.addPlayerToGameData(01, null, true));
     }
 }
 

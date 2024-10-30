@@ -16,35 +16,18 @@ public class LogoutTests extends MyTests {
     public void logoutSucessTest() throws DataAccessException {
 
         //Create the following like the test does
-        UserService userService = new UserService();
-        AuthService authService = new AuthService();
-        AuthService authServiceEmpty = new AuthService();
+        DatabaseAuthDAO auth = new DatabaseAuthDAO();
 
-        //Create data -- We wrap it so it works like a request
-        WrappedRequest req = new WrappedRequest();
-        req.setQueryParam("username", "adam");
-        req.setQueryParam("password", "AdamIsAwesome");
-        req.setQueryParam("email", "coolio.email.com");
+        //Add auth
+        AuthData authData = new AuthData("woagnsd", "adam");
+        auth.addAuth(authData);
 
-        UserData userData = new UserData("adam", "AdamIsAwesome", "coolio.email.com");
+        Assertions.assertNotNull(auth.getAuth("adam"));
 
+        //logout
+        auth.deleteAuth("adam");
 
-        //Register the person and then login (verify password function)
-        userService.register(userData);
-        userService.verifyPassword(userData);
-        AuthData auth = authService.getAuth(userData.username());
-
-        // Now log them out
-        authService.logout(userData.username());
-
-
-        //Verify auth
-        Assertions.assertThrows(DataAccessException.class, () -> {
-            authServiceEmpty.verifyAuth(auth.authToken());
-        });
-
-        //Check to see if both Authservice's databases's is empty
-        //Assertions.assertEquals(authServiceEmpty, authService, "Logout failed");
+        Assertions.assertNull(auth.getAuth("adam"));
 
     }
 
@@ -53,23 +36,13 @@ public class LogoutTests extends MyTests {
     public void logoutFailTest() throws DataAccessException {
 
         //Create the following like the test does
-        UserService userService = new UserService();
-        AuthService authService = new AuthService();
-        AuthService authServiceEmpty = new AuthService();
+        DatabaseAuthDAO auth = new DatabaseAuthDAO();
 
-        //Create data
-        UserData userData = new UserData("adam", "AdamIsAwesome", "coolio.email.com");
-        AuthData authData = new AuthData("myToken", "adam");
+        //Add auth
+        AuthData authData = new AuthData(null, "adam");
+        Assertions.assertThrows(DataAccessException.class, () -> auth.addAuth(authData));
 
-        //Register the person and then login
-        userService.register(userData);
-        userService.verifyPassword(userData);
-        authService.getAuth(authData.username());
-
-        // Now log out the wrong person
-        UserData userData2 = new UserData("Kevin", "AdamIsAwesome", "coolio.email.com");
-
-        Assertions.assertThrows(DataAccessException.class, () -> userService.verifyPassword(userData2));
+        Assertions.assertNull(auth.getAuth("adam"));
 
     }
 }

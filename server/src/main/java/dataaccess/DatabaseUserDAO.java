@@ -102,6 +102,7 @@ public class DatabaseUserDAO implements UserDAO {
         } catch (Exception e) {
             throw new DataAccessException("Unable to read data: " + e.getMessage());
         }
+
         return null;
     }
 
