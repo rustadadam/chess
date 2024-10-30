@@ -1,10 +1,10 @@
-package dataaccess;
+package service;
 
+import dataaccess.DataAccessException;
 import model.GameData;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import service.GameService;
 
 import java.util.Collection;
 import java.util.Map;

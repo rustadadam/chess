@@ -1,10 +1,8 @@
-package dataaccess;
+package service;
 
+import dataaccess.DataAccessException;
 import model.GameData;
 import model.UserData;
-import service.AuthService;
-import service.GameService;
-import service.UserService;
 
 import org.junit.jupiter.api.*;
 

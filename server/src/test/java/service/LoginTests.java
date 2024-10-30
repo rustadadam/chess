@@ -1,12 +1,11 @@
-package dataaccess;
+package service;
 
+import dataaccess.DataAccessException;
 import model.AuthData;
 import model.UserData;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import service.AuthService;
-import service.UserService;
 
 public class LoginTests extends MyTests {
 

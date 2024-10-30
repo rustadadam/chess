@@ -1,4 +1,4 @@
-package dataaccess;
+package service;
 
 import dataaccess.DataAccessException;
 import org.junit.jupiter.api.BeforeEach;

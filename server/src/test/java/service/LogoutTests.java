@@ -1,13 +1,12 @@
-package dataaccess;
+package service;
 
+import dataaccess.DataAccessException;
 import model.AuthData;
 import model.UserData;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import passoff.WrappedRequest;
-import service.AuthService;
-import service.UserService;
 
 public class LogoutTests extends MyTests {
 

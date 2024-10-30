@@ -1,10 +1,9 @@
-package dataaccess;
+package service;
 
+import dataaccess.DataAccessException;
 import model.AuthData;
 import model.UserData;
 import org.junit.jupiter.api.*;
-import service.AuthService;
-import service.UserService;
 
 public class RegisterTests extends MyTests {
 
