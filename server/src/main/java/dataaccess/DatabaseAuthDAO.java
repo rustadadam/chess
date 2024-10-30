@@ -70,7 +70,8 @@ public class DatabaseAuthDAO implements AuthDAO {
     }
 
     public void deleteAuth(String username) throws DataAccessException {
-        DatabaseManager.executeUpdate("DELETE FROM GameData WHERE username=" + username);
+        var statement = "DELETE FROM GameData WHERE username=?";
+        DatabaseManager.executeUpdate(statement, username);
     }
 
     public void deleteAllAuth() throws DataAccessException {
@@ -81,7 +82,7 @@ public class DatabaseAuthDAO implements AuthDAO {
     private AuthData readAuth(ResultSet rs) throws SQLException {
         //Rebuild the user data
         String username = rs.getString("username");
-        String authToken = rs.getString("email");
+        String authToken = rs.getString("authToken");
 
         return new AuthData(authToken, username);
     }
