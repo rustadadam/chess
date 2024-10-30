@@ -133,3 +133,10 @@ git push
 - https://github.com/softwareconstruction240/softwareconstruction/blob/main/instruction/db-sql/example-code/initialize.sql
 - Create database with database manager
 
+## Command Line Interface (CLI)
+- Git is an example of a database
+- REPL is Read Evaluate Print Loop
+- echo -e "\u001b[31;40;7m ♔♕♖♗♘♙♚♛ "
+- URI is a Universal --- Identifier
+- 
+

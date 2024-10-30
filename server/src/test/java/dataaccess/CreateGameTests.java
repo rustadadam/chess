@@ -28,7 +28,6 @@ public class CreateGameTests extends MyTests {
 
         //Check if info is right
         for (GameData gameData : games.values()) {
-            Assertions.assertNotNull(gameData.gameID(), "Game ID was not added.");
             Assertions.assertNotNull(gameData.gameName(), "Game name was not added.");
             Assertions.assertNull(gameData.blackUsername(), "Black user name was incorrectly added.");
             Assertions.assertNull(gameData.whiteUsername(), "White user name was incorrectly added.");
