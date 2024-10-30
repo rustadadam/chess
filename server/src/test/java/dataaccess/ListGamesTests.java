@@ -1,15 +1,10 @@
-package service;
+package dataaccess;
 
-import dataaccess.DataAccessException;
-import model.AuthData;
 import model.GameData;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import passoff.WrappedRequest;
-import service.AuthService;
 import service.GameService;
-import service.UserService;
 
 import java.util.Collection;
 

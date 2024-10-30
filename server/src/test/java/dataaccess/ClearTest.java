@@ -1,25 +1,12 @@
-package service;
+package dataaccess;
 
-import dataaccess.DataAccessException;
 import model.GameData;
 import model.UserData;
-import passoff.WrappedRequest;
 import service.AuthService;
 import service.GameService;
 import service.UserService;
-import spark.Request;
 
-import spark.Response;
-import chess.ChessGame;
 import org.junit.jupiter.api.*;
-import passoff.model.*;
-import server.Server;
-
-import java.net.HttpURLConnection;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Locale;
 
 public class ClearTest extends MyTests {
 
