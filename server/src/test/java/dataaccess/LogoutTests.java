@@ -42,6 +42,7 @@ public class LogoutTests extends MyTests {
         AuthData authData = new AuthData(null, "adam");
         Assertions.assertThrows(DataAccessException.class, () -> auth.addAuth(authData));
 
+        //See that its fake!
         Assertions.assertNull(auth.getAuth("adam"));
 
     }
