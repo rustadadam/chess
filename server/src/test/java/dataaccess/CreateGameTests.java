@@ -13,6 +13,61 @@ import java.util.Map;
 public class CreateGameTests extends MyTests {
 
     @Test
+    @DisplayName("Successfully add game")
+    public void successGetGameTest() throws DataAccessException {
+
+        //Create the following like the test does
+        DatabaseGameDAO gameDatabase = new DatabaseGameDAO();
+
+        //Add game
+        gameDatabase.addGame(new GameData(11212, null, null, "myGame", new ChessGame()));
+
+        GameData game = gameDatabase.getGame(11212);
+        Assertions.assertNotNull(game);
+    }
+
+    @Test
+    @DisplayName("Failure to add game")
+    public void failGetGameTest() throws DataAccessException {
+
+        //Create the following like the test does
+        DatabaseGameDAO gameDatabase = new DatabaseGameDAO();
+
+        //Add game
+        gameDatabase.addGame(new GameData(11212, null, null, "myGame", new ChessGame()));
+
+        GameData game = gameDatabase.getGame(14212);
+        Assertions.assertNull(game);
+    }
+
+    @Test
+    @DisplayName("Successfully add game")
+    public void successAddTest() throws DataAccessException {
+
+        //Create the following like the test does
+        DatabaseGameDAO gameDatabase = new DatabaseGameDAO();
+
+        //Add game
+        try {
+            gameDatabase.addGame(new GameData(11212, null, null, "myGame", new ChessGame()));
+        } catch (DataAccessException e) {
+            Assertions.fail(e.getMessage());
+        }
+    }
+
+    @Test
+    @DisplayName("Failure add game")
+    public void failureAddTest() throws DataAccessException {
+
+        //Create the following like the test does
+        DatabaseGameDAO gameDatabase = new DatabaseGameDAO();
+
+        //Add game
+        Assertions.assertThrows(DataAccessException.class, () -> gameDatabase.addGame(new GameData(12132, null, null, null, new ChessGame())));
+
+    }
+
+    @Test
     @DisplayName("Successfully Create games")
     public void successCreateGamesTest() throws DataAccessException {
 

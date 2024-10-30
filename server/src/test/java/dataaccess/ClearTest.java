@@ -14,26 +14,39 @@ public class ClearTest extends MyTests {
 
     @Test
     @DisplayName("Clear Database")
-    public void testClearDataBase() throws DataAccessException {
+    public void testClearGameDataBase() throws DataAccessException {
 
         //Create the following like the test does
-        DatabaseUserDAO user = new DatabaseUserDAO();
         DatabaseGameDAO gameData = new DatabaseGameDAO();
 
         UserData userData = new UserData("adam", "AdamIsAwesome", "coolio.email.com");
 
-
-        user.addUser(userData);
         gameData.addGame(new GameData(11212, "hi", "you", "myGame", new ChessGame()));
 
         //Call the following
-        user.deleteAllUser();
         gameData.deleteAllGame();
 
         //Check to see if there is no data
-        Assertions.assertNull(user.getUser("adam"));
         Assertions.assertNull(gameData.getGame(11212));
 
+    }
+
+    @Test
+    @DisplayName("Clear Database")
+    public void testClearUserDataBase() throws DataAccessException {
+
+        //Create the following like the test does
+        DatabaseUserDAO user = new DatabaseUserDAO();
+
+        UserData userData = new UserData("adam", "AdamIsAwesome", "coolio.email.com");
+
+        user.addUser(userData);
+
+        //Call the following
+        user.deleteAllUser();
+
+        //Check to see if there is no data
+        Assertions.assertNull(user.getUser("adam"));
     }
 
 }
