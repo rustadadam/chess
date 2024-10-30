@@ -7,6 +7,7 @@ import dataaccess.UserDAO;
 import dataaccess.MemoryUserDAO;
 import model.AuthData;
 import model.UserData;
+import org.mindrot.jbcrypt.BCrypt;
 import spark.Request;
 import spark.Response;
 
@@ -16,6 +17,7 @@ import java.util.Objects;
 public class UserService {
 
     private UserDAO dataAccess;
+
 
     public UserService() throws DataAccessException {
         this.dataAccess = new DatabaseUserDAO();//Or we can do this new MemoryUserDAO();
@@ -41,7 +43,7 @@ public class UserService {
         } //Check for which new DataAccessException("ERROR");
 
         //Check password
-        if (Objects.equals(data.password(), password)) {
+        if (BCrypt.checkpw(password, data.password())) {
             return true;
         }
 
@@ -56,19 +58,24 @@ public class UserService {
         if (oldData != null) {
             throw new DataAccessException("Error: already taken");
         }
-        ; //Check for which new DataAccessException("ERROR");
+        //Check for which new DataAccessException("ERROR");
         if (userData.password() == null) {
             throw new DataAccessException("Error: bad request");
         }
-        ;
+
         if (userData.email() == null) {
             throw new DataAccessException("Error: bad request");
         }
-        ;
+
+        //Hash password
+        String hashedPassword = BCrypt.hashpw(userData.password(), BCrypt.gensalt());
+
+        //Create new data
+        UserData newUser = new UserData(userData.username(), hashedPassword, userData.email());
 
         //Create new user data
-        dataAccess.addUser(userData);
-        // return newUser;
+        dataAccess.addUser(newUser);
+
     }
 
     @Override
