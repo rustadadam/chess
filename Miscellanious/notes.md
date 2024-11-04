@@ -142,5 +142,10 @@ git push
 ## Logging
 - External recording of your program
 - Helps with debugging, and mapping. Sometimes is the only way to debug. The debugger may be better.
-- 
+- Logging properties are helpful: Persistent, Immutable, Aggregated, Accessible, Performat
+- Logger objects can handle multiple levels of logging. 
+- We can make custom handlers 
+
+## Debugging
+
 
