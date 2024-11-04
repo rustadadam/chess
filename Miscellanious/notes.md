@@ -138,5 +138,9 @@ git push
 - REPL is Read Evaluate Print Loop
 - echo -e "\u001b[31;40;7m ♔♕♖♗♘♙♚♛ "
 - URI is a Universal --- Identifier
+
+## Logging
+- External recording of your program
+- Helps with debugging, and mapping. Sometimes is the only way to debug. The debugger may be better.
 - 
 
