@@ -146,6 +146,4 @@ git push
 - Logger objects can handle multiple levels of logging. 
 - We can make custom handlers 
 
-## Debugging
-
 
