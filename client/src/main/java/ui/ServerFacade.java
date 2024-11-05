@@ -25,7 +25,6 @@ public class ServerFacade {
         serverUrl = url;
     }
 
-
     public void clearDataBase() throws Exception {
         var path = "/db";
         this.makeRequest("DELETE", path, null, null);
@@ -60,7 +59,7 @@ public class ServerFacade {
         var path = "/user";
         return this.makeRequest("POST", path, userData, AuthData.class);
     }
-    
+
 
     private <T> T makeRequest(String method, String path, Object request, Class<T> responseClass) throws Exception {
         try {

@@ -8,14 +8,11 @@ public class PreLoginClient {
     private String visitorName = null;
     private final ServerFacade server;
     private final String serverUrl;
-    private final NotificationHandler notificationHandler;
-    private WebSocketFacade ws;
     private State state = State.SIGNEDOUT;
 
-    public PreLoginClient(String serverUrl, NotificationHandler notificationHandler) {
+    public PreLoginClient(String serverUrl) {
         server = new ServerFacade(serverUrl);
         this.serverUrl = serverUrl;
-        this.notificationHandler = notificationHandler;
     }
 
     public String eval(String input) {
@@ -26,24 +23,24 @@ public class PreLoginClient {
             return switch (cmd) {
                 case "login" -> logIn(params);
                 case "help" -> help();
-                case "adoptall" -> adoptAllPets();
+                //case "adoptall" -> adoptAllPets();
                 case "quit" -> "quit";
                 default -> help();
             };
-        } catch (ResponseException ex) {
+        } catch (Exception ex) {
             return ex.getMessage();
         }
     }
 
-    public String logIn(String... params) throws ResponseException {
+    public String logIn(String... params) throws Exception {
         if (params.length >= 1) {
             state = State.SIGNEDIN;
             visitorName = String.join("-", params);
-            ws = new WebSocketFacade(serverUrl, notificationHandler);
-            ws.enterPetShop(visitorName);
+            //ws = new WebSocketFacade(serverUrl, notificationHandler);
+            //ws.enterPetShop(visitorName);
             return String.format("You signed in as %s.", visitorName);
         }
-        throw new ResponseException(400, "Expected: <yourname>");
+        throw new Exception("Expected: <yourname>");
     }
 
     public String help() {
@@ -63,9 +60,9 @@ public class PreLoginClient {
                 """;
     }
 
-    private void assertSignedIn() throws ResponseException {
+    private void assertSignedIn() throws Exception {
         if (state == State.SIGNEDOUT) {
-            throw new ResponseException(400, "You must sign in");
+            throw new Exception("You must sign in");
         }
     }
 }
