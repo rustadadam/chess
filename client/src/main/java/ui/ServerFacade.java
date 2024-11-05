@@ -14,7 +14,8 @@ import java.util.Map;
 
 import model.AuthData;
 import model.GameData;
-import shared.authdata;
+import model.GameRequest;
+import model.UserData;
 
 public class ServerFacade {
 
@@ -30,23 +31,36 @@ public class ServerFacade {
         this.makeRequest("DELETE", path, null, null);
     }
 
-    public void listGames(AuthData data) throws Exception {
+    public Object listGames(AuthData data) throws Exception { //The auth should be in the header?
         var path = "/game";
-        this.makeRequest("GET", path, data, Map.class);
+        return this.makeRequest("GET", path, data, Map.class);
     }
 
-    public void joinGame() throws Exception {
+    public void joinGame(GameRequest gameRequest) throws Exception {
         var path = "/game";
-        this.makeRequest("PUT", path, null, null);
+        this.makeRequest("PUT", path, gameRequest, null);
     }
 
-    public Pet[] listPets() throws Exception {
-        var path = "/pet";
-        record listPetResponse(Pet[] pet) {
-        }
-        var response = this.makeRequest("GET", path, null, listPetResponse.class);
-        return response.pet();
+    public Object createGame(GameData gameData) throws Exception {
+        var path = "/game";
+        return this.makeRequest("POST", path, gameData, Map.class);
     }
+
+    public Object login(UserData userData) throws Exception {
+        var path = "/session";
+        return this.makeRequest("POST", path, userData, AuthData.class);
+    }
+
+    public void logout() throws Exception {
+        var path = "/session";
+        this.makeRequest("DELETE", path, null, null);
+    }
+
+    public Object register(UserData userData) throws Exception {
+        var path = "/user";
+        return this.makeRequest("POST", path, userData, AuthData.class);
+    }
+    
 
     private <T> T makeRequest(String method, String path, Object request, Class<T> responseClass) throws Exception {
         try {
