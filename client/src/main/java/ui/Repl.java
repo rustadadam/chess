@@ -2,21 +2,25 @@ package ui;
 
 import java.util.Scanner;
 
-import static EscapeSequences.*;
+import static ui.EscapeSequences.*;
 
+import com.sun.nio.sctp.HandlerResult;
+import com.sun.nio.sctp.Notification;
 import com.sun.nio.sctp.NotificationHandler;
 
-public class Repl implements NotificationHandler {
-    private final PetClient client;
+public class Repl {
+    private final PreLoginClient client;
 
     public Repl(String serverUrl) {
-        client = new PetClient(serverUrl, this);
+        client = new preLoginClient(serverUrl, this);
     }
 
     public void run() {
         System.out.println("\uD83D\uDC36 Welcome to the pet store. Sign in to start.");
         System.out.print(client.help());
 
+
+        //The Following is the loop
         Scanner scanner = new Scanner(System.in);
         var result = "";
         while (!result.equals("quit")) {
@@ -25,7 +29,7 @@ public class Repl implements NotificationHandler {
 
             try {
                 result = client.eval(line);
-                System.out.print(BLUE + result);
+                System.out.print(SET_TEXT_COLOR_BLUE + result);
             } catch (Throwable e) {
                 var msg = e.toString();
                 System.out.print(msg);
@@ -34,13 +38,8 @@ public class Repl implements NotificationHandler {
         System.out.println();
     }
 
-    public void notify(Notification notification) {
-        System.out.println(RED + notification.message());
-        printPrompt();
-    }
-
     private void printPrompt() {
-        System.out.print("\n" + RESET + ">>> " + GREEN);
+        System.out.print("\n" + RESET_BG_COLOR + ">>> " + SET_TEXT_COLOR_GREEN);
     }
 
 }

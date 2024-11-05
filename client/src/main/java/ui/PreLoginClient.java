@@ -1,11 +1,10 @@
 package ui;
 
-import com.google.gson.Gson;
 import com.sun.nio.sctp.NotificationHandler;
 
 import java.util.Arrays;
 
-public class ChessClient {
+public class PreLoginClient {
     private String visitorName = null;
     private final ServerFacade server;
     private final String serverUrl;
@@ -13,7 +12,7 @@ public class ChessClient {
     private WebSocketFacade ws;
     private State state = State.SIGNEDOUT;
 
-    public ChessClient(String serverUrl, NotificationHandler notificationHandler) {
+    public PreLoginClient(String serverUrl, NotificationHandler notificationHandler) {
         server = new ServerFacade(serverUrl);
         this.serverUrl = serverUrl;
         this.notificationHandler = notificationHandler;
