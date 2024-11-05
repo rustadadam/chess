@@ -9,6 +9,12 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URL;
+import java.util.Collection;
+import java.util.Map;
+
+import model.AuthData;
+import model.GameData;
+import shared.authdata;
 
 public class ServerFacade {
 
@@ -24,14 +30,14 @@ public class ServerFacade {
         this.makeRequest("DELETE", path, null, null);
     }
 
-    public void deletePet(int id) throws Exception {
-        var path = String.format("/pet/%s", id);
-        this.makeRequest("DELETE", path, null, null);
+    public void listGames(AuthData data) throws Exception {
+        var path = "/game";
+        this.makeRequest("GET", path, data, Map.class);
     }
 
-    public void deleteAllPets() throws Exception {
-        var path = "/pet";
-        this.makeRequest("DELETE", path, null, null);
+    public void joinGame() throws Exception {
+        var path = "/game";
+        this.makeRequest("PUT", path, null, null);
     }
 
     public Pet[] listPets() throws Exception {
