@@ -9,15 +9,18 @@ import com.sun.nio.sctp.Notification;
 import com.sun.nio.sctp.NotificationHandler;
 
 public class Repl {
-    private final PreLoginClient client;
+    private Client client;
+    private State state = State.SIGNEDOUT;
+    private final String serverUrl;
 
     public Repl(String serverUrl) {
         client = new PreLoginClient(serverUrl);
+        this.serverUrl = serverUrl;
     }
 
     public void run() {
-        System.out.println("\uD83D\uDC36 Welcome to the pet store. Sign in to start.");
-        System.out.print(client.help());
+        System.out.println("\uD83D\uDC36 Welcome Grand Master back to Chess. Sign in to start.");
+        System.out.print(client.eval("help"));
 
 
         //The Following is the loop
@@ -34,12 +37,20 @@ public class Repl {
                 var msg = e.toString();
                 System.out.print(msg);
             }
+            changeClient();
         }
         System.out.println();
     }
 
+    private void changeClient() {
+        state = client.getState();
+        if (state == State.SIGNEDOUT) {
+            client = new PreLoginClient(serverUrl);
+        }
+    }
+
     private void printPrompt() {
-        System.out.print("\n" + RESET_BG_COLOR + ">>> " + SET_TEXT_COLOR_GREEN);
+        System.out.print("\n" + RESET_BG_COLOR + "[" + state + "]" + ">>> " + SET_TEXT_COLOR_GREEN);
     }
 
 }

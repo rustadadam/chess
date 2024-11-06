@@ -4,7 +4,7 @@ import com.sun.nio.sctp.NotificationHandler;
 
 import java.util.Arrays;
 
-public class PreLoginClient {
+public class PreLoginClient implements Client {
     private String visitorName = null;
     private final ServerFacade server;
     private final String serverUrl;
@@ -13,6 +13,10 @@ public class PreLoginClient {
     public PreLoginClient(String serverUrl) {
         server = new ServerFacade(serverUrl);
         this.serverUrl = serverUrl;
+    }
+
+    public State getState() {
+        return state;
     }
 
     public String eval(String input) {

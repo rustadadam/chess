@@ -9,7 +9,6 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URL;
-import java.util.Collection;
 import java.util.Map;
 
 import model.AuthData;
@@ -30,9 +29,9 @@ public class ServerFacade {
         this.makeRequest("DELETE", path, null, null);
     }
 
-    public Object listGames(AuthData data) throws Exception { //The auth should be in the header?
+    public Object listGames() throws Exception { //The auth should be in the header?
         var path = "/game";
-        return this.makeRequest("GET", path, data, Map.class);
+        return this.makeRequest("GET", path, null, Map.class);
     }
 
     public void joinGame(GameRequest gameRequest) throws Exception {
@@ -55,7 +54,7 @@ public class ServerFacade {
         this.makeRequest("DELETE", path, null, null);
     }
 
-    public Object register(UserData userData) throws Exception {
+    public AuthData register(UserData userData) throws Exception {
         var path = "/user";
         return this.makeRequest("POST", path, userData, AuthData.class);
     }
