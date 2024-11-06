@@ -146,4 +146,15 @@ git push
 - Logger objects can handle multiple levels of logging. 
 - We can make custom handlers 
 
+## HTTP Highlights
+- Client initiates, Server responds
+- Extensive Caching
+- Methods, paths, headers
+- Only 1 directional
+
+## Websocket
+- Its bidirectional between a server and something else
+- Automatically detects whether it is dropped or not
+- 
+
 
