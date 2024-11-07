@@ -1,6 +1,7 @@
 package ui;
 
 import com.sun.nio.sctp.NotificationHandler;
+import model.UserData;
 
 import java.util.Arrays;
 
@@ -27,7 +28,7 @@ public class PreLoginClient implements Client {
             var cmd = (tokens.length > 0) ? tokens[0] : "help";
             var params = Arrays.copyOfRange(tokens, 1, tokens.length);
             return switch (cmd) {
-                case "login" -> logIn(params);
+                case "register" -> register(params);
                 case "help" -> help();
                 //case "adoptall" -> adoptAllPets();
                 case "quit" -> "quit";
@@ -38,7 +39,7 @@ public class PreLoginClient implements Client {
         }
     }
 
-    public String logIn(String... params) throws Exception {
+    public String register(String... params) throws Exception {
         if (params.length >= 3) {
             state = State.SIGNEDIN;
 
@@ -46,6 +47,10 @@ public class PreLoginClient implements Client {
             String userName = params[0];
             String password = params[1];
             String email = params[2];
+
+            UserData userData = new UserData(userName, password, email);
+
+            server.register(userData);
 
             return String.format(WHITE_KING + SET_TEXT_BOLD + "Welcome Grand Master %s." + RESET_TEXT_BOLD_FAINT + WHITE_KING, userName);
         }
