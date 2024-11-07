@@ -50,7 +50,7 @@ public class Repl {
     }
 
     private void printPrompt() {
-        System.out.print("\n" + RESET_BG_COLOR + "[" + state + "]" + ">>> " + SET_TEXT_COLOR_GREEN);
+        System.out.print("\n" + SET_TEXT_COLOR_MAGENTA + "[" + state + "] " + RESET_TEXT_COLOR + ">>> " + SET_TEXT_COLOR_GREEN);
     }
 
 }
