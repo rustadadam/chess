@@ -4,6 +4,8 @@ import com.sun.nio.sctp.NotificationHandler;
 
 import java.util.Arrays;
 
+import static ui.EscapeSequences.*;
+
 public class PreLoginClient implements Client {
     private String visitorName = null;
     private final ServerFacade server;
@@ -40,28 +42,19 @@ public class PreLoginClient implements Client {
         if (params.length >= 1) {
             state = State.SIGNEDIN;
             visitorName = String.join("-", params);
-            //ws = new WebSocketFacade(serverUrl, notificationHandler);
-            //ws.enterPetShop(visitorName);
             return String.format("You signed in as %s.", visitorName);
         }
-        throw new Exception("Expected: <yourname>");
+        throw new Exception("Login Failed. Expected: <USERNAME> <PASSWORD> <EMAIL>");
     }
 
     public String help() {
-        if (state == State.SIGNEDOUT) {
-            return """
-                    - signIn <yourname>
-                    - quit
-                    """;
-        }
-        return """
-                - list
-                - adopt <pet id>
-                - rescue <name> <CAT|DOG|FROG|FISH>
-                - adoptAll
-                - signOut
-                - quit
-                """;
+        return SET_TEXT_COLOR_RED + "Choose one of the following options:\n" + SET_TEXT_COLOR_BLUE +
+                """
+                        - register <USERNAME> <PASSWORD> <EMAIL> | to create an account!
+                        - login <USERNAME> <PASSWORD>  | to play Chess!
+                        - quit | to leave application!
+                        - help | to print the command options!
+                        """;
     }
 
     private void assertSignedIn() throws Exception {
