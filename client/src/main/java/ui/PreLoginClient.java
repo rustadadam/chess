@@ -39,10 +39,15 @@ public class PreLoginClient implements Client {
     }
 
     public String logIn(String... params) throws Exception {
-        if (params.length >= 1) {
+        if (params.length >= 3) {
             state = State.SIGNEDIN;
-            visitorName = String.join("-", params);
-            return String.format("You signed in as %s.", visitorName);
+
+            //Create User
+            String userName = params[0];
+            String password = params[1];
+            String email = params[2];
+
+            return String.format(WHITE_KING + SET_TEXT_BOLD + "Welcome Grand Master %s." + RESET_TEXT_BOLD_FAINT + WHITE_KING, userName);
         }
         throw new Exception("Login Failed. Expected: <USERNAME> <PASSWORD> <EMAIL>");
     }
