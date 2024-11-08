@@ -44,7 +44,7 @@ public class ServerFacade {
         return this.makeRequest("POST", path, gameData, Map.class);
     }
 
-    public Object login(UserData userData) throws Exception {
+    public AuthData login(UserData userData) throws Exception {
         var path = "/session";
         return this.makeRequest("POST", path, userData, AuthData.class);
     }

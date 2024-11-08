@@ -1,6 +1,7 @@
 package ui;
 
 import com.sun.nio.sctp.NotificationHandler;
+import model.AuthData;
 import model.UserData;
 
 import java.util.Arrays;
@@ -30,7 +31,7 @@ public class PreLoginClient implements Client {
             return switch (cmd) {
                 case "register" -> register(params);
                 case "help" -> help();
-                //case "adoptall" -> adoptAllPets();
+                case "login" -> login();
                 case "quit" -> "quit";
                 default -> help();
             };
@@ -41,7 +42,6 @@ public class PreLoginClient implements Client {
 
     public String register(String... params) throws Exception {
         if (params.length >= 3) {
-            state = State.SIGNEDIN;
 
             //Create User
             String userName = params[0];
@@ -50,7 +50,24 @@ public class PreLoginClient implements Client {
 
             UserData userData = new UserData(userName, password, email);
 
-            server.register(userData);
+            AuthData auth = server.register(userData);
+            state = State.SIGNEDIN;
+
+            return String.format(WHITE_KING + SET_TEXT_BOLD + "Welcome Grand Master %s." + RESET_TEXT_BOLD_FAINT + WHITE_KING, userName);
+        }
+        throw new Exception("Login Failed. Expected: <USERNAME> <PASSWORD> <EMAIL>");
+    }
+
+    public String login(String... params) throws Exception {
+        if (params.length >= 2) {
+
+            //Create User
+            String password = params[1];
+            String userName = params[0];
+            UserData userData = new UserData(userName, password, null);
+
+            server.login(userData);
+            state = State.SIGNEDIN;
 
             return String.format(WHITE_KING + SET_TEXT_BOLD + "Welcome Grand Master %s." + RESET_TEXT_BOLD_FAINT + WHITE_KING, userName);
         }
