@@ -26,7 +26,7 @@ public class LoginClient implements Client {
             var cmd = (tokens.length > 0) ? tokens[0] : "help";
             var params = Arrays.copyOfRange(tokens, 1, tokens.length);
             return switch (cmd) {
-                case "logout" -> register(params);
+                case "logout" -> logout(params);
                 case "help" -> help();
                 case "create" -> login();
                 case "list" -> login();
@@ -39,22 +39,13 @@ public class LoginClient implements Client {
         }
     }
 
-    public String register(String... params) throws Exception {
-        if (params.length >= 3) {
+    public String logout(String... params) throws Exception {
 
-            //Create User
-            String userName = params[0];
-            String password = params[1];
-            String email = params[2];
+        server.logout();
+        state = State.SIGNEDOUT;
 
-            UserData userData = new UserData(userName, password, email);
+        return String.format(WHITE_KING + SET_TEXT_BOLD + "Enjoy your break Grand Master %s." + RESET_TEXT_BOLD_FAINT + WHITE_KING, userName);
 
-            AuthData auth = server.register(userData);
-            state = State.SIGNEDIN;
-
-            return String.format(WHITE_KING + SET_TEXT_BOLD + "Welcome Grand Master %s." + RESET_TEXT_BOLD_FAINT + WHITE_KING, userName);
-        }
-        throw new Exception("Login Failed. Expected: <USERNAME> <PASSWORD> <EMAIL>");
     }
 
     public String login(String... params) throws Exception {
