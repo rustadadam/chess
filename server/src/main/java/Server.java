@@ -3,7 +3,7 @@ import spark.Spark;
 public class Server {
     public static void main(String[] args) {
         var s = new Server();
-        var port = s.run(8080);
+        var port = s.run(0);
         System.out.println("Running on port: " + port);
     }
 

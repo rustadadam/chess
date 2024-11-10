@@ -1,5 +1,7 @@
 package ui;
 
+package ui;
+
 import model.AuthData;
 import model.UserData;
 
@@ -7,11 +9,11 @@ import java.util.Arrays;
 
 import static ui.EscapeSequences.*;
 
-public class PreLoginClient implements Client {
+public class LoginClient implements Client {
     private final ServerFacade server;
     private State state = State.SIGNEDOUT;
 
-    public PreLoginClient(String serverUrl) {
+    public LoginClient(String serverUrl) {
         server = new ServerFacade(serverUrl);
     }
 
