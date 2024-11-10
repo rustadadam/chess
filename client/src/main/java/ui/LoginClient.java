@@ -1,7 +1,5 @@
 package ui;
 
-package ui;
-
 import model.AuthData;
 import model.UserData;
 
@@ -11,7 +9,7 @@ import static ui.EscapeSequences.*;
 
 public class LoginClient implements Client {
     private final ServerFacade server;
-    private State state = State.SIGNEDOUT;
+    private State state = State.SIGNEDIN;
 
     public LoginClient(String serverUrl) {
         server = new ServerFacade(serverUrl);
@@ -27,10 +25,12 @@ public class LoginClient implements Client {
             var cmd = (tokens.length > 0) ? tokens[0] : "help";
             var params = Arrays.copyOfRange(tokens, 1, tokens.length);
             return switch (cmd) {
-                case "register" -> register(params);
+                case "logout" -> register(params);
                 case "help" -> help();
-                case "login" -> login();
-                case "quit" -> "quit";
+                case "create" -> login();
+                case "list" -> login();
+                case "play" -> login();
+                case "observe" -> login();
                 default -> help();
             };
         } catch (Exception ex) {
@@ -75,10 +75,13 @@ public class LoginClient implements Client {
     public String help() {
         return SET_TEXT_COLOR_RED + "Choose one of the following options:\n" + SET_TEXT_COLOR_BLUE +
                 """
-                        - register <USERNAME> <PASSWORD> <EMAIL> | to create an account!
-                        - login <USERNAME> <PASSWORD>  | to play Chess!
-                        - quit | to leave application!
-                        - help | to print the command options!
+                        - create <Game Name> | Create a Game to Crush Your Opponents!
+                        - list | to see all available games!
+                        - join <Game ID> <WHITE or BLACK> | Face down a Dragon in Chess!
+                        - observe <Game ID> | Keep an eye on the competition...
+                        - logout | When you are done avenging the death of your Father.
+                        - quit | When you realize that you can make more money doing math than chess.
+                        - help | You really don't need this. :)
                         """;
     }
 

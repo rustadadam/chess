@@ -4,10 +4,6 @@ import java.util.Scanner;
 
 import static ui.EscapeSequences.*;
 
-import com.sun.nio.sctp.HandlerResult;
-import com.sun.nio.sctp.Notification;
-import com.sun.nio.sctp.NotificationHandler;
-
 public class Repl {
     private Client client;
     private State state = State.SIGNEDOUT;
@@ -46,6 +42,8 @@ public class Repl {
         state = client.getState();
         if (state == State.SIGNEDOUT) {
             client = new PreLoginClient(serverUrl);
+        } else if (state == State.SIGNEDIN) {
+            client = new LoginClient(serverUrl);
         }
     }
 

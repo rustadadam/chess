@@ -13,6 +13,7 @@ public class PreLoginClient implements Client {
 
     public PreLoginClient(String serverUrl) {
         server = new ServerFacade(serverUrl);
+        System.out.print(WHITE_QUEEN + SET_TEXT_COLOR_LIGHT_GREY + SET_TEXT_ITALIC + "Grand Master Authorized" + WHITE_QUEEN);
     }
 
     public State getState() {
