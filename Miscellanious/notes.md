@@ -155,6 +155,9 @@ git push
 ## Websocket
 - Its bidirectional between a server and something else
 - Automatically detects whether it is dropped or not
-- 
+
+# Final Notes
+- We are going to need to read the json to detemine the type of a USerGame command
+- You don't need to make a leave, resign, and observer classes. 
 
 
