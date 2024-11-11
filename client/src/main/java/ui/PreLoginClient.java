@@ -86,11 +86,6 @@ public class PreLoginClient implements Client {
                         - help | to print the command options!
                         """;
     }
-
-    private void assertSignedIn() throws Exception {
-        if (state == State.SIGNEDOUT) {
-            throw new Exception("You must sign in");
-        }
-    }
+    
 }
 

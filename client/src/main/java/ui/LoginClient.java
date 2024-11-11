@@ -73,7 +73,7 @@ public class LoginClient implements Client {
 
             server.joinGame(gameReq, authToken);
 
-            return "The Grandmaster has Entered the battlefield!" + RESET_TEXT_BOLD_FAINT;
+            return "The Grandmaster has entered battlefield" + params[0] + RESET_TEXT_BOLD_FAINT;
         }
         throw new Exception("Join Game Failed. Expected: <Game ID> <WHITE or BLACK>");
     }
@@ -125,10 +125,5 @@ public class LoginClient implements Client {
                         """;
     }
 
-    private void assertSignedIn() throws Exception {
-        if (state == State.SIGNEDOUT) {
-            throw new Exception("You must sign in");
-        }
-    }
 }
 
