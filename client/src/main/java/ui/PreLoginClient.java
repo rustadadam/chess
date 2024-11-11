@@ -32,7 +32,7 @@ public class PreLoginClient implements Client {
             return switch (cmd) {
                 case "register" -> register(params);
                 case "help" -> help();
-                case "login" -> login();
+                case "login" -> login(params);
                 case "quit" -> "quit";
                 default -> help();
             };

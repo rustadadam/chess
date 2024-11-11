@@ -33,7 +33,11 @@ public class Repl {
                 var msg = e.toString();
                 System.out.print(msg);
             }
-            changeClient();
+            
+            //Change client
+            if (state != client.getState()) {
+                changeClient();
+            }
         }
         System.out.println();
     }
