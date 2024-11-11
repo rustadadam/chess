@@ -1,11 +1,16 @@
 package ui;
 
 import chess.ChessGame;
+import com.google.gson.internal.LinkedTreeMap;
 import model.AuthData;
 import model.GameData;
+import model.GameRequest;
 import model.UserData;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Map;
 
 import static ui.EscapeSequences.*;
 
@@ -13,7 +18,7 @@ public class LoginClient implements Client {
     private final ServerFacade server;
     private State state = State.SIGNEDIN;
     private String authToken;
-    private Integer gameID = 0;
+    private Integer gameID = 1;
 
     public LoginClient(String serverUrl, String authToken) {
         server = new ServerFacade(serverUrl);
@@ -38,8 +43,8 @@ public class LoginClient implements Client {
                 case "logout" -> logout(params);
                 case "help" -> help();
                 case "create" -> create(params);
-                case "list" -> logout(params);
-                case "play" -> logout(params);
+                case "list" -> list(params);
+                case "join" -> join(params);
                 case "observe" -> logout(params);
                 default -> help();
             };
@@ -57,10 +62,25 @@ public class LoginClient implements Client {
 
     }
 
+    public String join(String... params) throws Exception {
+        if (params.length >= 2) {
+
+            int gameID = Integer.parseInt(params[0]);
+            String color = params[1];
+            GameRequest gameReq = new GameRequest();
+            gameReq.setGameID(gameID + 1000);
+            gameReq.setPlayerColor(color);
+
+            server.joinGame(gameReq, authToken);
+
+            return "The Grandmaster has Entered the battlefield!" + RESET_TEXT_BOLD_FAINT;
+        }
+        throw new Exception("Join Game Failed. Expected: <Game ID> <WHITE or BLACK>");
+    }
+
     public String create(String... params) throws Exception {
         if (params.length >= 1) {
 
-            //Create User
             String gameName = params[0];
             GameData gameData = new GameData(gameID, null, null, gameName, new ChessGame());
             gameID++;
@@ -70,6 +90,26 @@ public class LoginClient implements Client {
             return String.format("Battleground at Game ID %s is prepared." + RESET_TEXT_BOLD_FAINT, gameID - 1);
         }
         throw new Exception("Create Game Failed. Expected: <Game Name>");
+    }
+
+    public String list(String... params) throws Exception {
+
+        StringBuilder str = new StringBuilder("Battles available to join: \n");
+        LinkedTreeMap<String, Object> games = (LinkedTreeMap<String, Object>) server.listGames(authToken);
+
+        ArrayList<LinkedTreeMap<String, Object>> gamesList = (ArrayList<LinkedTreeMap<String, Object>>) games.get("games");
+
+        Integer pos = 0;
+        for (LinkedTreeMap<String, Object> game : gamesList) {
+            // Extract gameID and gameName
+            String gameName = (String) game.get("gameName");
+
+            str.append("    - Battleground " + SET_TEXT_COLOR_YELLOW + SET_TEXT_BOLD).append(gameName).append(RESET_TEXT_BOLD_FAINT + SET_TEXT_COLOR_BLUE).append(" at position ").append(pos.toString());
+            str.append("\n");
+            pos++;
+        }
+
+        return str + SET_TEXT_COLOR_BLUE;
     }
 
     public String help() {

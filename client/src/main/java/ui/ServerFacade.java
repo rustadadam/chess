@@ -67,7 +67,7 @@ public class ServerFacade {
             http.setRequestMethod(method);
             http.setDoOutput(true);
             http.addRequestProperty("Authorization", auth);
-            
+
             writeBody(request, http);
             http.connect();
             throwIfNotSuccessful(http);
