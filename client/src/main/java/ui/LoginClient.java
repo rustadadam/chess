@@ -1,6 +1,8 @@
 package ui;
 
+import chess.ChessGame;
 import model.AuthData;
+import model.GameData;
 import model.UserData;
 
 import java.util.Arrays;
@@ -11,6 +13,7 @@ public class LoginClient implements Client {
     private final ServerFacade server;
     private State state = State.SIGNEDIN;
     private String authToken;
+    private Integer gameID = 0;
 
     public LoginClient(String serverUrl, String authToken) {
         server = new ServerFacade(serverUrl);
@@ -34,10 +37,10 @@ public class LoginClient implements Client {
             return switch (cmd) {
                 case "logout" -> logout(params);
                 case "help" -> help();
-                case "create" -> login();
-                case "list" -> login();
-                case "play" -> login();
-                case "observe" -> login();
+                case "create" -> create(params);
+                case "list" -> logout(params);
+                case "play" -> logout(params);
+                case "observe" -> logout(params);
                 default -> help();
             };
         } catch (Exception ex) {
@@ -54,20 +57,19 @@ public class LoginClient implements Client {
 
     }
 
-    public String login(String... params) throws Exception {
-        if (params.length >= 2) {
+    public String create(String... params) throws Exception {
+        if (params.length >= 1) {
 
             //Create User
-            String password = params[1];
-            String userName = params[0];
-            UserData userData = new UserData(userName, password, null);
+            String gameName = params[0];
+            GameData gameData = new GameData(gameID, null, null, gameName, new ChessGame());
+            gameID++;
 
-            server.login(userData);
-            state = State.SIGNEDIN;
+            server.createGame(gameData, authToken);
 
-            return String.format(WHITE_KING + SET_TEXT_BOLD + "Welcome Grand Master %s." + RESET_TEXT_BOLD_FAINT + WHITE_KING, userName);
+            return String.format("Battleground at Game ID %s is prepared." + RESET_TEXT_BOLD_FAINT, gameID - 1);
         }
-        throw new Exception("Login Failed. Expected: <USERNAME> <PASSWORD>");
+        throw new Exception("Create Game Failed. Expected: <Game Name>");
     }
 
     public String help() {
