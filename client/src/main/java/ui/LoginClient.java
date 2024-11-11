@@ -47,10 +47,10 @@ public class LoginClient implements Client {
 
     public String logout(String... params) throws Exception {
 
-        server.logout();
+        server.logout(authToken);
         state = State.SIGNEDOUT;
 
-        return String.format(WHITE_KING + SET_TEXT_BOLD + "Enjoy your break Grand Master %s." + RESET_TEXT_BOLD_FAINT + WHITE_KING, userName);
+        return String.format(WHITE_KING + SET_TEXT_BOLD + "Enjoy your break Grand Master." + RESET_TEXT_BOLD_FAINT + WHITE_KING);
 
     }
 
