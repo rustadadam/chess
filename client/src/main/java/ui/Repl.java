@@ -43,7 +43,8 @@ public class Repl {
         if (state == State.SIGNEDOUT) {
             client = new PreLoginClient(serverUrl);
         } else if (state == State.SIGNEDIN) {
-            client = new LoginClient(serverUrl);
+            String authToken = client.getAuthToken();
+            client = new LoginClient(serverUrl, authToken);
         }
     }
 

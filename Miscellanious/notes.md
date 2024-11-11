@@ -160,5 +160,6 @@ git push
 - We are going to need to read the json to detemine the type of a USerGame command
 - You don't need to make a leave, resign, and observer classes.
 - We can use the terminal for multiple uses
+- Use websocket to repass the html commands
 
 

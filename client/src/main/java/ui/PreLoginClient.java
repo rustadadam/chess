@@ -10,9 +10,14 @@ import static ui.EscapeSequences.*;
 public class PreLoginClient implements Client {
     private final ServerFacade server;
     private State state = State.SIGNEDOUT;
+    private String authToken;
 
     public PreLoginClient(String serverUrl) {
         server = new ServerFacade(serverUrl);
+    }
+
+    public String getAuthToken() {
+        return authToken;
     }
 
     public State getState() {
@@ -47,6 +52,7 @@ public class PreLoginClient implements Client {
             UserData userData = new UserData(userName, password, email);
 
             AuthData auth = server.register(userData);
+            authToken = auth.authToken();
             state = State.SIGNEDIN;
 
             return String.format(WHITE_KING + SET_TEXT_BOLD + "Welcome Grand Master %s." + RESET_TEXT_BOLD_FAINT + WHITE_KING, userName);
@@ -62,7 +68,8 @@ public class PreLoginClient implements Client {
             String userName = params[0];
             UserData userData = new UserData(userName, password, null);
 
-            server.login(userData);
+            AuthData auth = server.login(userData);
+            authToken = auth.authToken();
             state = State.SIGNEDIN;
 
             return String.format(WHITE_KING + SET_TEXT_BOLD + "Welcome Grand Master %s." + RESET_TEXT_BOLD_FAINT + WHITE_KING, userName);

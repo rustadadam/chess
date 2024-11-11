@@ -10,10 +10,16 @@ import static ui.EscapeSequences.*;
 public class LoginClient implements Client {
     private final ServerFacade server;
     private State state = State.SIGNEDIN;
+    private String authToken;
 
-    public LoginClient(String serverUrl) {
+    public LoginClient(String serverUrl, String authToken) {
         server = new ServerFacade(serverUrl);
         System.out.print("\n\n" + SET_TEXT_COLOR_LIGHT_GREY + WHITE_QUEEN + SET_TEXT_ITALIC + "Grand Master Authorized" + WHITE_QUEEN);
+        this.authToken = authToken;
+    }
+
+    public String getAuthToken() {
+        return authToken;
     }
 
     public State getState() {
