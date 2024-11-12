@@ -1,5 +1,6 @@
 package ui;
 
+import java.io.IOException;
 import java.util.Objects;
 import java.util.Scanner;
 
@@ -17,7 +18,11 @@ public class Repl {
 
     public void run() {
         System.out.println("\uD83D\uDC36 Welcome Grand Master back to Chess. Sign in to start.");
-        System.out.print(client.eval("help"));
+        try {
+            System.out.print(client.eval("help"));
+        } catch (Exception e) {
+            System.out.print(e.getMessage());
+        }
 
 
         //The Following is the loop
@@ -31,19 +36,19 @@ public class Repl {
                 result = client.eval(line);
                 System.out.print(SET_TEXT_COLOR_BLUE + result);
             } catch (Throwable e) {
-                var msg = e.toString();
+                var msg = e.getMessage();
 
-                if (Objects.equals(e.toString(), "failure: 400")) {
+                if (Objects.equals(msg, "failure: 400")) {
                     msg = "Error: bad request";
-                } else if (Objects.equals(e.toString(), "failure: 401")) {
+                } else if (Objects.equals(msg, "failure: 401")) {
                     msg = "Error: unauthorized";
-                } else if (Objects.equals(e.toString(), "failure: 403")) {
+                } else if (Objects.equals(msg, "failure: 403")) {
                     msg = "Error: already taken";
-                } else if (Objects.equals(e.toString(), "failure: 500")) {
+                } else if (Objects.equals(msg, "failure: 500")) {
                     msg = "Error: unknown error";
                 }
 
-                System.out.print(msg);
+                System.out.print(SET_TEXT_COLOR_RED + msg);
             }
 
             //Change client

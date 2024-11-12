@@ -76,7 +76,7 @@ public class PreLoginClient implements Client {
     }
 
     public String help() {
-        return SET_TEXT_COLOR_RED + "Choose one of the following options:\n" + SET_TEXT_COLOR_BLUE +
+        return SET_TEXT_COLOR_GREEN + "Choose one of the following options:\n" + SET_TEXT_COLOR_BLUE +
                 """
                         - register <USERNAME> <PASSWORD> <EMAIL> | to create an account!
                         - login <USERNAME> <PASSWORD>  | to play Chess!
