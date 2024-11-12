@@ -44,9 +44,9 @@ public class GameClient implements Client {
         ChessGame game = new ChessGame();
 
         if (isPlayerWhite) {
-            System.out.print("Printing battlefield as White");
+            System.out.print("Printing battlefield as White\n");
         } else {
-            System.out.print("Printing battlefield as Black");
+            System.out.print("Printing battlefield as Black\n");
         }
 
         ChessPiece[][] board = game.getBoard().board;
@@ -56,41 +56,60 @@ public class GameClient implements Client {
         //Loop through rows
         String squareColor = SET_BG_COLOR_DARK_GREY;
         for (int row = 0; row < 8; row++) {
+
             if (squareColor.equals(SET_BG_COLOR_DARK_GREY)) {
                 squareColor = SET_BG_COLOR_LIGHT_GREY;
             } else {
                 squareColor = SET_BG_COLOR_DARK_GREY;
             }
 
-            sb.append(" ");
-
             for (int column = 0; column < 8; column++) {
+
+                if (squareColor.equals(SET_BG_COLOR_DARK_GREY)) {
+                    squareColor = SET_BG_COLOR_LIGHT_GREY;
+                } else {
+                    squareColor = SET_BG_COLOR_DARK_GREY;
+                }
+
+                sb.append(squareColor);
+
+                sb.append(" ");
                 if (board[row][column] != null) {
                     sb.append(printPiece(board[row][column].toString())); //Remember to update pieces for this
                 } else {
-                    sb.append(" ");
+                    if (!squareColor.equals(SET_BG_COLOR_DARK_GREY)) {
+                        sb.append(SET_TEXT_COLOR_LIGHT_GREY);
+                    } else {
+                        sb.append(SET_TEXT_COLOR_DARK_GREY);
+                    }
+                    //This will be hidden
+                    sb.append(BLACK_PAWN);
                 }
+                sb.append(" ");
             }
+            
+            sb.append(RESET_BG_COLOR);
+            sb.append("\n");
         }
 
-        System.out.print(sb);
+        System.out.print(sb + RESET_BG_COLOR);
         return "";
     }
 
     public String printPiece(String pieceChar) {
         return switch (pieceChar) {
-            case "R" -> EscapeSequences.WHITE_ROOK;
-            case "N" -> EscapeSequences.WHITE_KNIGHT;
-            case "B" -> EscapeSequences.WHITE_BISHOP;
-            case "Q" -> EscapeSequences.WHITE_QUEEN;
-            case "K" -> EscapeSequences.WHITE_KING;
-            case "P" -> EscapeSequences.WHITE_PAWN;
-            case "r" -> EscapeSequences.BLACK_ROOK;
-            case "n" -> EscapeSequences.BLACK_KNIGHT;
-            case "b" -> EscapeSequences.BLACK_BISHOP;
-            case "q" -> EscapeSequences.BLACK_QUEEN;
-            case "k" -> EscapeSequences.BLACK_KING;
-            case "p" -> EscapeSequences.BLACK_PAWN;
+            case "R" -> SET_TEXT_COLOR_GREEN + EscapeSequences.WHITE_ROOK;
+            case "N" -> SET_TEXT_COLOR_GREEN + EscapeSequences.WHITE_KNIGHT;
+            case "B" -> SET_TEXT_COLOR_GREEN + EscapeSequences.WHITE_BISHOP;
+            case "Q" -> SET_TEXT_COLOR_GREEN + EscapeSequences.WHITE_QUEEN;
+            case "K" -> SET_TEXT_COLOR_GREEN + EscapeSequences.WHITE_KING;
+            case "P" -> SET_TEXT_COLOR_GREEN + EscapeSequences.WHITE_PAWN;
+            case "r" -> SET_TEXT_COLOR_BLUE + EscapeSequences.BLACK_ROOK;
+            case "n" -> SET_TEXT_COLOR_BLUE + EscapeSequences.BLACK_KNIGHT;
+            case "b" -> SET_TEXT_COLOR_BLUE + EscapeSequences.BLACK_BISHOP;
+            case "q" -> SET_TEXT_COLOR_BLUE + EscapeSequences.BLACK_QUEEN;
+            case "k" -> SET_TEXT_COLOR_BLUE + EscapeSequences.BLACK_KING;
+            case "p" -> SET_TEXT_COLOR_BLUE + EscapeSequences.BLACK_PAWN;
             case " " -> EscapeSequences.EMPTY;
             default -> " ";
         };

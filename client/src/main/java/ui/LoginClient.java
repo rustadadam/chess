@@ -81,7 +81,7 @@ public class LoginClient implements Client {
 
             //At a later point, we may need to store the game data
 
-            return "The Grandmaster has entered battlefield" + params[0] + RESET_TEXT_BOLD_FAINT + "\n";
+            return "The Grandmaster has entered battlefield " + params[0] + RESET_TEXT_BOLD_FAINT + "\n";
         }
         throw new Exception("Join Game Failed. Expected: <Game ID> <WHITE or BLACK>");
     }
@@ -95,7 +95,7 @@ public class LoginClient implements Client {
 
             server.createGame(gameData, authToken);
 
-            return String.format("Battleground at Game ID %s is prepared." + RESET_TEXT_BOLD_FAINT, gameID - 1);
+            return String.format("Battleground at %s is prepared." + RESET_TEXT_BOLD_FAINT, gameName);
         }
         throw new Exception("Create Game Failed. Expected: <Game Name>");
     }
