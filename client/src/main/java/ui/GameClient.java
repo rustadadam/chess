@@ -47,20 +47,18 @@ public class GameClient implements Client {
         return "";
     }
 
-    public String eval(String input) {
-        try {
-            var tokens = input.toLowerCase().split(" ");
-            var cmd = (tokens.length > 0) ? tokens[0] : "help";
-            var params = Arrays.copyOfRange(tokens, 1, tokens.length);
-            return switch (cmd) {
-                case "show" -> printGame();
-                case "help" -> help();
-                case "leave" -> leave();
-                default -> help();
-            };
-        } catch (Exception ex) {
-            return ex.getMessage();
-        }
+    public String eval(String input) throws Exception {
+
+        var tokens = input.toLowerCase().split(" ");
+        var cmd = (tokens.length > 0) ? tokens[0] : "help";
+        var params = Arrays.copyOfRange(tokens, 1, tokens.length);
+        return switch (cmd) {
+            case "show" -> printGame();
+            case "help" -> help();
+            case "leave" -> leave();
+            default -> help();
+        };
+
     }
 
     public String leave() {

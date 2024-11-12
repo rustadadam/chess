@@ -24,21 +24,19 @@ public class PreLoginClient implements Client {
         return state;
     }
 
-    public String eval(String input) {
-        try {
-            var tokens = input.toLowerCase().split(" ");
-            var cmd = (tokens.length > 0) ? tokens[0] : "help";
-            var params = Arrays.copyOfRange(tokens, 1, tokens.length);
-            return switch (cmd) {
-                case "register" -> register(params);
-                case "help" -> help();
-                case "login" -> login(params);
-                case "quit" -> "quit";
-                default -> help();
-            };
-        } catch (Exception ex) {
-            return ex.getMessage();
-        }
+    public String eval(String input) throws Exception {
+
+        var tokens = input.toLowerCase().split(" ");
+        var cmd = (tokens.length > 0) ? tokens[0] : "help";
+        var params = Arrays.copyOfRange(tokens, 1, tokens.length);
+        return switch (cmd) {
+            case "register" -> register(params);
+            case "help" -> help();
+            case "login" -> login(params);
+            case "quit" -> "quit";
+            default -> help();
+        };
+
     }
 
     public String register(String... params) throws Exception {
@@ -86,6 +84,6 @@ public class PreLoginClient implements Client {
                         - help | to print the command options!
                         """;
     }
-    
+
 }
 

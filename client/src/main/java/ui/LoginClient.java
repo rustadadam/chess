@@ -34,23 +34,21 @@ public class LoginClient implements Client {
         return state;
     }
 
-    public String eval(String input) {
-        try {
-            var tokens = input.toLowerCase().split(" ");
-            var cmd = (tokens.length > 0) ? tokens[0] : "help";
-            var params = Arrays.copyOfRange(tokens, 1, tokens.length);
-            return switch (cmd) {
-                case "logout" -> logout(params);
-                case "help" -> help();
-                case "create" -> create(params);
-                case "list" -> list(params);
-                case "join" -> join(params);
-                case "observe" -> logout(params);
-                default -> help();
-            };
-        } catch (Exception ex) {
-            return ex.getMessage();
-        }
+    public String eval(String input) throws Exception {
+
+        var tokens = input.toLowerCase().split(" ");
+        var cmd = (tokens.length > 0) ? tokens[0] : "help";
+        var params = Arrays.copyOfRange(tokens, 1, tokens.length);
+        return switch (cmd) {
+            case "logout" -> logout(params);
+            case "help" -> help();
+            case "create" -> create(params);
+            case "list" -> list(params);
+            case "join" -> join(params);
+            case "observe" -> logout(params);
+            default -> help();
+        };
+
     }
 
     public String logout(String... params) throws Exception {
