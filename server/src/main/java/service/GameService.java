@@ -18,8 +18,8 @@ public class GameService {
     private int gameID;
 
     public GameService() throws DataAccessException {
-        this.gameID = 1000;
         this.dataAccess = new DatabaseGameDAO();//MemoryGameDAO();
+        this.gameID = dataAccess.getGames().size() + 1001;
     }
 
 
@@ -93,6 +93,7 @@ public class GameService {
     public void deleteAllGame() throws DataAccessException {
         //Delete all Auth in the memory
         dataAccess.deleteAllGame();
+        this.gameID = 1001;
     }
 
     @Override
