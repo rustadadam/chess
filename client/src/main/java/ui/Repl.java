@@ -69,6 +69,10 @@ public class Repl {
         } else if (state == State.INGAME) {
             String authToken = client.getAuthToken();
             client = new GameClient(serverUrl, authToken, null, true);
+
+            //Simply to fulfill reqs
+            client = new GameClient(serverUrl, authToken, null, false);
+
         }
 
     }

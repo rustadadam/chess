@@ -53,9 +53,9 @@ public class GameClient implements Client {
             squareColor = SET_BG_COLOR_DARK_GREY;
 
             //Reverse board
-            ChessPiece[][] new_board = game.getBoard().board;
+            ChessPiece[][] new_board = new ChessPiece[8][8];
             for (int row = 0; row < 8; row++) {
-                new_board[row] = board[7 - row].clone();
+                new_board[row] = board[7 - row];
             }
 
             board = new_board;
@@ -107,19 +107,19 @@ public class GameClient implements Client {
 
     public String printPiece(String pieceChar) {
         return switch (pieceChar) {
-            case "R" -> SET_TEXT_COLOR_GREEN + EscapeSequences.WHITE_ROOK;
-            case "N" -> SET_TEXT_COLOR_GREEN + EscapeSequences.WHITE_KNIGHT;
-            case "B" -> SET_TEXT_COLOR_GREEN + EscapeSequences.WHITE_BISHOP;
-            case "Q" -> SET_TEXT_COLOR_GREEN + EscapeSequences.WHITE_QUEEN;
-            case "K" -> SET_TEXT_COLOR_GREEN + EscapeSequences.WHITE_KING;
-            case "P" -> SET_TEXT_COLOR_GREEN + EscapeSequences.WHITE_PAWN;
-            case "r" -> SET_TEXT_COLOR_BLUE + EscapeSequences.BLACK_ROOK;
-            case "n" -> SET_TEXT_COLOR_BLUE + EscapeSequences.BLACK_KNIGHT;
-            case "b" -> SET_TEXT_COLOR_BLUE + EscapeSequences.BLACK_BISHOP;
-            case "q" -> SET_TEXT_COLOR_BLUE + EscapeSequences.BLACK_QUEEN;
-            case "k" -> SET_TEXT_COLOR_BLUE + EscapeSequences.BLACK_KING;
-            case "p" -> SET_TEXT_COLOR_BLUE + EscapeSequences.BLACK_PAWN;
-            case " " -> EscapeSequences.EMPTY;
+            case "R" -> SET_TEXT_COLOR_GREEN + WHITE_ROOK;
+            case "N" -> SET_TEXT_COLOR_GREEN + WHITE_KNIGHT;
+            case "B" -> SET_TEXT_COLOR_GREEN + WHITE_BISHOP;
+            case "Q" -> SET_TEXT_COLOR_GREEN + WHITE_QUEEN;
+            case "K" -> SET_TEXT_COLOR_GREEN + WHITE_KING;
+            case "P" -> SET_TEXT_COLOR_GREEN + WHITE_PAWN;
+            case "r" -> SET_TEXT_COLOR_BLUE + BLACK_ROOK;
+            case "n" -> SET_TEXT_COLOR_BLUE + BLACK_KNIGHT;
+            case "b" -> SET_TEXT_COLOR_BLUE + BLACK_BISHOP;
+            case "q" -> SET_TEXT_COLOR_BLUE + BLACK_QUEEN;
+            case "k" -> SET_TEXT_COLOR_BLUE + BLACK_KING;
+            case "p" -> SET_TEXT_COLOR_BLUE + BLACK_PAWN;
+            case " " -> EMPTY;
             default -> " ";
         };
     }
@@ -133,12 +133,18 @@ public class GameClient implements Client {
             case "show" -> printGame();
             case "help" -> help();
             case "leave" -> leave();
+            case "clear" -> clear();
             default -> help();
         };
 
     }
 
     public String leave() throws Exception {
+        state = State.SIGNEDIN; //Change later
+        return "Grandmaster has left the battlefield";
+    }
+
+    public String clear() throws Exception {
         state = State.SIGNEDOUT; //Change later
         server.clearDataBase();
         return "Grandmaster has left the battlefield | Database cleared";
