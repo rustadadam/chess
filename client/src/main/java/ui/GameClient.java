@@ -1,6 +1,8 @@
 package ui;
 
+import chess.ChessBoard;
 import chess.ChessGame;
+import chess.ChessPiece;
 import com.google.gson.internal.LinkedTreeMap;
 import model.AuthData;
 import model.GameData;
@@ -38,13 +40,60 @@ public class GameClient implements Client {
     }
 
     public String printGame() {
+        //Placeholder for now
+        ChessGame game = new ChessGame();
+
         if (isPlayerWhite) {
             System.out.print("Printing battlefield as White");
         } else {
             System.out.print("Printing battlefield as Black");
         }
 
+        ChessPiece[][] board = game.getBoard().board;
+
+        StringBuilder sb = new StringBuilder();
+
+        //Loop through rows
+        String squareColor = SET_BG_COLOR_DARK_GREY;
+        for (int row = 0; row < 8; row++) {
+            if (squareColor.equals(SET_BG_COLOR_DARK_GREY)) {
+                squareColor = SET_BG_COLOR_LIGHT_GREY;
+            } else {
+                squareColor = SET_BG_COLOR_DARK_GREY;
+            }
+
+            sb.append(" ");
+
+            for (int column = 0; column < 8; column++) {
+                if (board[row][column] != null) {
+                    sb.append(printPiece(board[row][column].toString())); //Remember to update pieces for this
+                } else {
+                    sb.append(" ");
+                }
+            }
+        }
+
+        System.out.print(sb);
         return "";
+    }
+
+    public String printPiece(String pieceChar) {
+        return switch (pieceChar) {
+            case "R" -> EscapeSequences.WHITE_ROOK;
+            case "N" -> EscapeSequences.WHITE_KNIGHT;
+            case "B" -> EscapeSequences.WHITE_BISHOP;
+            case "Q" -> EscapeSequences.WHITE_QUEEN;
+            case "K" -> EscapeSequences.WHITE_KING;
+            case "P" -> EscapeSequences.WHITE_PAWN;
+            case "r" -> EscapeSequences.BLACK_ROOK;
+            case "n" -> EscapeSequences.BLACK_KNIGHT;
+            case "b" -> EscapeSequences.BLACK_BISHOP;
+            case "q" -> EscapeSequences.BLACK_QUEEN;
+            case "k" -> EscapeSequences.BLACK_KING;
+            case "p" -> EscapeSequences.BLACK_PAWN;
+            case " " -> EscapeSequences.EMPTY;
+            default -> " ";
+        };
     }
 
     public String eval(String input) throws Exception {
@@ -61,9 +110,10 @@ public class GameClient implements Client {
 
     }
 
-    public String leave() {
-        state = State.SIGNEDIN;
-        return "Grandmaster has left the battlefield";
+    public String leave() throws Exception {
+        state = State.SIGNEDOUT; //Change later
+        server.clearDataBase();
+        return "Grandmaster has left the battlefield | Database cleared";
     }
 
 

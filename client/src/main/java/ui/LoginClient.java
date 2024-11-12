@@ -63,15 +63,17 @@ public class LoginClient implements Client {
     public String join(String... params) throws Exception {
         if (params.length >= 2) {
 
+            int joinID;
+
             try {
-                int gameID = Integer.parseInt(params[0]);
+                joinID = Integer.parseInt(params[0]);
             } catch (Exception ex) {
                 throw new Exception("Join Game Failed. Expected: <Game ID> <WHITE or BLACK>");
             }
 
             String color = params[1];
             GameRequest gameReq = new GameRequest();
-            gameReq.setGameID(gameID + 1000);
+            gameReq.setGameID(joinID + 1000);
             gameReq.setPlayerColor(color);
 
             server.joinGame(gameReq, authToken);
@@ -105,7 +107,7 @@ public class LoginClient implements Client {
 
         ArrayList<LinkedTreeMap<String, Object>> gamesList = (ArrayList<LinkedTreeMap<String, Object>>) games.get("games");
 
-        Integer pos = 0;
+        Integer pos = 1;
         for (LinkedTreeMap<String, Object> game : gamesList) {
             // Extract gameID and gameName
             String gameName = (String) game.get("gameName");

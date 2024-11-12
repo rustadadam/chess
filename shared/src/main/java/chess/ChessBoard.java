@@ -11,7 +11,7 @@ import java.util.Collection;
  */
 public class ChessBoard {
 
-    ChessPiece[][] board;
+    public ChessPiece[][] board;
 
     public ChessBoard() {
         //Create Board
