@@ -33,7 +33,7 @@ public class Repl {
                 var msg = e.toString();
                 System.out.print(msg);
             }
-            
+
             //Change client
             if (state != client.getState()) {
                 changeClient();
@@ -49,7 +49,11 @@ public class Repl {
         } else if (state == State.SIGNEDIN) {
             String authToken = client.getAuthToken();
             client = new LoginClient(serverUrl, authToken);
+        } else if (state == State.INGAME) {
+            String authToken = client.getAuthToken();
+            client = new GameClient(serverUrl, authToken, null, true);
         }
+
     }
 
     private void printPrompt() {

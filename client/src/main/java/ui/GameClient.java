@@ -1,7 +1,5 @@
 package ui;
 
-package ui;
-
 import chess.ChessGame;
 import com.google.gson.internal.LinkedTreeMap;
 import model.AuthData;
@@ -18,14 +16,16 @@ import static ui.EscapeSequences.*;
 
 public class GameClient implements Client {
     private final ServerFacade server;
-    private ChessGame game;
+    private GameData gameData;
     private State state = State.INGAME;
     private String authToken;
+    private Boolean isPlayerWhite;
 
-    public GameClient(String serverUrl, String authToken, ChessGame game) {
+    public GameClient(String serverUrl, String authToken, GameData gameData, Boolean isPlayerWhite) {
         server = new ServerFacade(serverUrl);
         this.authToken = authToken;
-        this.game = game;
+        this.gameData = gameData;
+        this.isPlayerWhite = isPlayerWhite;
         printGame();
     }
 
@@ -37,8 +37,12 @@ public class GameClient implements Client {
         return state;
     }
 
-    public String printGame(){
-        System.out.print("Printing battlefield");
+    public String printGame() {
+        if (isPlayerWhite) {
+            System.out.print("Printing battlefield as White");
+        } else {
+            System.out.print("Printing battlefield as Black");
+        }
 
         return "";
     }
@@ -51,6 +55,7 @@ public class GameClient implements Client {
             return switch (cmd) {
                 case "show" -> printGame();
                 case "help" -> help();
+                case "leave" -> leave();
                 default -> help();
             };
         } catch (Exception ex) {
@@ -58,16 +63,18 @@ public class GameClient implements Client {
         }
     }
 
+    public String leave() {
+        state = State.SIGNEDIN;
+        return "Grandmaster has left the battlefield";
+    }
+
+
     public String help() {
         return SET_TEXT_COLOR_RED + "Choose one of the following options:\n" + SET_TEXT_COLOR_BLUE +
                 """
-                        - create <Game Name> | Create a Game to Crush Your Opponents!
-                        - list | to see all available games!
-                        - join <Game ID> <WHITE or BLACK> | Face down a Dragon in Chess!
-                        - observe <Game ID> | Keep an eye on the competition...
-                        - logout | When you are done avenging the death of your Father.
-                        - quit | When you realize that you can make more money doing math than chess.
-                        - help | You really don't need this. :)
+                        - play <Game Name> | Create a Game to Crush Your Opponents!
+                        - make move
+                        - Finish later
                         """;
     }
 }

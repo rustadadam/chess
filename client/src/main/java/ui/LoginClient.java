@@ -72,6 +72,9 @@ public class LoginClient implements Client {
             gameReq.setPlayerColor(color);
 
             server.joinGame(gameReq, authToken);
+            state = State.INGAME;
+
+            //At a later point, we may need to store the game data
 
             return "The Grandmaster has entered battlefield" + params[0] + RESET_TEXT_BOLD_FAINT;
         }
