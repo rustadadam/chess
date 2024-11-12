@@ -1,5 +1,6 @@
 package ui;
 
+import java.util.Objects;
 import java.util.Scanner;
 
 import static ui.EscapeSequences.*;
@@ -31,6 +32,17 @@ public class Repl {
                 System.out.print(SET_TEXT_COLOR_BLUE + result);
             } catch (Throwable e) {
                 var msg = e.toString();
+
+                if (Objects.equals(e.toString(), "failure: 400")) {
+                    msg = "Error: bad request";
+                } else if (Objects.equals(e.toString(), "failure: 401")) {
+                    msg = "Error: unauthorized";
+                } else if (Objects.equals(e.toString(), "failure: 403")) {
+                    msg = "Error: already taken";
+                } else if (Objects.equals(e.toString(), "failure: 500")) {
+                    msg = "Error: unknown error";
+                }
+
                 System.out.print(msg);
             }
 

@@ -65,7 +65,12 @@ public class LoginClient implements Client {
     public String join(String... params) throws Exception {
         if (params.length >= 2) {
 
-            int gameID = Integer.parseInt(params[0]);
+            try {
+                int gameID = Integer.parseInt(params[0]);
+            } catch (Exception ex) {
+                throw new Exception("Join Game Failed. Expected: <Game ID> <WHITE or BLACK>");
+            }
+
             String color = params[1];
             GameRequest gameReq = new GameRequest();
             gameReq.setGameID(gameID + 1000);
@@ -76,7 +81,7 @@ public class LoginClient implements Client {
 
             //At a later point, we may need to store the game data
 
-            return "The Grandmaster has entered battlefield" + params[0] + RESET_TEXT_BOLD_FAINT;
+            return "The Grandmaster has entered battlefield" + params[0] + RESET_TEXT_BOLD_FAINT + "\n";
         }
         throw new Exception("Join Game Failed. Expected: <Game ID> <WHITE or BLACK>");
     }
