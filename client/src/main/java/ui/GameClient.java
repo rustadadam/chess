@@ -42,19 +42,28 @@ public class GameClient implements Client {
     public String printGame() {
         //Placeholder for now
         ChessGame game = new ChessGame();
+        String squareColor;
+        ChessPiece[][] board = game.getBoard().board;
 
         if (isPlayerWhite) {
             System.out.print("Printing battlefield as White\n");
+            squareColor = SET_BG_COLOR_LIGHT_GREY;
         } else {
             System.out.print("Printing battlefield as Black\n");
-        }
+            squareColor = SET_BG_COLOR_DARK_GREY;
 
-        ChessPiece[][] board = game.getBoard().board;
+            //Reverse board
+            ChessPiece[][] new_board = game.getBoard().board;
+            for (int row = 0; row < 8; row++) {
+                new_board[row] = board[7 - row].clone();
+            }
+
+            board = new_board;
+        }
 
         StringBuilder sb = new StringBuilder();
 
         //Loop through rows
-        String squareColor = SET_BG_COLOR_DARK_GREY;
         for (int row = 0; row < 8; row++) {
 
             if (squareColor.equals(SET_BG_COLOR_DARK_GREY)) {
@@ -87,7 +96,7 @@ public class GameClient implements Client {
                 }
                 sb.append(" ");
             }
-            
+
             sb.append(RESET_BG_COLOR);
             sb.append("\n");
         }
