@@ -167,6 +167,16 @@ git push
 - Authentication: who am I. Authorization: What can I do. Data-Integrity: Non-changing. Non-Repudiation: Ownership
 - SHA-256 is standard today, and Bcrypt is too but is also way slower
 - collisons means that two objects map to the same thing
-- 
 
+## Encryption and Decryption
+- AES : never broken. Standard method for today
+- Super easy to do, and very helpful
+- Symmetric key dycryption: Easy, but hard to distrubtion
+- Asymmetric key dycryption: Uses a secret key and public key
+- Private key can dycrypt what is encrypted through a public key, but a public key cannot do it
+- The standard use is ECC for .
+- Disadvantage: Slow, size-restriction. Advantage: Open key distribution
+- Certificate Authorities provide a web certificate which help people learn
+- 
+- 
 
