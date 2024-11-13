@@ -53,12 +53,12 @@ public class GameClient implements Client {
             squareColor = SET_BG_COLOR_DARK_GREY;
 
             //Reverse board
-            ChessPiece[][] new_board = new ChessPiece[8][8];
+            ChessPiece[][] newBoard = new ChessPiece[8][8];
             for (int row = 0; row < 8; row++) {
-                new_board[row] = board[7 - row];
+                newBoard[row] = board[7 - row];
             }
 
-            board = new_board;
+            board = newBoard;
         }
 
         StringBuilder sb = new StringBuilder();

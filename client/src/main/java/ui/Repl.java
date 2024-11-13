@@ -78,7 +78,8 @@ public class Repl {
     }
 
     private void printPrompt() {
-        System.out.print("\n" + SET_TEXT_COLOR_MAGENTA + SET_TEXT_BOLD + "[" + state + "] " + RESET_TEXT_BOLD_FAINT + RESET_TEXT_COLOR + ">>> " + SET_TEXT_COLOR_GREEN);
+        String str = "] " + RESET_TEXT_BOLD_FAINT + RESET_TEXT_COLOR + ">>> " + SET_TEXT_COLOR_GREEN;
+        System.out.print("\n" + SET_TEXT_COLOR_MAGENTA + SET_TEXT_BOLD + "[" + state + str);
     }
 
 }

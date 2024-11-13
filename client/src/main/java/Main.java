@@ -1,5 +1,6 @@
 import chess.*;
 import ui.Repl;
+import ui.ServerFacade;
 
 import static ui.EscapeSequences.*;
 
