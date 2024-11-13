@@ -7,6 +7,7 @@ import model.UserData;
 import org.junit.jupiter.api.*;
 import server.Server;
 import service.GameService;
+import ui.LoginClient;
 import ui.ServerFacade;
 
 import java.util.Collection;
@@ -75,24 +76,57 @@ public class ServerFacadeTests {
 
         //Register user
         UserData userData = new UserData("Adam", "Austria", "Email");
-        serverFacade.register(userData);
+        AuthData authData = serverFacade.register(userData);
 
-        //We have no games yet
-//        Object games = serverFacade.listGames();
-//        Assertions.assertNotNull(games);
-//        Assertions.assertEquals(serverFacade.listGames().getGames().get("games").size(), 0, "Games already exist.");
-//
-//        //Add game
-//        gameService.createGame("myGame");
-//
-//        //Check game size
-//        Collection<GameData> games = gameService.getGames().get("games");
-//        Assertions.assertEquals(1, games.size(), "Incorrect number of games.");
-//
-//        //Check if info is right
-//        for (GameData gameData : games) {
-//            Assertions.assertEquals(gameData.gameName(), "myGame", "Incorrect game name.");
-//        }
+        LoginClient client = new LoginClient(serverUrl, authData.authToken());
+        Assertions.assertEquals("Battles available to join: \n[38;5;12m", client.list());
+    }
+
+    @Test
+    @DisplayName("Fail to list all games")
+    public void failListGamesTest() throws Exception {
+        serverFacade.clearDataBase();
+
+        //Register user
+        UserData userData = new UserData("Adam", "kansa", "Email");
+        AuthData authData = serverFacade.register(userData);
+
+        LoginClient client = new LoginClient(serverUrl, authData.authToken());
+        client.create("Game");
+        Assertions.assertNotEquals("Battles available to join: \n[38;5;12m", client.list("DFWOGSP"));
+    }
+
+    @Test
+    @DisplayName("Success to create game")
+    public void successCreateGamesTest() throws Exception {
+        serverFacade.clearDataBase();
+
+        //Register user
+        UserData userData = new UserData("Adam", "Mongi", "Email");
+        AuthData authData = serverFacade.register(userData);
+
+        LoginClient client = new LoginClient(serverUrl, authData.authToken());
+        client.create("Howny");
+        client.create("HUMAN");
+        Assertions.assertTrue(client.list().length() > 20);
+    }
+
+    @Test
+    @DisplayName("Fail to create game")
+    public void failCreateGamesTest() throws Exception {
+        serverFacade.clearDataBase();
+
+        //Register user
+        UserData userData = new UserData("legit", "Mongi", "Email");
+        AuthData authData = serverFacade.register(userData);
+
+        LoginClient client = new LoginClient(serverUrl, authData.authToken());
+        try {
+            client.create();
+            Assertions.fail();
+        } catch (Exception e) {
+            Assertions.assertNotNull(e);
+        }
     }
 
 }
