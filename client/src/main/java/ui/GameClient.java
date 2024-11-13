@@ -44,18 +44,19 @@ public class GameClient implements Client {
         ChessGame game = new ChessGame();
         String squareColor;
         ChessPiece[][] board = game.getBoard().board;
+        squareColor = SET_BG_COLOR_LIGHT_GREY;
 
         if (isPlayerWhite) {
             System.out.print("Printing battlefield as White\n");
-            squareColor = SET_BG_COLOR_LIGHT_GREY;
         } else {
             System.out.print("Printing battlefield as Black\n");
-            squareColor = SET_BG_COLOR_DARK_GREY;
 
             //Reverse board
             ChessPiece[][] newBoard = new ChessPiece[8][8];
             for (int row = 0; row < 8; row++) {
-                newBoard[row] = board[7 - row];
+                for (int col = 0; col < 8; col++) {
+                    newBoard[row][col] = board[7 - row][7 - col];
+                }
             }
 
             board = newBoard;
@@ -65,6 +66,13 @@ public class GameClient implements Client {
 
         //Loop through rows
         for (int row = 0; row < 8; row++) {
+
+            //Line numbers
+            if (!isPlayerWhite) {
+                sb.append(SET_TEXT_COLOR_MAGENTA).append(row + 1).append(" ");
+            } else {
+                sb.append(SET_TEXT_COLOR_MAGENTA).append(8 - row).append(" ");
+            }
 
             if (squareColor.equals(SET_BG_COLOR_DARK_GREY)) {
                 squareColor = SET_BG_COLOR_LIGHT_GREY;
@@ -101,7 +109,34 @@ public class GameClient implements Client {
             sb.append("\n");
         }
 
-        System.out.print(sb + RESET_BG_COLOR);
+        //Print line numbers
+        sb.append("  ");
+        boolean addSpace = true;
+
+        String[] strList;
+        if (isPlayerWhite) {
+            strList = new String[]{"A", "B", "C", "D", "E", "F", "G", "H"};
+        } else {
+            strList = new String[]{"H", "G", "F", "E", "D", "C", "B", "A"};
+        }
+
+        for (String letter : strList) {
+            sb.append(SET_TEXT_COLOR_MAGENTA).append("  ").append(letter).append("  ");
+            if (addSpace) {
+                sb.append(" ");
+                addSpace = false;
+            }
+
+            if (letter.equals("C")) {
+                addSpace = true;
+            }
+
+            if (letter.equals("F")) {
+                addSpace = true;
+            }
+        }
+
+        System.out.print(sb + RESET_BG_COLOR + "\n");
         return "";
     }
 

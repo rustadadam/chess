@@ -45,7 +45,7 @@ public class Server {
 
     public static void main(String[] args) {
         var s = new Server();
-        var port = s.run(0);
+        var port = s.run(0); //Need to keep 0
         System.out.println("Running on port: " + port);
     }
 

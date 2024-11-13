@@ -82,12 +82,14 @@ public class GameService {
             } else {
                 throw new DataAccessException("Error: already taken");
             }
-        } else {
+        } else if (playerColor.equalsIgnoreCase("black")) {
             if (game.blackUsername() == null) {
                 dataAccess.addPlayerToGameData(game.gameID(), userName, false);
             } else {
                 throw new DataAccessException("Error: already taken");
             }
+        } else {
+            throw new DataAccessException("Error: bad request");
         }
 
         return dataAccess.getGame(gameID);

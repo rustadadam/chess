@@ -140,6 +140,8 @@ public class LoginClient implements Client {
         for (LinkedTreeMap<String, Object> game : gamesList) {
             // Extract gameName
             String gameName = (String) game.get("gameName");
+            String whitePlayer = (String) game.get("whiteUsername");
+            String blackPlayer = (String) game.get("blackUsername");
 
             str.append("    - Battleground " + SET_TEXT_COLOR_YELLOW + SET_TEXT_BOLD)
                     .append(gameName)
@@ -149,6 +151,10 @@ public class LoginClient implements Client {
                     .append(pos)
                     .append(SET_TEXT_COLOR_BLUE);
             str.append("\n");
+            str.append("        > White contestant: " + SET_TEXT_COLOR_MAGENTA)
+                    .append(whitePlayer).append(SET_TEXT_COLOR_BLUE).append("\n");
+            str.append("        > Black contestant: " + SET_TEXT_COLOR_MAGENTA)
+                    .append(blackPlayer).append(SET_TEXT_COLOR_BLUE).append("\n");
             pos++;
         }
 
@@ -164,7 +170,6 @@ public class LoginClient implements Client {
                         - join <Game ID> <WHITE or BLACK> | Face down a Dragon in Chess!
                         - observe <Game ID> | Keep an eye on the competition...
                         - logout | When you are done avenging the death of your Father.
-                        - quit | When you realize that you can make more money doing math than chess.
                         - help | You really don't need this. :)
                         """;
     }
