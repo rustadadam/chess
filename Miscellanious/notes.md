@@ -162,4 +162,11 @@ git push
 - We can use the terminal for multiple uses
 - Use websocket to repass the html commands
 
+# Additional Notes
+## Cryptograph
+- Authentication: who am I. Authorization: What can I do. Data-Integrity: Non-changing. Non-Repudiation: Ownership
+- SHA-256 is standard today, and Bcrypt is too but is also way slower
+- collisons means that two objects map to the same thing
+- 
+
 
