@@ -71,7 +71,8 @@ public class GameService {
         }
 
         if (playerColor == null) {
-            throw new DataAccessException("Error: bad request"); //NOTE, spectator mode?
+            //Spectator mode
+            return dataAccess.getGame(gameID);
         } else if (playerColor.equalsIgnoreCase("white")) {
             if (game.whiteUsername() == null) {
                 //Add player to game. :)

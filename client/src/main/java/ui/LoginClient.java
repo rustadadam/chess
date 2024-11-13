@@ -42,7 +42,7 @@ public class LoginClient implements Client {
             case "create" -> create(params);
             case "list" -> list(params);
             case "join" -> join(params);
-            case "observe" -> logout(params);
+            case "observe" -> observe(params);
             default -> help();
         };
 
@@ -83,6 +83,28 @@ public class LoginClient implements Client {
         throw new Exception("Join Game Failed. Expected: <Game ID> <WHITE or BLACK>");
     }
 
+    public String observe(String... params) throws Exception {
+        if (params.length >= 1) {
+
+            int joinID;
+            try {
+                joinID = Integer.parseInt(params[0]);
+            } catch (Exception ex) {
+                throw new Exception("Observe Game Failed. Expected: <Game ID>");
+            }
+
+            GameRequest gameReq = new GameRequest();
+            gameReq.setGameID(joinID + 1000);
+            gameReq.setPlayerColor(null);
+
+            server.joinGame(gameReq, authToken);
+            state = State.INGAME;
+
+            return "You are spying on battlefield " + params[0] + RESET_TEXT_BOLD_FAINT + "\n";
+        }
+        throw new Exception("Observe Game Failed. Expected: <Game ID>");
+    }
+
     public String create(String... params) throws Exception {
         if (params.length >= 1) {
 
@@ -114,7 +136,7 @@ public class LoginClient implements Client {
                 return gameID1.compareTo(gameID2);
             }
         });
-    
+
         for (LinkedTreeMap<String, Object> game : gamesList) {
             // Extract gameName
             String gameName = (String) game.get("gameName");
@@ -123,7 +145,9 @@ public class LoginClient implements Client {
                     .append(gameName)
                     .append(RESET_TEXT_BOLD_FAINT + SET_TEXT_COLOR_BLUE)
                     .append(" at position ")
-                    .append(pos);
+                    .append(SET_TEXT_COLOR_YELLOW)
+                    .append(pos)
+                    .append(SET_TEXT_COLOR_BLUE);
             str.append("\n");
             pos++;
         }
