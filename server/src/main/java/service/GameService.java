@@ -71,6 +71,8 @@ public class GameService {
         }
 
         if (playerColor == null) {
+            throw new DataAccessException("Error: bad request"); //NOTE, spectator mode?
+        } else if (playerColor.equals("observer")) {
             //Spectator mode
             return dataAccess.getGame(gameID);
         } else if (playerColor.equalsIgnoreCase("white")) {

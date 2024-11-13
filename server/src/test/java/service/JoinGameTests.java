@@ -27,7 +27,7 @@ public class JoinGameTests extends MyTests {
         Assertions.assertEquals(1, games.size(), "Game was not added.");
 
         //Check if info is right
-        GameData joinedGame = gameService.joinGame("Adam", "WHITE", 1000);
+        GameData joinedGame = gameService.joinGame("Adam", "WHITE", 1001);
         Assertions.assertEquals("Adam", joinedGame.whiteUsername());
 
     }
@@ -47,7 +47,7 @@ public class JoinGameTests extends MyTests {
         Assertions.assertEquals(1, games.size(), "Game was not added.");
 
         //Check if info is right
-        GameData joinedGame = gameService.joinGame("Adam", "WHITE", 1000);
+        GameData joinedGame = gameService.joinGame("Adam", "WHITE", 1001);
         Assertions.assertEquals("Adam", joinedGame.whiteUsername());
 
         //Throw Error

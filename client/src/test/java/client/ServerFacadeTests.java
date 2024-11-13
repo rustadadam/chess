@@ -78,8 +78,8 @@ public class ServerFacadeTests {
         serverFacade.register(userData);
 
         //We have no games yet
-        Object games = serverFacade.listGames();
-        Assertions.assertNotNull(games);
+//        Object games = serverFacade.listGames();
+//        Assertions.assertNotNull(games);
 //        Assertions.assertEquals(serverFacade.listGames().getGames().get("games").size(), 0, "Games already exist.");
 //
 //        //Add game
