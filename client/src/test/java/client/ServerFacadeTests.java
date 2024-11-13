@@ -320,4 +320,33 @@ public class ServerFacadeTests {
         Assertions.assertEquals(loginClient.getState(), State.INGAME);
     }
 
+    @Test
+    @DisplayName("logout Games Success")
+    public void logoutGamesSuccess() throws Exception {
+        UserData userData = new UserData("Jooly", "Mongi", "hotshot@gmail.com");
+        serverFacade.clearDataBase();
+        AuthData authData = serverFacade.register(userData);
+
+        LoginClient loginClient = new LoginClient(serverUrl, authData.authToken());
+
+        loginClient.create("GAME");
+        loginClient.join("1", "WHITE");
+        Assertions.assertEquals(loginClient.getState(), State.INGAME);
+        loginClient.logout();
+        Assertions.assertEquals(loginClient.getState(), State.SIGNEDOUT);
+    }
+
+    @Test
+    @DisplayName("logout Success")
+    public void logoutSuccess() throws Exception {
+        serverFacade.clearDataBase();
+
+        UserData userData = new UserData("Jooly", "Mongi", "hotshot@gmail.com");
+        AuthData authData = serverFacade.register(userData);
+
+        LoginClient loginClient = new LoginClient(serverUrl, authData.authToken());
+        loginClient.logout();
+        Assertions.assertEquals(loginClient.getState(), State.SIGNEDOUT);
+    }
+
 }
