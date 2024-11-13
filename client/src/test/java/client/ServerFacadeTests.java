@@ -274,13 +274,50 @@ public class ServerFacadeTests {
         loginClient.create("NewGame2");
         loginClient.join("1", "WHITE");
         Assertions.assertEquals(loginClient.getState(), State.INGAME);
-        
+
         try {
             loginClient.join("2", "WHITE");
             Assertions.fail();
         } catch (Exception e) {
             Assertions.assertNotNull(e);
         }
+    }
+
+    @Test
+    @DisplayName("Join Games Fail")
+    public void joinGamesFail() throws Exception {
+        serverFacade.clearDataBase();
+
+        UserData userData = new UserData("Oldman", "Mongi", "hotshot@gmail.com");
+        AuthData authData = serverFacade.register(userData);
+
+        LoginClient loginClient = new LoginClient(serverUrl, authData.authToken());
+
+        try {
+            loginClient.join("1", "BLACK");
+            Assertions.fail();
+        } catch (Exception e) {
+            Assertions.assertNotNull(e);
+        }
+    }
+
+    @Test
+    @DisplayName("Join Games Success")
+    public void joinGamesSuccess() throws Exception {
+        serverFacade.clearDataBase();
+
+        UserData userData = new UserData("Oldman", "Mongi", "hotshot@gmail.com");
+        AuthData authData = serverFacade.register(userData);
+
+        LoginClient loginClient = new LoginClient(serverUrl, authData.authToken());
+
+        loginClient.create("firstGame");
+        loginClient.join("1", "BLACK");
+        Assertions.assertEquals(loginClient.getState(), State.INGAME);
+
+        loginClient.create("SecondGame");
+        loginClient.join("2", "BLACK");
+        Assertions.assertEquals(loginClient.getState(), State.INGAME);
     }
 
 }
