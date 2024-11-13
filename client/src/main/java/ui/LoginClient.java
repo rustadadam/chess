@@ -95,7 +95,7 @@ public class LoginClient implements Client {
 
             GameRequest gameReq = new GameRequest();
             gameReq.setGameID(joinID + 1000);
-            gameReq.setPlayerColor(null);
+            gameReq.setPlayerColor("observer");
 
             server.joinGame(gameReq, authToken);
             state = State.INGAME;
