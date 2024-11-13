@@ -7,10 +7,7 @@ import model.GameData;
 import model.GameRequest;
 import model.UserData;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Map;
+import java.util.*;
 
 import static ui.EscapeSequences.*;
 
@@ -108,14 +105,29 @@ public class LoginClient implements Client {
         ArrayList<LinkedTreeMap<String, Object>> gamesList = (ArrayList<LinkedTreeMap<String, Object>>) games.get("games");
 
         Integer pos = 1;
+        Collections.sort(gamesList, new Comparator<LinkedTreeMap<String, Object>>() {
+            @Override
+            public int compare(LinkedTreeMap<String, Object> game1, LinkedTreeMap<String, Object> game2) {
+                // Extract gameIDs and compare them
+                Double gameID1 = (Double) game1.get("gameID");
+                Double gameID2 = (Double) game2.get("gameID");
+                return gameID1.compareTo(gameID2);
+            }
+        });
+    
         for (LinkedTreeMap<String, Object> game : gamesList) {
-            // Extract gameID and gameName
+            // Extract gameName
             String gameName = (String) game.get("gameName");
 
-            str.append("    - Battleground " + SET_TEXT_COLOR_YELLOW + SET_TEXT_BOLD).append(gameName).append(RESET_TEXT_BOLD_FAINT + SET_TEXT_COLOR_BLUE).append(" at position ").append(pos.toString());
+            str.append("    - Battleground " + SET_TEXT_COLOR_YELLOW + SET_TEXT_BOLD)
+                    .append(gameName)
+                    .append(RESET_TEXT_BOLD_FAINT + SET_TEXT_COLOR_BLUE)
+                    .append(" at position ")
+                    .append(pos);
             str.append("\n");
             pos++;
         }
+
 
         return str + SET_TEXT_COLOR_BLUE;
     }
