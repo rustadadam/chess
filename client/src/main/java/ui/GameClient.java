@@ -34,8 +34,12 @@ public class GameClient implements Client {
         this.isPlayerWhite = isPlayerWhite;
         printGame();
         this.notificationHandler = notificationHandler;
-        this.ws = new WebSocketFacade(serverUrl, notificationHandler);
-        this.gameData = ws.connect();
+        try {
+            this.ws = new WebSocketFacade(serverUrl, notificationHandler);
+            this.gameData = ws.connect();
+        } catch (Exception e) {
+            System.out.print(SET_TEXT_COLOR_RED + "ERROR: Failed to connect to websocket");
+        }
 
     }
 
@@ -200,13 +204,6 @@ public class GameClient implements Client {
             ChessPosition chessPosition = new ChessPosition(row, col);
             ChessPiece piece = gameData.game().getBoard().getPiece(chessPosition);
 
-            //Check color
-            if (piece == null) {
-                return "No piece selected.";
-            }
-
-            if (piece.getTeamColor() == isPlayerWhite) {
-            }
             gameData.game().validMoves(chessPosition);
 
             return "The Grandmaster has entered battlefield " + params[0] + RESET_TEXT_BOLD_FAINT + "\n";
