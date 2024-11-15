@@ -24,6 +24,7 @@ public class GameClient implements Client {
     private Boolean isPlayerWhite;
     private final NotificationHandler notificationHandler;
     private WebSocketFacade ws;
+    GameData gameData = ws.connect();
 
     public GameClient(String serverUrl, String authToken, GameData gameData, Boolean isPlayerWhite, NotificationHandler notificationHandler) {
         server = new ServerFacade(serverUrl);
@@ -32,6 +33,8 @@ public class GameClient implements Client {
         this.isPlayerWhite = isPlayerWhite;
         printGame();
         this.notificationHandler = notificationHandler;
+        this.ws = new WebSocketFacade(serverUrl, notificationHandler);
+
     }
 
     public String getAuthToken() {
@@ -168,13 +171,18 @@ public class GameClient implements Client {
         var cmd = (tokens.length > 0) ? tokens[0] : "help";
         var params = Arrays.copyOfRange(tokens, 1, tokens.length);
         return switch (cmd) {
-            case "show" -> printGame();
+            case "redraw" -> printGame();
             case "help" -> help();
+            case "highlight" -> highlight();
             case "leave" -> leave();
             case "clear" -> clear();
             default -> help();
         };
 
+    }
+
+    public String highlight() throws Exception {
+        return "Grandmaster has left the battlefield";
     }
 
     public String leave() throws Exception {
@@ -192,9 +200,12 @@ public class GameClient implements Client {
     public String help() {
         return SET_TEXT_COLOR_RED + "Choose one of the following options:\n" + SET_TEXT_COLOR_BLUE +
                 """
-                        - play <Game Name> | Create a Game to Crush Your Opponents!
-                        - make move
-                        - Finish later
+                        - redraw | Print the game again!
+                        - move <Piece Row> <Piece Col> <Move Row> <Move Col> | Deliver a devastating blow!
+                        - highlight <Piece Row> <Piece Col> | Highlights the possible moves for your selected piece
+                        - leave | If your opponent smells...
+                        - resign | Hope you didn't bet your career on this game!
+                        - help | Put on training wheels. 
                         """;
     }
 }
