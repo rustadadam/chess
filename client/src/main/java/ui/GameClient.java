@@ -3,6 +3,7 @@ package ui;
 import chess.ChessBoard;
 import chess.ChessGame;
 import chess.ChessPiece;
+import chess.ChessPosition;
 import com.google.gson.internal.LinkedTreeMap;
 import model.AuthData;
 import model.GameData;
@@ -24,7 +25,7 @@ public class GameClient implements Client {
     private Boolean isPlayerWhite;
     private final NotificationHandler notificationHandler;
     private WebSocketFacade ws;
-    GameData gameData = ws.connect();
+    GameData gameData;
 
     public GameClient(String serverUrl, String authToken, GameData gameData, Boolean isPlayerWhite, NotificationHandler notificationHandler) {
         server = new ServerFacade(serverUrl);
@@ -34,6 +35,7 @@ public class GameClient implements Client {
         printGame();
         this.notificationHandler = notificationHandler;
         this.ws = new WebSocketFacade(serverUrl, notificationHandler);
+        this.gameData = ws.connect();
 
     }
 
@@ -181,8 +183,32 @@ public class GameClient implements Client {
 
     }
 
-    public String highlight() throws Exception {
-        return "Grandmaster has left the battlefield";
+    public String highlight(String... params) throws Exception {
+        if (params.length >= 2) {
+
+            int row;
+            int col;
+
+            try {
+                row = Integer.parseInt(params[0]);
+                col = Integer.parseInt(params[1]);
+            } catch (Exception ex) {
+                throw new Exception("Highlight Failed. Expected: <Piece Row> <Piece Col>");
+            }
+
+            //Get piece at location
+            ChessPosition chessPosition = new ChessPosition(row, col);
+            ChessPiece piece = gameData.game().getBoard().getPiece(chessPosition);
+
+            //Check color
+
+            if (piece.getTeamColor() == isPlayerWhite) {
+            }
+            gameData.game().validMoves(chessPosition);
+
+            return "The Grandmaster has entered battlefield " + params[0] + RESET_TEXT_BOLD_FAINT + "\n";
+        }
+        throw new Exception("Join Game Failed. Expected: <Game ID> <WHITE or BLACK>");
     }
 
     public String leave() throws Exception {
