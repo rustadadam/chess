@@ -201,6 +201,9 @@ public class GameClient implements Client {
             ChessPiece piece = gameData.game().getBoard().getPiece(chessPosition);
 
             //Check color
+            if (piece == null) {
+                return "No piece selected.";
+            }
 
             if (piece.getTeamColor() == isPlayerWhite) {
             }
