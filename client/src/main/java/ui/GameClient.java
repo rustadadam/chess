@@ -22,13 +22,16 @@ public class GameClient implements Client {
     private State state = State.INGAME;
     private String authToken;
     private Boolean isPlayerWhite;
+    private final NotificationHandler notificationHandler;
+    private WebSocketFacade ws;
 
-    public GameClient(String serverUrl, String authToken, GameData gameData, Boolean isPlayerWhite) {
+    public GameClient(String serverUrl, String authToken, GameData gameData, Boolean isPlayerWhite, NotificationHandler notificationHandler) {
         server = new ServerFacade(serverUrl);
         this.authToken = authToken;
         this.gameData = gameData;
         this.isPlayerWhite = isPlayerWhite;
         printGame();
+        this.notificationHandler = notificationHandler;
     }
 
     public String getAuthToken() {

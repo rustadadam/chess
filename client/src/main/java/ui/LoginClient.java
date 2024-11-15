@@ -24,7 +24,6 @@ public class LoginClient implements Client {
         System.out.print("\n\n" + SET_TEXT_COLOR_LIGHT_GREY + WHITE_QUEEN + SET_TEXT_ITALIC + "Grand Master Authorized" + WHITE_QUEEN);
         this.authToken = authToken;
         this.notificationHandler = notificationHandler;
-
     }
 
     public String getAuthToken() {
