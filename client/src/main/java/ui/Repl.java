@@ -4,9 +4,12 @@ import java.io.IOException;
 import java.util.Objects;
 import java.util.Scanner;
 
+import webSocketMessages.Notification;
+
+
 import static ui.EscapeSequences.*;
 
-public class Repl {
+public class Repl implements NotificationHandler {
     private Client client;
     private State state = State.SIGNEDOUT;
     private final String serverUrl;
@@ -75,6 +78,11 @@ public class Repl {
 
         }
 
+    }
+
+    public void notify(Notification notification) {
+        System.out.println(SET_TEXT_COLOR_YELLOW + "-> " + notification.message() + RESET_TEXT_COLOR);
+        printPrompt();
     }
 
     private void printPrompt() {

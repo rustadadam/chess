@@ -16,11 +16,15 @@ public class LoginClient implements Client {
     private State state = State.SIGNEDIN;
     private String authToken;
     private Integer gameID = 1;
+    private final NotificationHandler notificationHandler;
+    private WebSocketFacade ws;
 
-    public LoginClient(String serverUrl, String authToken) {
+    public LoginClient(String serverUrl, String authToken, NotificationHandler notificationHandler) {
         server = new ServerFacade(serverUrl);
         System.out.print("\n\n" + SET_TEXT_COLOR_LIGHT_GREY + WHITE_QUEEN + SET_TEXT_ITALIC + "Grand Master Authorized" + WHITE_QUEEN);
         this.authToken = authToken;
+        this.notificationHandler = notificationHandler;
+
     }
 
     public String getAuthToken() {
