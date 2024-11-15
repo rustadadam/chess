@@ -3,6 +3,7 @@ package ui;
 
 import com.google.gson.Gson;
 import websocket.messages.ServerMessage;
+import websocket.commands.UserGameCommand;
 
 import javax.websocket.*;
 import java.io.IOException;
@@ -45,7 +46,7 @@ public class WebSocketFacade extends Endpoint {
 
     public void enterPetShop(String visitorName) throws Exception {
         try {
-            var action = new Action(Action.Type.ENTER, visitorName);
+            var action = new UserGameCommand(UserGameCommand.Type.ENTER, visitorName);
             this.session.getBasicRemote().sendText(new Gson().toJson(action));
         } catch (IOException ex) {
             throw new Exception(ex.getMessage());
