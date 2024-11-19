@@ -24,6 +24,8 @@ import java.util.Timer;
 public class WebSocketHandler {
 
     private final HashMap<Integer, ConnectionManager> connections = new HashMap<>();
+    private final HashMap<Integer, Boolean> isGameFinished = new HashMap<>();
+
 
     private DatabaseAuthDAO databaseAuthDAO = new DatabaseAuthDAO();
     private DatabaseGameDAO databaseGameDAO = new DatabaseGameDAO();
@@ -39,14 +41,15 @@ public class WebSocketHandler {
         switch (action.getCommandType()) {
             case CONNECT -> connect(action.getGameID(), action.getAuthToken());
             case MAKE_MOVE -> makeMove(message, session);
-            case LEAVE -> exit(action.visitorName());
-            case RESIGN -> resign(action.resign());
+            case LEAVE -> exit(action.getGameID(), action.getAuthToken());
+            case RESIGN -> resign(action.getGameID(), action.getAuthToken());
         }
     }
 
     public ConnectionManager getConnection(Integer gameID) {
         if (!connections.containsKey(gameID)) {
             connections.put(gameID, new ConnectionManager());
+            isGameFinished.put(gameID, false);
         }
 
         return connections.get(gameID);
@@ -58,27 +61,47 @@ public class WebSocketHandler {
         String userName = databaseAuthDAO.getUserFromAuth(action.getAuthToken());
         getConnection(action.getGameID()).add(userName, session);
 
-        //Actually Make the move!
-        try {
-            databaseGameDAO.makeGameMove(action.getGameID(), action.move);
-
-            var send_msg = String.format("%s has made the moved %s to %s", userName,
-                    action.move.getStartPosition(), action.move.getEndPosition());
-
-            var notification = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, send_msg);
-            getConnection(action.getGameID()).broadcast(userName, notification);
-
-        } catch (InvalidMoveException e) {
-            ServerMessage errorMsg = new ServerMessage(ServerMessage.ServerMessageType.ERROR, "Illegal Move");
+        if (isGameFinished.get(action.getGameID())) {
+            ServerMessage errorMsg = new ServerMessage(ServerMessage.ServerMessageType.ERROR,
+                    "Game is finished");
             getConnection(action.getGameID()).giveError(userName, errorMsg);
+        } else {
+
+            //Actually Make the move!
+            try {
+                databaseGameDAO.makeGameMove(action.getGameID(), action.move);
+
+                var send_msg = String.format("%s has made the moved %s to %s", userName,
+                        action.move.getStartPosition(), action.move.getEndPosition());
+
+                var notification = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, send_msg);
+                getConnection(action.getGameID()).broadcast(userName, notification);
+
+            } catch (InvalidMoveException e) {
+                ServerMessage errorMsg = new ServerMessage(ServerMessage.ServerMessageType.ERROR, "Illegal Move");
+                getConnection(action.getGameID()).giveError(userName, errorMsg);
+            }
         }
     }
 
-    private void exit(String visitorName) throws IOException {
-        connections.remove(visitorName);
-        var message = String.format("%s left the shop", visitorName);
-        var notification = new ServerMessage(Notification.Type.DEPARTURE, message);
-        connections.broadcast(visitorName, notification);
+    private void exit(Integer gameID, String auth) throws DataAccessException {
+        String userName = databaseAuthDAO.getUserFromAuth(auth);
+
+        getConnection(gameID).remove(userName);
+        var message = String.format("%s left the game", userName);
+        var notification = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, message);
+        getConnection(gameID).broadcast(userName, notification);
+    }
+
+    private void resign(Integer gameID, String auth) throws DataAccessException {
+        String userName = databaseAuthDAO.getUserFromAuth(auth);
+
+        var message = String.format("%s admitted a crushing defeat", userName);
+        var notification = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, message);
+        getConnection(gameID).broadcast(userName, notification);
+
+        //Mark game as finished
+        isGameFinished.put(gameID, true);
     }
 
     public void connect(Integer gameID, String auth) throws Exception {
@@ -87,7 +110,7 @@ public class WebSocketHandler {
             var message = String.format("%s joined game %s", userName, gameID);
             var notification = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, message);
             getConnection(gameID).broadcast("", notification);
-            
+
         } catch (Exception ex) {
             throw new Exception("Connection error with websocket");
         }
