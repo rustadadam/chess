@@ -29,14 +29,14 @@ public class Server {
     private final GameService gameService;
     private final UserService userService;
     private final Gson gson = new Gson();
-    //private final WebSocketHandler webSocketHandler;
+    private final WebSocketHandler webSocketHandler;
 
     public Server() {
         try {
             this.authService = new AuthService();
             this.gameService = new GameService();
             this.userService = new UserService();
-            //webSocketHandler = new WebSocketHandler();
+            webSocketHandler = new WebSocketHandler();
         } catch (DataAccessException e) {
             System.out.println("Error: " + e.getMessage());
             throw new RuntimeException(e);
@@ -57,7 +57,7 @@ public class Server {
 
         // Register your endpoints and handle exceptions here.
 
-        //Wrap to send exceptions
+        Spark.webSocket("/ws", webSocketHandler);
 
         //Clear endpoint
         Spark.delete("/db", this::clearDataBase);
