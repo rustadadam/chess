@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.Objects;
 import java.util.Scanner;
 
-import webSocketMessages.Notification;
 import websocket.messages.ServerMessage;
 
 
@@ -14,6 +13,8 @@ public class Repl implements NotificationHandler {
     private Client client;
     private State state = State.SIGNEDOUT;
     private final String serverUrl;
+    private WebSocketFacade ws;
+
 
     public Repl(String serverUrl) {
         client = new PreLoginClient(serverUrl);
@@ -69,7 +70,9 @@ public class Repl implements NotificationHandler {
             client = new PreLoginClient(serverUrl);
         } else if (state == State.SIGNEDIN) {
             String authToken = client.getAuthToken();
-            client = new LoginClient(serverUrl, authToken, this);
+            LoginClient loginClient = new LoginClient(serverUrl, authToken);
+            loginClient.addNotificationHandler(serverUrl, this);
+            client = loginClient;
         } else if (state == State.INGAME) {
             String authToken = client.getAuthToken();
             client = new GameClient(serverUrl, authToken, null, true, this);

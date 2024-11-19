@@ -16,14 +16,25 @@ public class LoginClient implements Client {
     private State state = State.SIGNEDIN;
     private String authToken;
     private Integer gameID = 1;
-    private final NotificationHandler notificationHandler;
+    private NotificationHandler notificationHandler;
     private WebSocketFacade ws;
 
-    public LoginClient(String serverUrl, String authToken, NotificationHandler notificationHandler) {
+
+    public LoginClient(String serverUrl, String authToken) {
         server = new ServerFacade(serverUrl);
         System.out.print("\n\n" + SET_TEXT_COLOR_LIGHT_GREY + WHITE_QUEEN + SET_TEXT_ITALIC + "Grand Master Authorized" + WHITE_QUEEN);
         this.authToken = authToken;
+
+    }
+
+    public void addNotificationHandler(String serverUrl, NotificationHandler notificationHandler) {
         this.notificationHandler = notificationHandler;
+
+        try {
+            this.ws = new WebSocketFacade(serverUrl, notificationHandler);
+        } catch (Exception e) {
+            System.out.println(SET_TEXT_COLOR_RED + "Error: " + e.getMessage());
+        }
     }
 
     public String getAuthToken() {
@@ -78,6 +89,7 @@ public class LoginClient implements Client {
 
             server.joinGame(gameReq, authToken);
             state = State.INGAME;
+            ws.joinGame(authToken, joinID);
 
             //At a later point, we may need to store the game data
 
