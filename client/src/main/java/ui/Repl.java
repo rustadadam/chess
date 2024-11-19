@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Objects;
 import java.util.Scanner;
 
+import model.GameData;
 import websocket.messages.ServerMessage;
 
 
@@ -14,6 +15,7 @@ public class Repl implements NotificationHandler {
     private State state = State.SIGNEDOUT;
     private final String serverUrl;
     private WebSocketFacade ws;
+    private GameData gameData;
 
 
     public Repl(String serverUrl) {
@@ -74,15 +76,22 @@ public class Repl implements NotificationHandler {
             loginClient.addNotificationHandler(serverUrl, this);
             client = loginClient;
         } else if (state == State.INGAME) {
+            //Cast so we can grab info
+            LoginClient loginClient = (LoginClient) client;
+
             String authToken = client.getAuthToken();
-            GameClient gameClient = new GameClient(serverUrl, authToken, null, true, this);
-            gameClient.addNotificationHandler(serverUrl, this);
+            GameClient gameClient = new GameClient(serverUrl, authToken, loginClient.joinedGameID, true, this);
             client = gameClient;
         }
     }
 
     public void notify(ServerMessage notification) {
         System.out.println(SET_TEXT_COLOR_YELLOW + "-> " + notification.message + RESET_TEXT_COLOR);
+
+        if (notification.game != null) {
+            this.gameData = notification.game;
+        }
+
         printPrompt();
     }
 

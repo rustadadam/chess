@@ -1,12 +1,11 @@
 package server;
 
-import chess.ChessMove;
 import chess.InvalidMoveException;
 import com.google.gson.Gson;
 import dataaccess.DataAccessException;
 import dataaccess.DatabaseAuthDAO;
 import dataaccess.DatabaseGameDAO;
-import dataaccess.MemoryAuthDAO;
+import model.GameData;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
 import org.eclipse.jetty.websocket.api.annotations.WebSocket;
@@ -14,9 +13,7 @@ import websocket.commands.MakeMoveCommand;
 import websocket.commands.UserGameCommand;
 import websocket.messages.ServerMessage;
 
-import java.io.IOException;
 import java.util.HashMap;
-import java.util.Timer;
 
 // This file just sends messages back and forth. It only needs to update the game in database
 
@@ -64,7 +61,7 @@ public class WebSocketHandler {
         if (isGameFinished.get(action.getGameID())) {
             ServerMessage errorMsg = new ServerMessage(ServerMessage.ServerMessageType.ERROR,
                     "Game is finished");
-            getConnection(action.getGameID()).giveError(userName, errorMsg);
+            getConnection(action.getGameID()).reportToUser(userName, errorMsg);
         } else {
 
             //Actually Make the move!
@@ -79,7 +76,7 @@ public class WebSocketHandler {
 
             } catch (InvalidMoveException e) {
                 ServerMessage errorMsg = new ServerMessage(ServerMessage.ServerMessageType.ERROR, "Illegal Move");
-                getConnection(action.getGameID()).giveError(userName, errorMsg);
+                getConnection(action.getGameID()).reportToUser(userName, errorMsg);
             }
         }
     }
@@ -104,12 +101,23 @@ public class WebSocketHandler {
         isGameFinished.put(gameID, true);
     }
 
-    public void connect(Integer gameID, String auth) throws Exception {
+    public GameData connect(Integer gameID, String auth) throws Exception {
         try {
             String userName = databaseAuthDAO.getUserFromAuth(auth);
+            GameData game = databaseGameDAO.getGame(gameID);
+
             var message = String.format("%s joined game %s", userName, gameID);
+
+            //Send join game
             var notification = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, message);
             getConnection(gameID).broadcast("", notification);
+
+            //Send game
+            var loadGame = new ServerMessage(ServerMessage.ServerMessageType.LOAD_GAME, "");
+            loadGame.addGame(game);
+            getConnection(gameID).reportToUser("", notification);
+
+            return game;
 
         } catch (Exception ex) {
             throw new Exception("Connection error with websocket");

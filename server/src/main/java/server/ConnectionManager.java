@@ -1,5 +1,6 @@
 package server;
 
+import com.google.gson.Gson;
 import dataaccess.DataAccessException;
 import org.eclipse.jetty.websocket.api.Session;
 import websocket.messages.ServerMessage;
@@ -42,25 +43,15 @@ public class ConnectionManager {
         }
     }
 
-    public void giveError(String sendName, ServerMessage notification) throws DataAccessException {
-        var removeList = new ArrayList<Connection>();
+    public void reportToUser(String sendName, ServerMessage notification) throws DataAccessException {
         for (var c : connections.values()) {
-            if (c.session.isOpen()) {
-                if (c.visitorName.equals(sendName)) {
-                    try {
-                        c.send(notification.toString());
-                    } catch (IOException e) {
-                        throw new DataAccessException("Failed to broadcast");
-                    }
+            if (c.visitorName.equals(sendName) && c.session.isOpen()) {
+                try {
+                    c.send(notification.toString());
+                } catch (IOException e) {
+                    throw new DataAccessException("Failed to broadcast");
                 }
-            } else {
-                removeList.add(c);
             }
-        }
-
-        // Clean up any connections that were left open.
-        for (var c : removeList) {
-            connections.remove(c.visitorName);
         }
     }
 }

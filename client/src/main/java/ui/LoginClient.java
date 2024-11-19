@@ -18,6 +18,7 @@ public class LoginClient implements Client {
     private Integer gameID = 1;
     private NotificationHandler notificationHandler;
     private WebSocketFacade ws;
+    public Integer joinedGameID;
 
 
     public LoginClient(String serverUrl, String authToken) {
@@ -89,9 +90,7 @@ public class LoginClient implements Client {
 
             server.joinGame(gameReq, authToken);
             state = State.INGAME;
-            ws.joinGame(authToken, joinID);
-
-            //At a later point, we may need to store the game data
+            this.joinedGameID = joinID + 1000;
 
             return "The Grandmaster has entered battlefield " + params[0] + RESET_TEXT_BOLD_FAINT + "\n";
         }
