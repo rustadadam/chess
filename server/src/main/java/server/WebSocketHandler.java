@@ -1,6 +1,9 @@
 package server;
 
 import com.google.gson.Gson;
+import dataaccess.DataAccessException;
+import dataaccess.DatabaseAuthDAO;
+import dataaccess.MemoryAuthDAO;
 import exception.ResponseException;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
@@ -19,6 +22,7 @@ import java.util.Timer;
 public class WebSocketHandler {
 
     private final HashMap<Integer, ConnectionManager> connections = new HashMap<>();
+    private DatabaseAuthDAO databaseAuthDAO = new DatabaseAuthDAO();
     //private final ConnectionManager connections = new ConnectionManager();
 
     @OnWebSocketMessage
@@ -32,21 +36,23 @@ public class WebSocketHandler {
         }
     }
 
-    public void addConnection(Integer gameID) {
+    public ConnectionManager getConnection(Integer gameID) {
         if (!connections.containsKey(gameID)) {
             connections.put(gameID, new ConnectionManager());
         }
+
+        return connections.get(gameID);
     }
 
-    private void makeMove(String message, Session session) throws IOException {
+    private void makeMove(String message, Session session) throws DataAccessException {
         //Hydrate class
         MakeMoveCommand action = new Gson().fromJson(message, MakeMoveCommand.class);
+        String userName = databaseAuthDAO.getUserFromAuth(action.getAuthToken());
+        getConnection(action.getGameID()).add(userName, session);
 
-
-        connections.add(visitorName, session);
-        var message = String.format("%s is in the shop", visitorName);
-        var notification = new ServerMessage(UserGameCommand.CommandType.LEAVE, message);
-        connections.broadcast(visitorName, notification);
+        var send_msg = String.format("%s has made the moved %s to %s", userName, action.startPos, action.endPos);
+        var notification = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, send_msg);
+        getConnection(action.getGameID()).broadcast(userName, notification);
     }
 
     private void exit(String visitorName) throws IOException {

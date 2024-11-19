@@ -1,5 +1,6 @@
 package server;
 
+import dataaccess.DataAccessException;
 import org.eclipse.jetty.websocket.api.Session;
 import websocket.messages.ServerMessage;
 
@@ -19,12 +20,16 @@ public class ConnectionManager {
         connections.remove(visitorName);
     }
 
-    public void broadcast(String excludeVisitorName, ServerMessage notification) throws IOException {
+    public void broadcast(String excludeVisitorName, ServerMessage notification) throws DataAccessException {
         var removeList = new ArrayList<Connection>();
         for (var c : connections.values()) {
             if (c.session.isOpen()) {
                 if (!c.visitorName.equals(excludeVisitorName)) {
-                    c.send(notification.toString());
+                    try {
+                        c.send(notification.toString());
+                    } catch (IOException e) {
+                        throw new DataAccessException("Failed to broadcast");
+                    }
                 }
             } else {
                 removeList.add(c);
