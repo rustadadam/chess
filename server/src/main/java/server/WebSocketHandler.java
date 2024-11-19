@@ -3,8 +3,8 @@ package server;
 import com.google.gson.Gson;
 import dataaccess.DataAccessException;
 import dataaccess.DatabaseAuthDAO;
+import dataaccess.DatabaseGameDAO;
 import dataaccess.MemoryAuthDAO;
-import exception.ResponseException;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
 import org.eclipse.jetty.websocket.api.annotations.WebSocket;
@@ -22,7 +22,13 @@ import java.util.Timer;
 public class WebSocketHandler {
 
     private final HashMap<Integer, ConnectionManager> connections = new HashMap<>();
+
     private DatabaseAuthDAO databaseAuthDAO = new DatabaseAuthDAO();
+    private DatabaseGameDAO databaseGameDAO = new DatabaseGameDAO();
+
+    public WebSocketHandler() throws DataAccessException {
+    }
+
     //private final ConnectionManager connections = new ConnectionManager();
 
     @OnWebSocketMessage
@@ -49,6 +55,9 @@ public class WebSocketHandler {
         MakeMoveCommand action = new Gson().fromJson(message, MakeMoveCommand.class);
         String userName = databaseAuthDAO.getUserFromAuth(action.getAuthToken());
         getConnection(action.getGameID()).add(userName, session);
+
+        //Actually Make the move!
+
 
         var send_msg = String.format("%s has made the moved %s to %s", userName, action.startPos, action.endPos);
         var notification = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, send_msg);

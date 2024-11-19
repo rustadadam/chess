@@ -2,6 +2,9 @@ package dataaccess;
 
 
 import chess.ChessGame;
+import chess.ChessMove;
+import chess.ChessPosition;
+import chess.InvalidMoveException;
 import com.google.gson.Gson;
 import model.GameData;
 import model.UserData;
@@ -107,6 +110,28 @@ public class DatabaseGameDAO implements GameDAO {
             } else {
                 updatedGame = new GameData(game.gameID(), userName, game.blackUsername(), game.gameName(), game.game());
             }
+
+            //Add the game back and delete the old one
+            DatabaseManager.executeUpdate("DELETE FROM GameData WHERE id=" + gameID);
+            addGame(updatedGame);
+        } catch (Exception e) {
+            throw new DataAccessException("Failure to retrieve games: " + e.getMessage());
+        }
+
+    }
+
+    public void makeGameMove(int gameID, ChessMove move) throws DataAccessException, InvalidMoveException {
+
+        //First get the game
+        GameData gameData = getGame(gameID);
+        ChessGame game = gameData.game();
+
+        //Make move
+        game.makeMove(move);
+
+        try {
+            GameData updatedGame = new GameData(gameData.gameID(), gameData.whiteUsername(), gameData.blackUsername(),
+                    gameData.gameName(), game);
 
             //Add the game back and delete the old one
             DatabaseManager.executeUpdate("DELETE FROM GameData WHERE id=" + gameID);
