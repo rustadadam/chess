@@ -41,5 +41,27 @@ public class ConnectionManager {
             connections.remove(c.visitorName);
         }
     }
+
+    public void giveError(String sendName, ServerMessage notification) throws DataAccessException {
+        var removeList = new ArrayList<Connection>();
+        for (var c : connections.values()) {
+            if (c.session.isOpen()) {
+                if (c.visitorName.equals(sendName)) {
+                    try {
+                        c.send(notification.toString());
+                    } catch (IOException e) {
+                        throw new DataAccessException("Failed to broadcast");
+                    }
+                }
+            } else {
+                removeList.add(c);
+            }
+        }
+
+        // Clean up any connections that were left open.
+        for (var c : removeList) {
+            connections.remove(c.visitorName);
+        }
+    }
 }
 

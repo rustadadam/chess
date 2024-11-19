@@ -1,5 +1,7 @@
 package server;
 
+import chess.ChessMove;
+import chess.InvalidMoveException;
 import com.google.gson.Gson;
 import dataaccess.DataAccessException;
 import dataaccess.DatabaseAuthDAO;
@@ -57,11 +59,19 @@ public class WebSocketHandler {
         getConnection(action.getGameID()).add(userName, session);
 
         //Actually Make the move!
+        try {
+            databaseGameDAO.makeGameMove(action.getGameID(), action.move);
 
+            var send_msg = String.format("%s has made the moved %s to %s", userName,
+                    action.move.getStartPosition(), action.move.getEndPosition());
 
-        var send_msg = String.format("%s has made the moved %s to %s", userName, action.startPos, action.endPos);
-        var notification = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, send_msg);
-        getConnection(action.getGameID()).broadcast(userName, notification);
+            var notification = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, send_msg);
+            getConnection(action.getGameID()).broadcast(userName, notification);
+
+        } catch (InvalidMoveException e) {
+            ServerMessage errorMsg = new ServerMessage(ServerMessage.ServerMessageType.ERROR, "Illegal Move");
+            getConnection(action.getGameID()).giveError(userName, errorMsg);
+        }
     }
 
     private void exit(String visitorName) throws IOException {

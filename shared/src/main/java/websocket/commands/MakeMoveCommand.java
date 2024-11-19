@@ -1,17 +1,15 @@
 package websocket.commands;
 
-import chess.ChessPosition;
+import chess.ChessMove;
 
 public class MakeMoveCommand extends UserGameCommand {
 
-    public final ChessPosition startPos;
-    public final ChessPosition endPos;
+    public final ChessMove move;
 
     public MakeMoveCommand(CommandType commandType, String authToken, Integer gameID,
-                           ChessPosition startPos, ChessPosition endPos) {
+                           ChessMove move) {
         super(commandType, authToken, gameID);
 
-        this.startPos = startPos;
-        this.endPos = endPos;
+        this.move = move;
     }
 }
