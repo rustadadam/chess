@@ -34,7 +34,7 @@ public class WebSocketHandler {
     //private final ConnectionManager connections = new ConnectionManager();
 
     @OnWebSocketMessage
-    public void onMessage(Session session, String message) throws IOException {
+    public void onMessage(Session session, String message) throws Exception {
         UserGameCommand action = new Gson().fromJson(message, UserGameCommand.class);
         switch (action.getCommandType()) {
             case CONNECT -> connect(action.getGameID(), action.getAuthToken());
@@ -83,9 +83,11 @@ public class WebSocketHandler {
 
     public void connect(Integer gameID, String auth) throws Exception {
         try {
-            var message = String.format("%s joined game %s", userName, gameName);
+            String userName = databaseAuthDAO.getUserFromAuth(auth);
+            var message = String.format("%s joined game %s", userName, gameID);
             var notification = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, message);
-            connections.broadcast("", notification);
+            getConnection(gameID).broadcast("", notification);
+            
         } catch (Exception ex) {
             throw new Exception("Connection error with websocket");
         }
