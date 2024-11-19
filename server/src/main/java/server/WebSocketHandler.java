@@ -1,7 +1,6 @@
 package server;
 
 import com.google.gson.Gson;
-import dataaccess.DataAccess;
 import exception.ResponseException;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
@@ -24,15 +23,16 @@ public class WebSocketHandler {
         UserGameCommand action = new Gson().fromJson(message, UserGameCommand.class);
         switch (action.getCommandType()) {
             case CONNECT -> connect(action.getGameID(), action.getAuthToken());
-            case ENTER -> enter(action.visitorName(), session);
-            case EXIT -> exit(action.visitorName());
+            case MAKE_MOVE -> enter(action.visitorName(), session);
+            case LEAVE -> exit(action.visitorName());
+            case RESIGN -> resign(action.resign());
         }
     }
 
     private void enter(String visitorName, Session session) throws IOException {
         connections.add(visitorName, session);
         var message = String.format("%s is in the shop", visitorName);
-        var notification = new ServerMessage(Notification.Type.ARRIVAL, message);
+        var notification = new ServerMessage(UserGameCommand.CommandType.LEAVE, message);
         connections.broadcast(visitorName, notification);
     }
 
@@ -49,7 +49,7 @@ public class WebSocketHandler {
             var notification = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, message);
             connections.broadcast("", notification);
         } catch (Exception ex) {
-            throw new ResponseException(500, ex.getMessage());
+            throw new Exception("Connection error with websocket");
         }
     }
 }

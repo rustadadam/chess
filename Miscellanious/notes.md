@@ -177,3 +177,6 @@ git push
 - The standard use is ECC for .
 - Disadvantage: Slow, size-restriction. Advantage: Open key distribution
 - Certificate Authorities provide a web certificate which help people learn
+
+### Question
+- How do you alter the game with websocket
