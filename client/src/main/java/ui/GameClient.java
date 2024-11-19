@@ -32,7 +32,6 @@ public class GameClient implements Client {
         this.gameData = gameData;
         this.isPlayerWhite = isPlayerWhite;
         printGame();
-
     }
 
     public void addNotificationHandler(String serverUrl, NotificationHandler notificationHandler) {
