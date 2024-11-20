@@ -36,7 +36,7 @@ public class WebSocketHandler {
     public void onMessage(Session session, String message) throws Exception {
         UserGameCommand action = new Gson().fromJson(message, UserGameCommand.class);
         switch (action.getCommandType()) {
-            case CONNECT -> connect(action.getGameID(), action.getAuthToken());
+            case CONNECT -> connect(action.getGameID(), action.getAuthToken(), session);
             case MAKE_MOVE -> makeMove(message, session);
             case LEAVE -> exit(action.getGameID(), action.getAuthToken());
             case RESIGN -> resign(action.getGameID(), action.getAuthToken());
@@ -101,10 +101,13 @@ public class WebSocketHandler {
         isGameFinished.put(gameID, true);
     }
 
-    public GameData connect(Integer gameID, String auth) throws Exception {
+    public GameData connect(Integer gameID, String auth, Session session) throws Exception {
         try {
-            String userName = databaseAuthDAO.getUserFromAuth(auth);
+            String userName = databaseAuthDAO.getUserFromAuth(auth).replace("@", "");
             GameData game = databaseGameDAO.getGame(gameID);
+
+            //Add connection
+            getConnection(gameID).add(userName, session);
 
             var message = String.format("%s joined game %s", userName, gameID);
 

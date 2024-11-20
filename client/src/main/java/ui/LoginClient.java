@@ -103,7 +103,7 @@ public class LoginClient implements Client {
             state = State.INGAME;
 
             try {
-                ws.joinGame(authToken, gameID);
+                ws.joinGame(authToken, joinID + 1000);
             } catch (Exception e) {
                 System.out.print(SET_TEXT_COLOR_RED + "ERROR: Failed to connect to websocket");
             }
