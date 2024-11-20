@@ -113,7 +113,7 @@ public class WebSocketHandler {
 
             //Send join game
             var notification = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, message);
-            getConnection(gameID).broadcast("", notification);
+            getConnection(gameID).broadcast(userName, notification);
 
             //Send game
             var loadGame = new ServerMessage(ServerMessage.ServerMessageType.LOAD_GAME, "");
