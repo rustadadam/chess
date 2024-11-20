@@ -38,7 +38,7 @@ public class GameClient implements Client {
         }
 
         this.isPlayerWhite = isPlayerWhite;
-        printGame();
+        printGame(false);
     }
 
     public GameData getGameData() {
@@ -47,9 +47,9 @@ public class GameClient implements Client {
 
     public void setGameData(GameData gameData) {
         this.gameData = gameData;
-        
+
         //Now print the board
-        printGame();
+        printGame(false);
     }
 
     public String getAuthToken() {
@@ -60,7 +60,7 @@ public class GameClient implements Client {
         return state;
     }
 
-    public String printGame() {
+    public String printGame(boolean highlight) {
         //Placeholder for now
         ChessGame game = new ChessGame();
         String squareColor;
@@ -186,7 +186,7 @@ public class GameClient implements Client {
         var cmd = (tokens.length > 0) ? tokens[0] : "help";
         var params = Arrays.copyOfRange(tokens, 1, tokens.length);
         return switch (cmd) {
-            case "redraw" -> printGame();
+            case "redraw" -> printGame(false);
             case "help" -> help();
             case "highlight" -> highlight();
             case "leave" -> leave();
