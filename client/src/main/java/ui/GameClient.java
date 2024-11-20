@@ -17,22 +17,22 @@ public class GameClient implements Client {
     private State state = State.INGAME;
     private String authToken;
     private Boolean isPlayerWhite;
-    private NotificationHandler notificationHandler;
     private WebSocketFacade ws;
 
     public GameClient(String serverUrl, String authToken, Boolean isPlayerWhite, NotificationHandler notificationHandler) {
         server = new ServerFacade(serverUrl);
         this.authToken = authToken;
-        this.notificationHandler = notificationHandler;
-
-        try {
-            this.ws = new WebSocketFacade(serverUrl, notificationHandler);
-        } catch (Exception e) {
-            System.out.print(SET_TEXT_COLOR_RED + "ERROR: Failed to connect to websocket");
-        }
 
         this.isPlayerWhite = isPlayerWhite;
         printGame(false);
+    }
+
+    public void addWebSocket(WebSocketFacade ws) {
+        try {
+            this.ws = ws;
+        } catch (Exception e) {
+            System.out.println(SET_TEXT_COLOR_RED + "Error: " + e.getMessage());
+        }
     }
 
     public GameData getGameData() {

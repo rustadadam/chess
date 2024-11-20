@@ -15,9 +15,17 @@ public class Repl implements NotificationHandler {
     private State state = State.SIGNEDOUT;
     private final String serverUrl;
     private boolean isPlayerWhite;
+    private WebSocketFacade ws;
 
     public Repl(String serverUrl) {
         client = new PreLoginClient(serverUrl);
+
+        try {
+            this.ws = new WebSocketFacade(serverUrl, this);
+        } catch (Exception e) {
+            System.out.print(SET_TEXT_COLOR_RED + "ERROR: Failed to connect to websocket");
+        }
+
         this.serverUrl = serverUrl;
     }
 
@@ -71,12 +79,14 @@ public class Repl implements NotificationHandler {
         } else if (state == State.SIGNEDIN) {
             String authToken = client.getAuthToken();
             LoginClient loginClient = new LoginClient(serverUrl, authToken);
-            loginClient.addNotificationHandler(serverUrl, this);
+            loginClient.addWebSocket(ws);
             isPlayerWhite = loginClient.isPlayerWhite;
             client = loginClient;
         } else if (state == State.INGAME) {
             String authToken = client.getAuthToken();
-            client = new GameClient(serverUrl, authToken, isPlayerWhite, this);
+            GameClient gameClient = new GameClient(serverUrl, authToken, isPlayerWhite, this);
+            gameClient.addWebSocket(ws);
+            client = gameClient;
         }
     }
 

@@ -16,7 +16,6 @@ public class LoginClient implements Client {
     private State state = State.SIGNEDIN;
     private String authToken;
     private Integer gameID = 1;
-    private NotificationHandler notificationHandler;
     private WebSocketFacade ws;
     private GameData gameData;
     public boolean isPlayerWhite;
@@ -29,10 +28,9 @@ public class LoginClient implements Client {
 
     }
 
-    public void addNotificationHandler(String serverUrl, NotificationHandler notificationHandler) {
-        this.notificationHandler = notificationHandler;
+    public void addWebSocket(WebSocketFacade ws) {
         try {
-            this.ws = new WebSocketFacade(serverUrl, notificationHandler);
+            this.ws = ws;
         } catch (Exception e) {
             System.out.println(SET_TEXT_COLOR_RED + "Error: " + e.getMessage());
         }
