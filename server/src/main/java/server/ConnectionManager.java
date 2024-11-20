@@ -27,7 +27,7 @@ public class ConnectionManager {
             if (c.session.isOpen()) {
                 if (!c.visitorName.equals(excludeVisitorName)) {
                     try {
-                        c.send(notification.toString());
+                        c.send(new Gson().toJson(notification));
                     } catch (IOException e) {
                         throw new DataAccessException("Failed to broadcast");
                     }
@@ -47,7 +47,7 @@ public class ConnectionManager {
         for (var c : connections.values()) {
             if (c.session.isOpen() && c.visitorName.equals(sendName)) {
                 try {
-                    c.send(notification.toString());
+                    c.send(new Gson().toJson(notification));
                 } catch (IOException e) {
                     throw new DataAccessException("Failed to broadcast");
                 }
