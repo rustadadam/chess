@@ -14,9 +14,6 @@ public class Repl implements NotificationHandler {
     private Client client;
     private State state = State.SIGNEDOUT;
     private final String serverUrl;
-    private WebSocketFacade ws;
-    private GameData gameData;
-
 
     public Repl(String serverUrl) {
         client = new PreLoginClient(serverUrl);
@@ -76,10 +73,8 @@ public class Repl implements NotificationHandler {
             loginClient.addNotificationHandler(serverUrl, this);
             client = loginClient;
         } else if (state == State.INGAME) {
-
             String authToken = client.getAuthToken();
-            GameClient gameClient = new GameClient(serverUrl, authToken, true, this);
-            client = gameClient;
+            client = new GameClient(serverUrl, authToken, true, this);
         }
     }
 
@@ -87,7 +82,7 @@ public class Repl implements NotificationHandler {
         System.out.println(SET_TEXT_COLOR_YELLOW + "-> " + notification.message + RESET_TEXT_COLOR);
 
         if (notification.game != null) {
-            this.gameData = notification.game;
+            client.setGameData(notification.game);
         }
 
         printPrompt();
