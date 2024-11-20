@@ -45,7 +45,7 @@ public class ConnectionManager {
 
     public void reportToUser(String sendName, ServerMessage notification) throws DataAccessException {
         for (var c : connections.values()) {
-            if (c.visitorName.equals(sendName) && c.session.isOpen()) {
+            if (c.session.isOpen() && c.visitorName.equals(sendName)) {
                 try {
                     c.send(notification.toString());
                 } catch (IOException e) {
