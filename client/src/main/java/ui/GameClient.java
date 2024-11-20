@@ -54,12 +54,17 @@ public class GameClient implements Client {
         return state;
     }
 
-    public String printGame(boolean highlight) {
+    public String printGame(boolean highlight, String... params) {
         //Placeholder for now
         ChessGame game = new ChessGame();
         String squareColor;
         ChessPiece[][] board = game.getBoard().board;
         squareColor = SET_BG_COLOR_LIGHT_GREY;
+
+        Set<ChessPosition> moveSet = null;
+        if (highlight) {
+            moveSet = highlight(params);
+        }
 
         if (isPlayerWhite) {
             System.out.print("Printing battlefield as White\n");
@@ -103,13 +108,22 @@ public class GameClient implements Client {
                     squareColor = SET_BG_COLOR_DARK_GREY;
                 }
 
-                sb.append(squareColor);
+                //Highlight square
+                ChessPosition pos = new ChessPosition(row, column);
+                if (moveSet != null && moveSet.contains(pos)) {
+                    sb.append(SET_BG_COLOR_YELLOW);
+                } else {
+                    sb.append(squareColor);
+                }
+
 
                 sb.append(" ");
                 if (board[row][column] != null) {
                     sb.append(printPiece(board[row][column].toString())); //Remember to update pieces for this
                 } else {
-                    if (!squareColor.equals(SET_BG_COLOR_DARK_GREY)) {
+                    if (moveSet != null && moveSet.contains(pos)) {
+                        sb.append(SET_TEXT_COLOR_YELLOW);
+                    } else if (!squareColor.equals(SET_BG_COLOR_DARK_GREY)) {
                         sb.append(SET_TEXT_COLOR_LIGHT_GREY);
                     } else {
                         sb.append(SET_TEXT_COLOR_DARK_GREY);
@@ -180,9 +194,9 @@ public class GameClient implements Client {
         var cmd = (tokens.length > 0) ? tokens[0] : "help";
         var params = Arrays.copyOfRange(tokens, 1, tokens.length);
         return switch (cmd) {
-            case "redraw" -> printGame(false);
+            case "redraw" -> printGame(false, params);
             case "help" -> help();
-            case "highlight" -> printGame(true);
+            case "highlight" -> printGame(true, params);
             case "leave" -> leave();
             case "clear" -> clear();
             default -> help();
@@ -190,19 +204,27 @@ public class GameClient implements Client {
 
     }
 
-    public Set<ChessPosition> highlight(Integer row, Integer col) throws Exception {
-        
-        //Get piece at location
-        ChessPosition chessPosition = new ChessPosition(row, col);
-        Collection<ChessMove> moveSet = gameData.game().validMoves(chessPosition);
-        Set<ChessPosition> endSet = new HashSet<>();
+    public Set<ChessPosition> highlight(String... params) {
+        if (params.length >= 2) {
+            Integer row = Integer.parseInt(params[0]);
+            Integer col = Integer.parseInt(params[1]);
 
-        //Get just the end position
-        for (ChessMove move : moveSet) {
-            endSet.add(move.getEndPosition());
+            //Get piece at location
+            ChessPosition chessPosition = new ChessPosition(row, col);
+            Collection<ChessMove> moveSet = gameData.game().validMoves(chessPosition);
+            Set<ChessPosition> endSet = new HashSet<>();
+
+            //Get just the end position
+            for (ChessMove move : moveSet) {
+                endSet.add(move.getEndPosition());
+            }
+
+            return endSet;
+
+        } else {
+            System.out.print(SET_TEXT_COLOR_RED + "Highlight Failed. Expected: <Piece Row> <Piece Col>");
+            return null;
         }
-
-        return endSet;
     }
 
 
