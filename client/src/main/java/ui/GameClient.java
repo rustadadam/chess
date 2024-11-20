@@ -47,6 +47,9 @@ public class GameClient implements Client {
 
     public void setGameData(GameData gameData) {
         this.gameData = gameData;
+        
+        //Now print the board
+        printGame();
     }
 
     public String getAuthToken() {

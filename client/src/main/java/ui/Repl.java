@@ -14,6 +14,7 @@ public class Repl implements NotificationHandler {
     private Client client;
     private State state = State.SIGNEDOUT;
     private final String serverUrl;
+    private boolean isPlayerWhite;
 
     public Repl(String serverUrl) {
         client = new PreLoginClient(serverUrl);
@@ -71,10 +72,11 @@ public class Repl implements NotificationHandler {
             String authToken = client.getAuthToken();
             LoginClient loginClient = new LoginClient(serverUrl, authToken);
             loginClient.addNotificationHandler(serverUrl, this);
+            isPlayerWhite = loginClient.isPlayerWhite;
             client = loginClient;
         } else if (state == State.INGAME) {
             String authToken = client.getAuthToken();
-            client = new GameClient(serverUrl, authToken, true, this);
+            client = new GameClient(serverUrl, authToken, isPlayerWhite, this);
         }
     }
 

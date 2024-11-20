@@ -19,6 +19,7 @@ public class LoginClient implements Client {
     private NotificationHandler notificationHandler;
     private WebSocketFacade ws;
     private GameData gameData;
+    public boolean isPlayerWhite;
 
 
     public LoginClient(String serverUrl, String authToken) {
@@ -91,6 +92,9 @@ public class LoginClient implements Client {
             }
 
             String color = params[1];
+
+            isPlayerWhite = color.equalsIgnoreCase("white");
+
             GameRequest gameReq = new GameRequest();
             gameReq.setGameID(joinID + 1000);
             gameReq.setPlayerColor(color);
