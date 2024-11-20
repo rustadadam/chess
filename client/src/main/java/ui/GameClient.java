@@ -1,19 +1,13 @@
 package ui;
 
-import chess.ChessBoard;
-import chess.ChessGame;
-import chess.ChessPiece;
-import chess.ChessPosition;
+import chess.*;
 import com.google.gson.internal.LinkedTreeMap;
 import model.AuthData;
 import model.GameData;
 import model.GameRequest;
 import model.UserData;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Map;
+import java.util.*;
 
 import static ui.EscapeSequences.*;
 
@@ -188,7 +182,7 @@ public class GameClient implements Client {
         return switch (cmd) {
             case "redraw" -> printGame(false);
             case "help" -> help();
-            case "highlight" -> highlight();
+            case "highlight" -> printGame(true);
             case "leave" -> leave();
             case "clear" -> clear();
             default -> help();
@@ -196,29 +190,21 @@ public class GameClient implements Client {
 
     }
 
-    public String highlight(String... params) throws Exception {
-        if (params.length >= 2) {
+    public Set<ChessPosition> highlight(Integer row, Integer col) throws Exception {
+        
+        //Get piece at location
+        ChessPosition chessPosition = new ChessPosition(row, col);
+        Collection<ChessMove> moveSet = gameData.game().validMoves(chessPosition);
+        Set<ChessPosition> endSet = new HashSet<>();
 
-            int row;
-            int col;
-
-            try {
-                row = Integer.parseInt(params[0]);
-                col = Integer.parseInt(params[1]);
-            } catch (Exception ex) {
-                throw new Exception("Highlight Failed. Expected: <Piece Row> <Piece Col>");
-            }
-
-            //Get piece at location
-            ChessPosition chessPosition = new ChessPosition(row, col);
-            ChessPiece piece = gameData.game().getBoard().getPiece(chessPosition);
-
-            gameData.game().validMoves(chessPosition);
-
-            return "The Grandmaster has entered battlefield " + params[0] + RESET_TEXT_BOLD_FAINT + "\n";
+        //Get just the end position
+        for (ChessMove move : moveSet) {
+            endSet.add(move.getEndPosition());
         }
-        throw new Exception("Join Game Failed. Expected: <Game ID> <WHITE or BLACK>");
+
+        return endSet;
     }
+
 
     public String leave() throws Exception {
         state = State.SIGNEDIN; //Change later
