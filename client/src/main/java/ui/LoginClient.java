@@ -18,7 +18,7 @@ public class LoginClient implements Client {
     private Integer gameID = 1;
     private NotificationHandler notificationHandler;
     private WebSocketFacade ws;
-    public Integer joinedGameID;
+    private GameData gameData;
 
 
     public LoginClient(String serverUrl, String authToken) {
@@ -30,7 +30,6 @@ public class LoginClient implements Client {
 
     public void addNotificationHandler(String serverUrl, NotificationHandler notificationHandler) {
         this.notificationHandler = notificationHandler;
-
         try {
             this.ws = new WebSocketFacade(serverUrl, notificationHandler);
         } catch (Exception e) {
@@ -42,8 +41,16 @@ public class LoginClient implements Client {
         return authToken;
     }
 
+    public GameData getGameData() {
+        return gameData;
+    }
+
     public State getState() {
         return state;
+    }
+
+    public void setGameData(GameData gameData) {
+        this.gameData = gameData;
     }
 
     public String eval(String input) throws Exception {
@@ -90,7 +97,12 @@ public class LoginClient implements Client {
 
             server.joinGame(gameReq, authToken);
             state = State.INGAME;
-            this.joinedGameID = joinID + 1000;
+
+            try {
+                ws.joinGame(authToken, gameID);
+            } catch (Exception e) {
+                System.out.print(SET_TEXT_COLOR_RED + "ERROR: Failed to connect to websocket");
+            }
 
             return "The Grandmaster has entered battlefield " + params[0] + RESET_TEXT_BOLD_FAINT + "\n";
         }

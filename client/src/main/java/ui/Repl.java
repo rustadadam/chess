@@ -76,11 +76,9 @@ public class Repl implements NotificationHandler {
             loginClient.addNotificationHandler(serverUrl, this);
             client = loginClient;
         } else if (state == State.INGAME) {
-            //Cast so we can grab info
-            LoginClient loginClient = (LoginClient) client;
 
             String authToken = client.getAuthToken();
-            GameClient gameClient = new GameClient(serverUrl, authToken, loginClient.joinedGameID, true, this);
+            GameClient gameClient = new GameClient(serverUrl, authToken, true, this);
             client = gameClient;
         }
     }

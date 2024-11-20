@@ -1,6 +1,7 @@
 package ui;
 
 import model.AuthData;
+import model.GameData;
 import model.UserData;
 
 import java.util.Arrays;
@@ -11,6 +12,7 @@ public class PreLoginClient implements Client {
     private final ServerFacade server;
     private State state = State.SIGNEDOUT;
     private String authToken;
+    private GameData gameData;
 
     public PreLoginClient(String serverUrl) {
         server = new ServerFacade(serverUrl);
@@ -20,8 +22,16 @@ public class PreLoginClient implements Client {
         return authToken;
     }
 
+    public void setGameData(GameData gameData) {
+        this.gameData = gameData;
+    }
+
     public State getState() {
         return state;
+    }
+
+    public GameData getGameData() {
+        return gameData;
     }
 
     public String eval(String input) throws Exception {
