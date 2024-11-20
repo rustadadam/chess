@@ -24,7 +24,6 @@ public class GameClient implements Client {
         this.authToken = authToken;
 
         this.isPlayerWhite = isPlayerWhite;
-        printGame(false);
     }
 
     public void addWebSocket(WebSocketFacade ws) {
