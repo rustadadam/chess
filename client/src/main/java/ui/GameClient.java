@@ -63,6 +63,10 @@ public class GameClient implements Client {
         Set<ChessPosition> moveSet = null;
         if (highlight) {
             moveSet = highlight(params);
+
+            if (moveSet == null) {
+                return SET_TEXT_COLOR_RED + "Error. No piece selected." + RESET_TEXT_COLOR;
+            }
         }
 
         if (isPlayerWhite) {
@@ -110,7 +114,7 @@ public class GameClient implements Client {
                 //Highlight square
                 ChessPosition pos = new ChessPosition(row, column);
                 if (moveSet != null && moveSet.contains(pos)) {
-                    sb.append(SET_BG_COLOR_YELLOW);
+                    sb.append(SET_BG_COLOR_BLACK);
                 } else {
                     sb.append(squareColor);
                 }
@@ -121,7 +125,7 @@ public class GameClient implements Client {
                     sb.append(printPiece(board[row][column].toString())); //Remember to update pieces for this
                 } else {
                     if (moveSet != null && moveSet.contains(pos)) {
-                        sb.append(SET_TEXT_COLOR_YELLOW);
+                        sb.append(SET_TEXT_COLOR_BLACK);
                     } else if (!squareColor.equals(SET_BG_COLOR_DARK_GREY)) {
                         sb.append(SET_TEXT_COLOR_LIGHT_GREY);
                     } else {
