@@ -74,6 +74,12 @@ public class WebSocketHandler {
                 var notification = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, send_msg);
                 getConnection(action.getGameID()).broadcast(userName, notification);
 
+                //Load Game
+                var loadGame = new ServerMessage(ServerMessage.ServerMessageType.LOAD_GAME, " ");
+                GameData game = databaseGameDAO.getGame(action.getGameID());
+                loadGame.addGame(game);
+                getConnection(action.getGameID()).broadcast(userName, loadGame);
+
             } catch (InvalidMoveException e) {
                 ServerMessage errorMsg = new ServerMessage(ServerMessage.ServerMessageType.ERROR, "Illegal Move");
                 getConnection(action.getGameID()).reportToUser(userName, errorMsg);
