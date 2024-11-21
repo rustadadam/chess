@@ -57,7 +57,7 @@ public class GameClient implements Client {
         ChessGame game = gameData.game();
         String squareColor;
         ChessPiece[][] board = game.getBoard().board;
-        squareColor = SET_BG_COLOR_LIGHT_GREY;
+        squareColor = SET_BG_COLOR_DARK_GREY;
 
         Set<ChessPosition> moveSet = null;
         if (highlight) {
@@ -68,10 +68,10 @@ public class GameClient implements Client {
             }
         }
 
-        if (isPlayerWhite) {
-            System.out.print("Printing battlefield as White\n");
-        } else {
+        if (!isPlayerWhite) {
             System.out.print("Printing battlefield as Black\n");
+        } else {
+            System.out.print("Printing battlefield as White\n");
 
             //Reverse board
             ChessPiece[][] newBoard = new ChessPiece[8][8];
@@ -96,10 +96,10 @@ public class GameClient implements Client {
                 sb.append(SET_TEXT_COLOR_MAGENTA).append(8 - row).append(" ");
             }
 
-            if (squareColor.equals(SET_BG_COLOR_DARK_GREY)) {
-                squareColor = SET_BG_COLOR_LIGHT_GREY;
-            } else {
+            if (squareColor.equals(SET_BG_COLOR_LIGHT_GREY)) {
                 squareColor = SET_BG_COLOR_DARK_GREY;
+            } else {
+                squareColor = SET_BG_COLOR_LIGHT_GREY;
             }
 
             for (int column = 0; column < 8; column++) {
@@ -113,9 +113,9 @@ public class GameClient implements Client {
                 //Highlight square
                 ChessPosition pos;
                 if (!isPlayerWhite) {
-                    pos = new ChessPosition(row + 1, 8 - column);
+                    pos = new ChessPosition((row + 1), (1 + column));
                 } else {
-                    pos = new ChessPosition(8 - row, column + 1);
+                    pos = new ChessPosition(9 - (row + 1), 9 - (1 + column));
                 }
 
                 if (moveSet != null && moveSet.contains(pos)) {
@@ -227,7 +227,7 @@ public class GameClient implements Client {
             }
 
             //Get piece at location
-            ChessPosition chessPosition = new ChessPosition(row, col);
+            ChessPosition chessPosition = new ChessPosition(row, 9 - col);
             Collection<ChessMove> moveSet = gameData.game().validMoves(chessPosition);
             Set<ChessPosition> endSet = new HashSet<>();
 
@@ -283,9 +283,14 @@ public class GameClient implements Client {
             }
 
             //Make move
-            ChessPosition startPosition = new ChessPosition(rowStart, colStart);
-            ChessPosition endPosition = new ChessPosition(rowEnd, colEnd);
+            ChessPosition startPosition;
+            ChessPosition endPosition;
+
+            startPosition = new ChessPosition(rowStart, 9 - colStart);
+            endPosition = new ChessPosition(rowEnd, 9 - colEnd);
+
             ChessMove move = new ChessMove(startPosition, endPosition, null);
+
 
             try {
                 ws.makeMove(authToken, gameData.gameID(), move);
