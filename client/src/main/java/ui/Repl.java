@@ -80,9 +80,10 @@ public class Repl implements NotificationHandler {
             String authToken = client.getAuthToken();
             LoginClient loginClient = new LoginClient(serverUrl, authToken);
             loginClient.addWebSocket(ws);
-            isPlayerWhite = loginClient.isPlayerWhite;
             client = loginClient;
         } else if (state == State.INGAME) {
+            LoginClient loginClient = (LoginClient) client;
+            isPlayerWhite = loginClient.isPlayerWhite;
             String authToken = client.getAuthToken();
             GameClient gameClient = new GameClient(serverUrl, authToken, isPlayerWhite, this);
             gameClient.addWebSocket(ws);

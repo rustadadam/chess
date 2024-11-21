@@ -16,7 +16,7 @@ public class GameClient implements Client {
     private GameData gameData;
     private State state = State.INGAME;
     private String authToken;
-    private Boolean isPlayerWhite;
+    private final Boolean isPlayerWhite;
     private WebSocketFacade ws;
 
     public GameClient(String serverUrl, String authToken, Boolean isPlayerWhite, NotificationHandler notificationHandler) {
@@ -114,13 +114,13 @@ public class GameClient implements Client {
                 //Highlight square
                 ChessPosition pos;
                 if (!isPlayerWhite) {
-                    pos = new ChessPosition(row - 1, column - 1);
+                    pos = new ChessPosition(row + 1, column + 1);
                 } else {
-                    pos = new ChessPosition(8 - (row - 1), 8 - (column - 1));
+                    pos = new ChessPosition(8 - (row + 1), 8 - (column + 1));
                 }
 
                 if (moveSet != null && moveSet.contains(pos)) {
-                    sb.append(SET_BG_COLOR_BLACK);
+                    sb.append(SET_BG_COLOR_YELLOW);
                 } else {
                     sb.append(squareColor);
                 }
@@ -131,7 +131,7 @@ public class GameClient implements Client {
                     sb.append(printPiece(board[row][column].toString())); //Remember to update pieces for this
                 } else {
                     if (moveSet != null && moveSet.contains(pos)) {
-                        sb.append(SET_TEXT_COLOR_BLACK);
+                        sb.append(SET_TEXT_COLOR_YELLOW);
                     } else if (!squareColor.equals(SET_BG_COLOR_DARK_GREY)) {
                         sb.append(SET_TEXT_COLOR_LIGHT_GREY);
                     } else {
