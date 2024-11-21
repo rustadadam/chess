@@ -112,7 +112,7 @@ public class GameClient implements Client {
                 }
 
                 //Highlight square
-                ChessPosition pos = new ChessPosition(row, column);
+                ChessPosition pos = new ChessPosition(row - 1, column - 1);
                 if (moveSet != null && moveSet.contains(pos)) {
                     sb.append(SET_BG_COLOR_BLACK);
                 } else {
