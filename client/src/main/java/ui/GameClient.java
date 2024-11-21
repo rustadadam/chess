@@ -208,6 +208,7 @@ public class GameClient implements Client {
             case "highlight" -> printGame(true, params);
             case "leave" -> leave();
             case "clear" -> clear();
+            case "move" -> move();
             default -> help();
         };
 
@@ -247,7 +248,6 @@ public class GameClient implements Client {
         }
     }
 
-
     public String leave() throws Exception {
         state = State.SIGNEDIN; //Change later
         return "Grandmaster has left the battlefield";
@@ -259,6 +259,51 @@ public class GameClient implements Client {
         return "Grandmaster has left the battlefield | Database cleared";
     }
 
+    public String move(String... params) {
+        if (params.length >= 4) {
+            Integer rowStart = Integer.parseInt(params[0]);
+            Integer rowEnd = Integer.parseInt(params[2]);
+
+
+            Integer colStart;
+            Integer colEnd;
+            try {
+                colEnd = Integer.parseInt(params[3]);
+
+            } catch (Exception e) {
+                String letter = params[3].toLowerCase();
+                colEnd = letter.charAt(0) - 'a' + 1;
+            }
+
+            try {
+                colStart = Integer.parseInt(params[1]);
+
+            } catch (Exception e) {
+                String letter = params[1].toLowerCase();
+                colStart = letter.charAt(0) - 'a' + 1;
+            }
+
+            //Make move
+
+            //Remove peice at start location
+            Collection<ChessMove> moveSet = gameData.game().validMoves(chessPosition);
+            Set<ChessPosition> endSet = new HashSet<>();
+
+            //Get just the end position
+            for (ChessMove move : moveSet) {
+                endSet.add(move.getEndPosition());
+            }
+
+            //add its own position
+            endSet.add(chessPosition);
+
+            return endSet;
+
+        } else {
+            System.out.print(SET_TEXT_COLOR_RED + "Highlight Failed. Expected: <Piece Row> <Piece Col>");
+            return null;
+        }
+    }
 
     public String help() {
         return SET_TEXT_COLOR_RED + "Choose one of the following options:\n" + SET_TEXT_COLOR_BLUE +
