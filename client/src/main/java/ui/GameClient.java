@@ -54,8 +54,7 @@ public class GameClient implements Client {
     }
 
     public String printGame(boolean highlight, String... params) {
-        //Placeholder for now
-        ChessGame game = new ChessGame();
+        ChessGame game = gameData.game();
         String squareColor;
         ChessPiece[][] board = game.getBoard().board;
         squareColor = SET_BG_COLOR_LIGHT_GREY;

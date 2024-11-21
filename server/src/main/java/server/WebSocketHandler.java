@@ -55,7 +55,7 @@ public class WebSocketHandler {
     private void makeMove(String message, Session session) throws DataAccessException {
         //Hydrate class
         MakeMoveCommand action = new Gson().fromJson(message, MakeMoveCommand.class);
-        String userName = databaseAuthDAO.getUserFromAuth(action.getAuthToken());
+        String userName = databaseAuthDAO.getUserFromAuth(action.getAuthToken()).replace("@", "");
         getConnection(action.getGameID()).add(userName, session);
 
         if (isGameFinished.get(action.getGameID())) {
@@ -78,7 +78,7 @@ public class WebSocketHandler {
                 var loadGame = new ServerMessage(ServerMessage.ServerMessageType.LOAD_GAME, " ");
                 GameData game = databaseGameDAO.getGame(action.getGameID());
                 loadGame.addGame(game);
-                getConnection(action.getGameID()).broadcast(userName, loadGame);
+                getConnection(action.getGameID()).broadcast("", loadGame);
 
             } catch (InvalidMoveException e) {
                 ServerMessage errorMsg = new ServerMessage(ServerMessage.ServerMessageType.ERROR, "Illegal Move");
@@ -88,7 +88,7 @@ public class WebSocketHandler {
     }
 
     private void exit(Integer gameID, String auth) throws DataAccessException {
-        String userName = databaseAuthDAO.getUserFromAuth(auth);
+        String userName = databaseAuthDAO.getUserFromAuth(auth).replace("@", "");
 
         getConnection(gameID).remove(userName);
         var message = String.format("%s left the game", userName);
@@ -97,7 +97,7 @@ public class WebSocketHandler {
     }
 
     private void resign(Integer gameID, String auth) throws DataAccessException {
-        String userName = databaseAuthDAO.getUserFromAuth(auth);
+        String userName = databaseAuthDAO.getUserFromAuth(auth).replace("@", "");
 
         var message = String.format("%s admitted a crushing defeat", userName);
         var notification = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, message);
