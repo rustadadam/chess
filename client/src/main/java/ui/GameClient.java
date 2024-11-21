@@ -116,7 +116,7 @@ public class GameClient implements Client {
                 if (!isPlayerWhite) {
                     pos = new ChessPosition(row + 1, 8 - column);
                 } else {
-                    pos = new ChessPosition(8 - row, column);
+                    pos = new ChessPosition(8 - row, column - 1);
                 }
 
                 if (moveSet != null && moveSet.contains(pos)) {
@@ -235,6 +235,9 @@ public class GameClient implements Client {
             for (ChessMove move : moveSet) {
                 endSet.add(move.getEndPosition());
             }
+
+            //add its own position
+            endSet.add(chessPosition);
 
             return endSet;
 
