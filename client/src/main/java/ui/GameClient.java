@@ -112,7 +112,13 @@ public class GameClient implements Client {
                 }
 
                 //Highlight square
-                ChessPosition pos = new ChessPosition(row - 1, column - 1);
+                ChessPosition pos;
+                if (!isPlayerWhite) {
+                    pos = new ChessPosition(row - 1, column - 1);
+                } else {
+                    pos = new ChessPosition(8 - (row - 1), 8 - (column - 1));
+                }
+
                 if (moveSet != null && moveSet.contains(pos)) {
                     sb.append(SET_BG_COLOR_BLACK);
                 } else {
@@ -210,7 +216,15 @@ public class GameClient implements Client {
     public Set<ChessPosition> highlight(String... params) {
         if (params.length >= 2) {
             Integer row = Integer.parseInt(params[0]);
-            Integer col = Integer.parseInt(params[1]);
+
+            Integer col;
+            try {
+                col = Integer.parseInt(params[1]);
+
+            } catch (Exception e) {
+                String letter = params[1].toLowerCase();
+                col = letter.charAt(0) - 'a' + 1;
+            }
 
             //Get piece at location
             ChessPosition chessPosition = new ChessPosition(row, col);
