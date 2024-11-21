@@ -114,9 +114,9 @@ public class GameClient implements Client {
                 //Highlight square
                 ChessPosition pos;
                 if (!isPlayerWhite) {
-                    pos = new ChessPosition(row + 1, column + 1);
+                    pos = new ChessPosition(row + 1, 8 - column);
                 } else {
-                    pos = new ChessPosition(8 - (row + 1), 8 - (column + 1));
+                    pos = new ChessPosition(8 - row, column);
                 }
 
                 if (moveSet != null && moveSet.contains(pos)) {
