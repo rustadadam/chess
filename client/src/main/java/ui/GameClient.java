@@ -64,7 +64,7 @@ public class GameClient implements Client {
         if (highlight) {
             moveSet = highlight(params);
 
-            if (moveSet == null) {
+            if (moveSet.isEmpty()) {
                 return SET_TEXT_COLOR_RED + "Error. No piece selected." + RESET_TEXT_COLOR;
             }
         }
