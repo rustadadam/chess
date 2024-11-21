@@ -208,7 +208,7 @@ public class GameClient implements Client {
             case "highlight" -> printGame(true, params);
             case "leave" -> leave();
             case "clear" -> clear();
-            case "move" -> move();
+            case "move" -> move(params);
             default -> help();
         };
 
