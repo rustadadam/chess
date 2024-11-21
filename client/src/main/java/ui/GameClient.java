@@ -260,7 +260,7 @@ public class GameClient implements Client {
     }
 
     public String move(String... params) {
-        if (params.length >= 4) {
+        if (params.length >= 3) {
             Integer rowStart = Integer.parseInt(params[0]);
             Integer rowEnd = Integer.parseInt(params[2]);
 
@@ -298,7 +298,7 @@ public class GameClient implements Client {
 
         } else {
             System.out.print(SET_TEXT_COLOR_RED + "Highlight Failed. Expected: <Piece Row> <Piece Col>");
-            return null;
+            return " ";
         }
     }
 
