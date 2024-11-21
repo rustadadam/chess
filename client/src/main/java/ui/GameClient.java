@@ -116,7 +116,7 @@ public class GameClient implements Client {
                 if (!isPlayerWhite) {
                     pos = new ChessPosition(row + 1, 8 - column);
                 } else {
-                    pos = new ChessPosition(8 - row, column - 1);
+                    pos = new ChessPosition(8 - row, column + 1);
                 }
 
                 if (moveSet != null && moveSet.contains(pos)) {
@@ -284,20 +284,17 @@ public class GameClient implements Client {
             }
 
             //Make move
+            ChessPosition startPosition = new ChessPosition(rowStart, colStart);
+            ChessPosition endPosition = new ChessPosition(rowEnd, colEnd);
+            ChessMove move = new ChessMove(startPosition, endPosition, null);
 
-            //Remove peice at start location
-            Collection<ChessMove> moveSet = gameData.game().validMoves(chessPosition);
-            Set<ChessPosition> endSet = new HashSet<>();
+            try {
+                ws.makeMove(authToken, gameData.gameID(), move);
+                return "Move made";
 
-            //Get just the end position
-            for (ChessMove move : moveSet) {
-                endSet.add(move.getEndPosition());
+            } catch (Exception e) {
+                return SET_TEXT_COLOR_RED + "Error. Unable to make move";
             }
-
-            //add its own position
-            endSet.add(chessPosition);
-
-            return endSet;
 
         } else {
             System.out.print(SET_TEXT_COLOR_RED + "Highlight Failed. Expected: <Piece Row> <Piece Col>");
