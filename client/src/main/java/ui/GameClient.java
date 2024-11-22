@@ -266,6 +266,17 @@ public class GameClient implements Client {
     }
 
     public String move(String... params) {
+        //Check to see if its their turn
+        if (isPlayerWhite) {
+            if (gameData.game().getTeamTurn() != ChessGame.TeamColor.WHITE) {
+                return SET_TEXT_COLOR_RED + "Error: Its not your turn";
+            }
+        } else {
+            if (gameData.game().getTeamTurn() != ChessGame.TeamColor.BLACK) {
+                return SET_TEXT_COLOR_RED + "Error: Its not your turn";
+            }
+        }
+
         if (params.length >= 4) {
             Integer rowStart = Integer.parseInt(params[0]);
             Integer rowEnd = Integer.parseInt(params[2]);
@@ -304,7 +315,7 @@ public class GameClient implements Client {
                 return "Move made";
 
             } catch (Exception e) {
-                return SET_TEXT_COLOR_RED + "Error. Unable to make move";
+                return SET_TEXT_COLOR_RED + "Error:" + e.getMessage();
             }
 
         } else {
