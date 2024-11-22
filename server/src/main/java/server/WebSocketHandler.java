@@ -1,5 +1,6 @@
 package server;
 
+import chess.ChessGame;
 import chess.InvalidMoveException;
 import com.google.gson.Gson;
 import dataaccess.DataAccessException;
@@ -114,7 +115,15 @@ public class WebSocketHandler {
             //Add connection
             getConnection(gameID).add(userName, session);
 
-            var message = String.format("%s joined game %s", userName, gameID);
+            String message;
+
+            if (userName.equalsIgnoreCase(game.blackUsername())) {
+                message = String.format("%s joined game %s as a player as color black", userName, game.gameName());
+            } else if (userName.equalsIgnoreCase(game.whiteUsername())) {
+                message = String.format("%s joined game %s as a player white", userName, game.gameName());
+            } else {
+                message = String.format("%s joined game %s as an observer", userName, game.gameName());
+            }
 
             //Send join game
             var notification = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, message);
@@ -129,6 +138,41 @@ public class WebSocketHandler {
 
         } catch (Exception ex) {
             throw new Exception("Connection error with websocket");
+        }
+    }
+
+    private void isInCheck(Integer gameID, ChessGame.TeamColor color) throws DataAccessException {
+        String SET_BG_COLOR_RED = "\u001b" + "[48;5;" + "160m";
+        String SET_TEXT_COLOR_WHITE = "\u001b" + "[38;5;" + "15m";
+        String SET_TEXT_COLOR_RED = "\u001b" + "[38;5;" + "160m";
+        String RESET_BG_COLOR = "\u001b" + "[49m";
+        String RESET_TEXT_COLOR = "\u001b" + "[39m";
+
+        GameData gameData = databaseGameDAO.getGame(gameID);
+        ChessGame game = gameData.game();
+
+        String playerName;
+        if (color == ChessGame.TeamColor.BLACK) {
+            playerName = gameData.blackUsername();
+        } else {
+            playerName = gameData.whiteUsername();
+        }
+
+
+        if (game.isInCheck(color)) {
+            String send_msg;
+            //Check if in checkmate
+            if (game.isInCheckmate(color)) {
+                send_msg = SET_BG_COLOR_RED + SET_TEXT_COLOR_WHITE + playerName.toUpperCase() +
+                        " HAVE BEEN CHECKMATED!" + RESET_BG_COLOR + RESET_TEXT_COLOR;
+                send_msg += playerName + " please Resign by typing resign\n";
+            } else {
+                send_msg = SET_TEXT_COLOR_RED + playerName.toUpperCase() +
+                        " is in check! Quick, your king is in Danger!\n";
+            }
+
+            var notification = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, send_msg);
+            getConnection(gameID).broadcast("", notification);
         }
     }
 }

@@ -41,8 +41,6 @@ public class GameClient implements Client {
     public void setGameData(GameData gameData) {
         this.gameData = gameData;
 
-        isInCheck(gameData.game());
-
         //Now print the board
         printGame(false);
     }
@@ -269,28 +267,6 @@ public class GameClient implements Client {
         state = State.SIGNEDOUT; //Change later
         server.clearDataBase();
         return "Grandmaster has left the battlefield | Database cleared";
-    }
-
-    private void isInCheck(ChessGame game) {
-        // Report if player in check mate
-        ChessGame.TeamColor color;
-        if (isPlayerWhite) {
-            color = ChessGame.TeamColor.WHITE;
-        } else {
-            color = ChessGame.TeamColor.BLACK;
-        }
-
-        if (game.isInCheck(color)) {
-            //Check if in checkmate
-            if (game.isInCheckmate(color)) {
-                System.out.print(SET_BG_COLOR_RED + SET_TEXT_COLOR_WHITE +
-                        "YOU HAVE BEEN CHECKMATED!" + RESET_BG_COLOR + RESET_TEXT_COLOR);
-                System.out.print("Please Resign by typing resign\n");
-            } else {
-                System.out.print(SET_TEXT_COLOR_RED + "CHECK! Your king is in Danger!\n");
-            }
-
-        }
     }
 
     public String move(String... params) {
