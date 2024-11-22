@@ -72,18 +72,18 @@ public class GameService {
 
         if (playerColor == null) {
             throw new DataAccessException("Error: bad request"); //NOTE, spectator mode?
-        } else if (playerColor.equals("observer")) {
+        } else if (playerColor.equalsIgnoreCase("observer")) {
             //Spectator mode
             return dataAccess.getGame(gameID);
         } else if (playerColor.equalsIgnoreCase("white")) {
-            if (game.whiteUsername() == null) {
+            if (game.whiteUsername() == null || game.whiteUsername().equals(userName)) {
                 //Add player to game. :)
                 dataAccess.addPlayerToGameData(game.gameID(), userName, true);
             } else {
                 throw new DataAccessException("Error: already taken");
             }
         } else if (playerColor.equalsIgnoreCase("black")) {
-            if (game.blackUsername() == null) {
+            if (game.blackUsername() == null || game.blackUsername().equals(userName)) {
                 dataAccess.addPlayerToGameData(game.gameID(), userName, false);
             } else {
                 throw new DataAccessException("Error: already taken");
