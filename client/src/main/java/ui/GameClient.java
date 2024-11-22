@@ -248,8 +248,11 @@ public class GameClient implements Client {
     }
 
     public String leave() throws Exception {
-        state = State.SIGNEDIN; //Change later
-        return "Grandmaster has left the battlefield";
+        state = State.SIGNEDIN;
+        ws.leaveGame(authToken, gameData.gameID());
+
+
+        return "You have left the battlefield";
     }
 
     public String clear() throws Exception {
