@@ -269,6 +269,28 @@ public class GameClient implements Client {
         return "Grandmaster has left the battlefield | Database cleared";
     }
 
+    private void isInCheck(ChessGame game) {
+        // Report if player in check mate
+        ChessGame.TeamColor color;
+        if (isPlayerWhite) {
+            color = ChessGame.TeamColor.WHITE;
+        } else {
+            color = ChessGame.TeamColor.BLACK;
+        }
+
+        if (game.isInCheck(color)) {
+            //Check if in checkmate
+            if (game.isInCheckmate(color)) {
+                System.out.print(SET_BG_COLOR_RED + SET_TEXT_COLOR_WHITE +
+                        "YOU HAVE BEEN CHECKMATED!" + RESET_BG_COLOR + RESET_TEXT_COLOR);
+                System.out.print("Please Resign by typing resign");
+            } else {
+                System.out.print("Your king is in Danger!");
+            }
+
+        }
+    }
+
     public String move(String... params) {
         //Check to see if its their turn
         if (isPlayerWhite) {
@@ -316,7 +338,7 @@ public class GameClient implements Client {
 
             try {
                 ws.makeMove(authToken, gameData.gameID(), move);
-                return "Move made";
+                return " ";
 
             } catch (Exception e) {
                 return SET_TEXT_COLOR_RED + "Error:" + e.getMessage();
