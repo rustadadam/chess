@@ -233,6 +233,10 @@ public class GameClient implements Client {
             Set<ChessPosition> endSet = new HashSet<>();
 
             //Get just the end position
+            if (moveSet == null) {
+                System.out.print(SET_TEXT_COLOR_RED + "No Piece ocuppies that square.");
+                return null;
+            }
             for (ChessMove move : moveSet) {
                 endSet.add(move.getEndPosition());
             }
