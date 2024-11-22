@@ -41,6 +41,8 @@ public class GameClient implements Client {
     public void setGameData(GameData gameData) {
         this.gameData = gameData;
 
+        isInCheck(gameData.game());
+
         //Now print the board
         printGame(false);
     }
