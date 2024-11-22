@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Objects;
 import java.util.Scanner;
 
+import chess.ChessGame;
 import model.GameData;
 import websocket.messages.ServerMessage;
 
@@ -97,6 +98,11 @@ public class Repl implements NotificationHandler {
 
         if (notification.game != null) {
             client.setGameData(notification.game);
+            if (isPlayerWhite) {
+                myTurn = notification.game.game().getTeamTurn() != ChessGame.TeamColor.WHITE;
+            } else {
+                myTurn = notification.game.game().getTeamTurn() != ChessGame.TeamColor.BLACK;
+            }
         }
 
         printPrompt();
