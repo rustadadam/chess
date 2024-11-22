@@ -207,6 +207,7 @@ public class GameClient implements Client {
             case "highlight" -> printGame(true, params);
             case "leave" -> leave();
             case "clear" -> clear();
+            case "resign" -> resign();
             case "move" -> move(params);
             default -> help();
         };
@@ -250,9 +251,12 @@ public class GameClient implements Client {
     public String leave() throws Exception {
         state = State.SIGNEDIN;
         ws.leaveGame(authToken, gameData.gameID());
-
-
         return "You have left the battlefield";
+    }
+
+    public String resign() throws Exception {
+        ws.resign(authToken, gameData.gameID());
+        return "You have resigned";
     }
 
     public String clear() throws Exception {
