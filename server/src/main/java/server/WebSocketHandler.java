@@ -79,6 +79,10 @@ public class WebSocketHandler {
                 GameData game = databaseGameDAO.getGame(action.getGameID());
                 loadGame.addGame(game);
                 getConnection(action.getGameID()).broadcast("", loadGame);
+                
+                //Send checkmate messages
+                isInCheck(action.getGameID(), ChessGame.TeamColor.BLACK);
+                isInCheck(action.getGameID(), ChessGame.TeamColor.WHITE);
 
             } catch (InvalidMoveException e) {
                 ServerMessage errorMsg = new ServerMessage(ServerMessage.ServerMessageType.ERROR, "Illegal Move");
