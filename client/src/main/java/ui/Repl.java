@@ -21,13 +21,6 @@ public class Repl implements NotificationHandler {
 
     public Repl(String serverUrl) {
         client = new PreLoginClient(serverUrl);
-
-        try {
-            this.ws = new WebSocketFacade(serverUrl, this);
-        } catch (Exception e) {
-            System.out.print(SET_TEXT_COLOR_RED + "ERROR: Failed to connect to websocket");
-        }
-
         this.serverUrl = serverUrl;
     }
 
@@ -81,6 +74,14 @@ public class Repl implements NotificationHandler {
         } else if (state == State.SIGNEDIN) {
             String authToken = client.getAuthToken();
             LoginClient loginClient = new LoginClient(serverUrl, authToken);
+            
+            //Create a new websocket
+            try {
+                this.ws = new WebSocketFacade(serverUrl, this);
+            } catch (Exception e) {
+                System.out.print(SET_TEXT_COLOR_RED + "ERROR: Failed to connect to websocket");
+            }
+
             loginClient.addWebSocket(ws);
             client = loginClient;
         } else if (state == State.INGAME) {
