@@ -56,7 +56,6 @@ public class WebSocketHandler {
         //Hydrate class
         MakeMoveCommand action = new Gson().fromJson(message, MakeMoveCommand.class);
         String userName = databaseAuthDAO.getUserFromAuth(action.getAuthToken()).replace("@", "");
-        getConnection(action.getGameID()).add(userName, session);
 
         if (isGameFinished.get(action.getGameID())) {
             ServerMessage errorMsg = new ServerMessage(ServerMessage.ServerMessageType.ERROR,
