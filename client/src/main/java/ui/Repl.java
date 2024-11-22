@@ -16,6 +16,7 @@ public class Repl implements NotificationHandler {
     private final String serverUrl;
     private boolean isPlayerWhite;
     private WebSocketFacade ws;
+    private boolean myTurn;
 
     public Repl(String serverUrl) {
         client = new PreLoginClient(serverUrl);
@@ -83,7 +84,7 @@ public class Repl implements NotificationHandler {
             client = loginClient;
         } else if (state == State.INGAME) {
             LoginClient loginClient = (LoginClient) client;
-            isPlayerWhite = loginClient.isPlayerWhite;
+            this.isPlayerWhite = loginClient.isPlayerWhite;
             String authToken = client.getAuthToken();
             GameClient gameClient = new GameClient(serverUrl, authToken, isPlayerWhite, this);
             gameClient.addWebSocket(ws);
@@ -102,7 +103,17 @@ public class Repl implements NotificationHandler {
     }
 
     private void printPrompt() {
-        String str = "] " + RESET_TEXT_BOLD_FAINT + RESET_TEXT_COLOR + ">>> " + SET_TEXT_COLOR_GREEN;
+        String str = "";
+        if (state == State.INGAME) {
+            if (myTurn) {
+                str += " - Your Turn";
+            } else {
+                str += " - Opponents Turn";
+            }
+
+        }
+        str += "] " + RESET_TEXT_BOLD_FAINT + RESET_TEXT_COLOR + ">>> " + SET_TEXT_COLOR_GREEN;
+
         System.out.print("\n" + SET_TEXT_COLOR_MAGENTA + SET_TEXT_BOLD + "[" + state + str);
     }
 
