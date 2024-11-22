@@ -111,7 +111,7 @@ public class Repl implements NotificationHandler {
     private void printPrompt() {
         String str = "";
         if (state == State.INGAME) {
-            if (myTurn) {
+            if (!myTurn) {
                 str += " - Your Turn";
             } else {
                 str += " - Opponents Turn";
