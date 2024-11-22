@@ -285,9 +285,9 @@ public class GameClient implements Client {
             if (game.isInCheckmate(color)) {
                 System.out.print(SET_BG_COLOR_RED + SET_TEXT_COLOR_WHITE +
                         "YOU HAVE BEEN CHECKMATED!" + RESET_BG_COLOR + RESET_TEXT_COLOR);
-                System.out.print("Please Resign by typing resign");
+                System.out.print("Please Resign by typing resign\n");
             } else {
-                System.out.print("Your king is in Danger!");
+                System.out.print(SET_TEXT_COLOR_RED + "CHECK! Your king is in Danger!\n");
             }
 
         }
