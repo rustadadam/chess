@@ -120,12 +120,7 @@ public class LoginClient implements Client {
             } catch (Exception ex) {
                 throw new Exception("Observe Game Failed. Expected: <Game ID>");
             }
-
-            GameRequest gameReq = new GameRequest();
-            gameReq.setGameID(joinID + 1000);
-            gameReq.setPlayerColor("observer");
-
-            server.joinGame(gameReq, authToken);
+            
             state = State.INGAME;
 
             try {

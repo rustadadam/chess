@@ -74,7 +74,7 @@ public class Repl implements NotificationHandler {
         } else if (state == State.SIGNEDIN) {
             String authToken = client.getAuthToken();
             LoginClient loginClient = new LoginClient(serverUrl, authToken);
-            
+
             //Create a new websocket
             try {
                 this.ws = new WebSocketFacade(serverUrl, this);
@@ -99,11 +99,9 @@ public class Repl implements NotificationHandler {
 
         if (notification.game != null) {
             client.setGameData(notification.game);
-            if (isPlayerWhite) {
-                myTurn = notification.game.game().getTeamTurn() != ChessGame.TeamColor.WHITE;
-            } else {
-                myTurn = notification.game.game().getTeamTurn() != ChessGame.TeamColor.BLACK;
-            }
+
+            myTurn = notification.game.game().getTeamTurn() != ChessGame.TeamColor.WHITE;
+
         }
 
         printPrompt();
@@ -113,9 +111,9 @@ public class Repl implements NotificationHandler {
         String str = "";
         if (state == State.INGAME) {
             if (!myTurn) {
-                str += " - Your Turn";
+                str += " - White's Turn";
             } else {
-                str += " - Opponents Turn";
+                str += " - Black's Turn";
             }
 
         }
