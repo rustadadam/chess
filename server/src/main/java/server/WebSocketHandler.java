@@ -103,15 +103,24 @@ public class WebSocketHandler {
     private void resign(Integer gameID, String auth) throws DataAccessException {
         String userName = databaseAuthDAO.getUserFromAuth(auth).replace("@", "");
 
-        var message = String.format("%s admitted a crushing defeat", userName);
-        var notification = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, message);
-        getConnection(gameID).broadcast(userName, notification);
 
-        //Mark game as finished
-        isGameFinished.put(gameID, true);
+        // check the observer didn't resing
+        GameData game = databaseGameDAO.getGame(gameID);
+        if (userName.equalsIgnoreCase(game.whiteUsername()) || userName.equalsIgnoreCase(game.blackUsername())) {
+            var message = String.format("%s admitted a crushing defeat", userName);
+            var notification = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, message);
+            getConnection(gameID).broadcast(userName, notification);
+
+            //Mark game as finished
+            isGameFinished.put(gameID, true);
+        } else {
+            String errMsg = "You can't resign as an observer";
+            var notification = new ServerMessage(ServerMessage.ServerMessageType.ERROR, errMsg);
+            getConnection(gameID).reportToUser(userName, notification);
+        }
     }
 
-    public GameData connect(Integer gameID, String auth, Session session) throws Exception {
+    public void connect(Integer gameID, String auth, Session session) throws Exception {
         try {
             String userName = databaseAuthDAO.getUserFromAuth(auth).replace("@", "");
             GameData game = databaseGameDAO.getGame(gameID);
@@ -137,8 +146,6 @@ public class WebSocketHandler {
             var loadGame = new ServerMessage(ServerMessage.ServerMessageType.LOAD_GAME, "");
             loadGame.addGame(game);
             getConnection(gameID).reportToUser(userName, loadGame);
-
-            return game;
 
         } catch (Exception ex) {
             throw new Exception("Connection error with websocket");
