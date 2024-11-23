@@ -79,7 +79,7 @@ public class WebSocketHandler {
                 GameData game = databaseGameDAO.getGame(action.getGameID());
                 loadGame.addGame(game);
                 getConnection(action.getGameID()).broadcast("", loadGame);
-                
+
                 //Send checkmate messages
                 isInCheck(action.getGameID(), ChessGame.TeamColor.BLACK);
                 isInCheck(action.getGameID(), ChessGame.TeamColor.WHITE);
@@ -168,11 +168,12 @@ public class WebSocketHandler {
             //Check if in checkmate
             if (game.isInCheckmate(color)) {
                 send_msg = SET_BG_COLOR_RED + SET_TEXT_COLOR_WHITE + playerName.toUpperCase() +
-                        " HAVE BEEN CHECKMATED!" + RESET_BG_COLOR + RESET_TEXT_COLOR;
-                send_msg += playerName + " please Resign by typing resign\n";
+                        "\n----------------------\n HAVE BEEN CHECKMATED!\n----------------------\n"
+                        + RESET_BG_COLOR + SET_TEXT_COLOR_RED;
+                send_msg += playerName + " please Resign by typing resign\n" + RESET_TEXT_COLOR;
             } else {
                 send_msg = SET_TEXT_COLOR_RED + playerName.toUpperCase() +
-                        " is in check! Quick, your king is in Danger!\n";
+                        " is in check! Quick, your king is in Danger!\n" + RESET_TEXT_COLOR;
             }
 
             var notification = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, send_msg);

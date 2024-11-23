@@ -128,6 +128,12 @@ public class LoginClient implements Client {
             server.joinGame(gameReq, authToken);
             state = State.INGAME;
 
+            try {
+                ws.joinGame(authToken, joinID + 1000);
+            } catch (Exception e) {
+                System.out.print(SET_TEXT_COLOR_RED + "ERROR: Failed to connect to websocket");
+            }
+
             return "You are spying on battlefield " + params[0] + RESET_TEXT_BOLD_FAINT + "\n";
         }
         throw new Exception("Observe Game Failed. Expected: <Game ID>");
