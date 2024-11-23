@@ -143,7 +143,7 @@ public class WebSocketHandler {
             getConnection(gameID).broadcast(userName, notification);
 
             //Send game
-            var loadGame = new ServerMessage(ServerMessage.ServerMessageType.LOAD_GAME, "");
+            var loadGame = new ServerMessage(ServerMessage.ServerMessageType.LOAD_GAME, null);
             loadGame.addGame(game);
             getConnection(gameID).reportToUser(userName, loadGame);
 
