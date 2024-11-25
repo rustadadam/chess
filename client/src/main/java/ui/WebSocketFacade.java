@@ -8,6 +8,8 @@ import websocket.commands.MakeMoveCommand;
 import websocket.messages.ServerMessage;
 import websocket.commands.UserGameCommand;
 
+//import org.eclipse.jetty.websocket.api.Session;
+
 import javax.websocket.*;
 import java.io.IOException;
 import java.net.URI;

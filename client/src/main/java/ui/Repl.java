@@ -98,7 +98,7 @@ public class Repl implements NotificationHandler {
         if (notification.message != null) {
             System.out.println(SET_TEXT_COLOR_YELLOW + "-> " + notification.message + RESET_TEXT_COLOR);
         }
-        
+
         if (notification.game != null) {
             client.setGameData(notification.game);
 
