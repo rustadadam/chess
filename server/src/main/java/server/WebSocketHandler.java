@@ -76,7 +76,7 @@ public class WebSocketHandler {
                 getConnection(action.getGameID()).broadcast(userName, notification);
 
                 //Load Game
-                var loadGame = new ServerMessage(ServerMessage.ServerMessageType.LOAD_GAME, " ");
+                var loadGame = new ServerMessage(ServerMessage.ServerMessageType.LOAD_GAME, null);
                 GameData game = databaseGameDAO.getGame(action.getGameID());
                 loadGame.addGame(game);
                 getConnection(action.getGameID()).broadcast("", loadGame);
