@@ -99,6 +99,15 @@ public class WebSocketHandler {
     private void exit(Integer gameID, String auth) throws DataAccessException {
         String userName = databaseAuthDAO.getUserFromAuth(auth).replace("@", "");
 
+        //We apparently need to have them leave so others can join
+        GameData game = databaseGameDAO.getGame(gameID);
+        if (userName.equalsIgnoreCase(game.whiteUsername())) {
+            databaseGameDAO.addPlayerToGameData(gameID, null, true);
+        } else if (userName.equalsIgnoreCase(game.blackUsername())) {
+            databaseGameDAO.addPlayerToGameData(gameID, null, false);
+        }
+
+
         getConnection(gameID).remove(userName);
         var message = String.format("%s left the game", userName);
         var notification = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, message);
