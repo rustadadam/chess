@@ -108,21 +108,29 @@ public class WebSocketHandler {
     private void resign(Integer gameID, String auth) throws DataAccessException {
         String userName = databaseAuthDAO.getUserFromAuth(auth).replace("@", "");
 
-
-        // check the observer didn't resing
-        GameData game = databaseGameDAO.getGame(gameID);
-        if (userName.equalsIgnoreCase(game.whiteUsername()) || userName.equalsIgnoreCase(game.blackUsername())) {
-            var message = String.format("%s admitted a crushing defeat", userName);
-            var notification = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, message);
-            getConnection(gameID).broadcast("", notification);
-
-            //Mark game as finished
-            isGameFinished.put(gameID, true);
-        } else {
-            String errMsg = "You can't resign as an observer";
+        //Check to make sure game isn't over
+        if (isGameFinished.get(gameID)) {
+            String errMsg = "Game is already finished";
             var notification = new ServerMessage(ServerMessage.ServerMessageType.ERROR, null);
             notification.setErrorMessage(errMsg);
             getConnection(gameID).reportToUser(userName, notification);
+        } else {
+
+            // check the observer didn't resing
+            GameData game = databaseGameDAO.getGame(gameID);
+            if (userName.equalsIgnoreCase(game.whiteUsername()) || userName.equalsIgnoreCase(game.blackUsername())) {
+                var message = String.format("%s admitted a crushing defeat", userName);
+                var notification = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, message);
+                getConnection(gameID).broadcast("", notification);
+
+                //Mark game as finished
+                isGameFinished.put(gameID, true);
+            } else {
+                String errMsg = "You can't resign as an observer";
+                var notification = new ServerMessage(ServerMessage.ServerMessageType.ERROR, null);
+                notification.setErrorMessage(errMsg);
+                getConnection(gameID).reportToUser(userName, notification);
+            }
         }
     }
 
