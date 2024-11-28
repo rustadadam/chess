@@ -38,11 +38,23 @@ public class WebSocketHandler {
     public void onMessage(Session session, String message) throws Exception {
         UserGameCommand action = new Gson().fromJson(message, UserGameCommand.class);
 
-        switch (action.getCommandType()) {
-            case CONNECT -> connect(action.getGameID(), action.getAuthToken(), session);
-            case MAKE_MOVE -> makeMove(message, session);
-            case LEAVE -> exit(action.getGameID(), action.getAuthToken());
-            case RESIGN -> resign(action.getGameID(), action.getAuthToken());
+        //Check valid auth
+        try {
+            databaseAuthDAO.getUserFromAuth(action.getAuthToken());
+
+            switch (action.getCommandType()) {
+                case CONNECT -> connect(action.getGameID(), action.getAuthToken(), session);
+                case MAKE_MOVE -> makeMove(message, session);
+                case LEAVE -> exit(action.getGameID(), action.getAuthToken());
+                case RESIGN -> resign(action.getGameID(), action.getAuthToken());
+            }
+
+        } catch (Exception e) {
+            ServerMessage errorMsg = new ServerMessage(ServerMessage.ServerMessageType.ERROR, null);
+            errorMsg.setErrorMessage("Error: Invalid Auth");
+            GameData game = databaseGameDAO.getGame(action.getGameID());
+            //getConnection(action.getGameID()).reportToUser(game.blackUsername(), errorMsg);
+            getConnection(action.getGameID()).reportToUser(game.whiteUsername(), errorMsg);
         }
 
     }
