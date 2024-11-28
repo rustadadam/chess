@@ -61,7 +61,6 @@ public class Repl implements NotificationHandler {
                 errorMsg.setErrorMessage(msg);
                 this.notify(errorMsg);
 
-                //System.out.print(SET_TEXT_COLOR_RED + msg);
             }
 
             //Change client
@@ -102,6 +101,10 @@ public class Repl implements NotificationHandler {
     public void notify(ServerMessage notification) {
         if (notification.message != null) {
             System.out.println(SET_TEXT_COLOR_YELLOW + "-> " + notification.message + RESET_TEXT_COLOR);
+        }
+
+        if (notification.errorMessage != null) {
+            System.out.println(SET_TEXT_COLOR_RED + "-> " + notification.errorMessage + RESET_TEXT_COLOR);
         }
 
         if (notification.game != null) {
