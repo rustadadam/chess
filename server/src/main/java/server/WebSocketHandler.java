@@ -65,15 +65,22 @@ public class WebSocketHandler {
         //Check if its there move
         if (userName.equalsIgnoreCase(gameData.whiteUsername())) {
             if (gameData.game().getTeamTurn() != ChessGame.TeamColor.WHITE) {
-                throw new Exception("Error: Its not your turn");
+                ServerMessage errorMsg = new ServerMessage(ServerMessage.ServerMessageType.ERROR, null);
+                errorMsg.setErrorMessage("Error: You are white but its blacks turn");
+                getConnection(action.getGameID()).reportToUser(userName, errorMsg);
             }
-        } else {
+        } else if (userName.equalsIgnoreCase(gameData.blackUsername())) {
             if (gameData.game().getTeamTurn() != ChessGame.TeamColor.BLACK) {
-                throw new Exception("Error: Its not your turn");
+                ServerMessage errorMsg = new ServerMessage(ServerMessage.ServerMessageType.ERROR, null);
+                errorMsg.setErrorMessage("Error: You are black but its white's turn");
+                getConnection(action.getGameID()).reportToUser(userName, errorMsg);
             }
-        }
-
-        if (isGameFinished.get(action.getGameID())) {
+        } else if (!userName.equalsIgnoreCase(gameData.blackUsername()) &&
+                !userName.equalsIgnoreCase(gameData.whiteUsername())) {
+            ServerMessage errorMsg = new ServerMessage(ServerMessage.ServerMessageType.ERROR, null);
+            errorMsg.setErrorMessage("Error: You are observer and can't make moves!");
+            getConnection(action.getGameID()).reportToUser(userName, errorMsg);
+        } else if (isGameFinished.get(action.getGameID())) {
             ServerMessage errorMsg = new ServerMessage(ServerMessage.ServerMessageType.ERROR, null);
             errorMsg.setErrorMessage("Error: Can't make move when game is finished.");
             getConnection(action.getGameID()).reportToUser(userName, errorMsg);
