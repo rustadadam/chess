@@ -56,11 +56,22 @@ public class WebSocketHandler {
         return connections.get(gameID);
     }
 
-    private void makeMove(String message, Session session) throws DataAccessException {
+    private void makeMove(String message, Session session) throws Exception {
         //Hydrate class
         MakeMoveCommand action = new Gson().fromJson(message, MakeMoveCommand.class);
         String userName = databaseAuthDAO.getUserFromAuth(action.getAuthToken()).replace("@", "");
+        GameData gameData = databaseGameDAO.getGame(action.getGameID());
 
+        //Check if its there move
+        if (userName.equalsIgnoreCase(gameData.whiteUsername())) {
+            if (gameData.game().getTeamTurn() != ChessGame.TeamColor.WHITE) {
+                throw new Exception("Error: Its not your turn");
+            }
+        } else {
+            if (gameData.game().getTeamTurn() != ChessGame.TeamColor.BLACK) {
+                throw new Exception("Error: Its not your turn");
+            }
+        }
 
         if (isGameFinished.get(action.getGameID())) {
             ServerMessage errorMsg = new ServerMessage(ServerMessage.ServerMessageType.ERROR, null);
@@ -90,7 +101,7 @@ public class WebSocketHandler {
 
             } catch (Exception e) {
                 ServerMessage errorMsg = new ServerMessage(ServerMessage.ServerMessageType.ERROR, null);
-                errorMsg.setErrorMessage("Illegal MOve");
+                errorMsg.setErrorMessage("Illegal Move");
                 getConnection(action.getGameID()).reportToUser(userName, errorMsg);
             }
         }
