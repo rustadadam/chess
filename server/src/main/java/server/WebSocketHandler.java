@@ -114,7 +114,7 @@ public class WebSocketHandler {
         if (userName.equalsIgnoreCase(game.whiteUsername()) || userName.equalsIgnoreCase(game.blackUsername())) {
             var message = String.format("%s admitted a crushing defeat", userName);
             var notification = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, message);
-            getConnection(gameID).broadcast(userName, notification);
+            getConnection(gameID).broadcast("", notification);
 
             //Mark game as finished
             isGameFinished.put(gameID, true);
