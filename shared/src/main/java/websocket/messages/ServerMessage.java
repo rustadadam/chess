@@ -14,6 +14,7 @@ public class ServerMessage {
     ServerMessageType serverMessageType;
     public String message;
     public GameData game;
+    public String errorMessage = null;
 
     public enum ServerMessageType {
         LOAD_GAME,
@@ -26,6 +27,10 @@ public class ServerMessage {
         this.serverMessageType = type;
         this.message = message;
         this.game = null;
+    }
+
+    public void setErrorMessage(String errorMessage) {
+        this.errorMessage = errorMessage;
     }
 
     public void addGame(GameData game) {

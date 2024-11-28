@@ -37,11 +37,17 @@ public class WebSocketHandler {
     @OnWebSocketMessage
     public void onMessage(Session session, String message) throws Exception {
         UserGameCommand action = new Gson().fromJson(message, UserGameCommand.class);
-        switch (action.getCommandType()) {
-            case CONNECT -> connect(action.getGameID(), action.getAuthToken(), session);
-            case MAKE_MOVE -> makeMove(message, session);
-            case LEAVE -> exit(action.getGameID(), action.getAuthToken());
-            case RESIGN -> resign(action.getGameID(), action.getAuthToken());
+
+        try {
+            switch (action.getCommandType()) {
+                case CONNECT -> connect(action.getGameID(), action.getAuthToken(), session);
+                case MAKE_MOVE -> makeMove(message, session);
+                case LEAVE -> exit(action.getGameID(), action.getAuthToken());
+                case RESIGN -> resign(action.getGameID(), action.getAuthToken());
+            }
+        } catch (Exception e) {
+            ServerMessage errorMsg = new ServerMessage(ServerMessage.ServerMessageType.ERROR, "Error: Bad Auth");
+            getConnection(action.getGameID()).broadcast("", errorMsg);
         }
     }
 
@@ -58,6 +64,7 @@ public class WebSocketHandler {
         //Hydrate class
         MakeMoveCommand action = new Gson().fromJson(message, MakeMoveCommand.class);
         String userName = databaseAuthDAO.getUserFromAuth(action.getAuthToken()).replace("@", "");
+
 
         if (isGameFinished.get(action.getGameID())) {
             ServerMessage errorMsg = new ServerMessage(ServerMessage.ServerMessageType.ERROR,
@@ -85,7 +92,7 @@ public class WebSocketHandler {
                 isInCheck(action.getGameID(), ChessGame.TeamColor.BLACK);
                 isInCheck(action.getGameID(), ChessGame.TeamColor.WHITE);
 
-            } catch (InvalidMoveException e) {
+            } catch (Exception e) {
                 ServerMessage errorMsg = new ServerMessage(ServerMessage.ServerMessageType.ERROR, "Illegal Move");
                 getConnection(action.getGameID()).reportToUser(userName, errorMsg);
             }
