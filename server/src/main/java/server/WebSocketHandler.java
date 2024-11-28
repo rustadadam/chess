@@ -38,17 +38,13 @@ public class WebSocketHandler {
     public void onMessage(Session session, String message) throws Exception {
         UserGameCommand action = new Gson().fromJson(message, UserGameCommand.class);
 
-        try {
-            switch (action.getCommandType()) {
-                case CONNECT -> connect(action.getGameID(), action.getAuthToken(), session);
-                case MAKE_MOVE -> makeMove(message, session);
-                case LEAVE -> exit(action.getGameID(), action.getAuthToken());
-                case RESIGN -> resign(action.getGameID(), action.getAuthToken());
-            }
-        } catch (Exception e) {
-            ServerMessage errorMsg = new ServerMessage(ServerMessage.ServerMessageType.ERROR, "Error: Bad Auth");
-            getConnection(action.getGameID()).broadcast("", errorMsg);
+        switch (action.getCommandType()) {
+            case CONNECT -> connect(action.getGameID(), action.getAuthToken(), session);
+            case MAKE_MOVE -> makeMove(message, session);
+            case LEAVE -> exit(action.getGameID(), action.getAuthToken());
+            case RESIGN -> resign(action.getGameID(), action.getAuthToken());
         }
+
     }
 
     public ConnectionManager getConnection(Integer gameID) {
@@ -67,8 +63,8 @@ public class WebSocketHandler {
 
 
         if (isGameFinished.get(action.getGameID())) {
-            ServerMessage errorMsg = new ServerMessage(ServerMessage.ServerMessageType.ERROR,
-                    "Game is finished");
+            ServerMessage errorMsg = new ServerMessage(ServerMessage.ServerMessageType.ERROR, null);
+            errorMsg.setErrorMessage("Error: Can't make move when game is finished.");
             getConnection(action.getGameID()).reportToUser(userName, errorMsg);
         } else {
 
@@ -93,7 +89,8 @@ public class WebSocketHandler {
                 isInCheck(action.getGameID(), ChessGame.TeamColor.WHITE);
 
             } catch (Exception e) {
-                ServerMessage errorMsg = new ServerMessage(ServerMessage.ServerMessageType.ERROR, "Illegal Move");
+                ServerMessage errorMsg = new ServerMessage(ServerMessage.ServerMessageType.ERROR, null);
+                errorMsg.setErrorMessage("Illegal MOve");
                 getConnection(action.getGameID()).reportToUser(userName, errorMsg);
             }
         }
@@ -123,7 +120,8 @@ public class WebSocketHandler {
             isGameFinished.put(gameID, true);
         } else {
             String errMsg = "You can't resign as an observer";
-            var notification = new ServerMessage(ServerMessage.ServerMessageType.ERROR, errMsg);
+            var notification = new ServerMessage(ServerMessage.ServerMessageType.ERROR, null);
+            notification.setErrorMessage(errMsg);
             getConnection(gameID).reportToUser(userName, notification);
         }
     }

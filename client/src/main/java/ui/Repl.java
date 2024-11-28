@@ -46,6 +46,8 @@ public class Repl implements NotificationHandler {
             } catch (Throwable e) {
                 var msg = e.getMessage();
 
+                ServerMessage errorMsg = new ServerMessage(ServerMessage.ServerMessageType.ERROR, null);
+
                 if (Objects.equals(msg, "failure: 400")) {
                     msg = "Error: bad request";
                 } else if (Objects.equals(msg, "failure: 401")) {
@@ -56,7 +58,10 @@ public class Repl implements NotificationHandler {
                     msg = "Error: unknown error";
                 }
 
-                System.out.print(SET_TEXT_COLOR_RED + msg);
+                errorMsg.setErrorMessage(msg);
+                this.notify(errorMsg);
+
+                //System.out.print(SET_TEXT_COLOR_RED + msg);
             }
 
             //Change client

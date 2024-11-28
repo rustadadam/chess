@@ -269,7 +269,7 @@ public class GameClient implements Client {
         return "Grandmaster has left the battlefield | Database cleared";
     }
 
-    public String move(String... params) {
+    public String move(String... params) throws Exception {
         //Check to see if its their turn
         if (isPlayerWhite) {
             if (gameData.game().getTeamTurn() != ChessGame.TeamColor.WHITE) {
@@ -314,13 +314,9 @@ public class GameClient implements Client {
             ChessMove move = new ChessMove(startPosition, endPosition, null);
 
 
-            try {
-                ws.makeMove(authToken, gameData.gameID(), move);
-                return " ";
+            ws.makeMove(authToken, gameData.gameID(), move);
+            return " ";
 
-            } catch (Exception e) {
-                return SET_TEXT_COLOR_RED + "Error:" + e.getMessage();
-            }
 
         } else {
             System.out.print(SET_TEXT_COLOR_RED + "Highlight Failed. Expected: <Piece Row> <Piece Col>");
