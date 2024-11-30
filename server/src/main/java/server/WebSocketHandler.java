@@ -175,10 +175,9 @@ public class WebSocketHandler {
 
     public void connect(Integer gameID, String auth, Session session) throws Exception {
 
-        try {
-            String userName = databaseAuthDAO.getUserFromAuth(auth).replace("@", "");
-
             try {
+                String userName = databaseAuthDAO.getUserFromAuth(auth).replace("@", "");
+
                 GameData game = databaseGameDAO.getGame(gameID);
 
                 //Add connection
@@ -209,13 +208,6 @@ public class WebSocketHandler {
                 getConnection(gameID).reportToUser(userName, notification);
             }
 
-        } catch (Exception ex) {
-            //Send error
-            var connection = new Connection("Unknown", session);
-            String errMsg = "Error: Unknown Auth";
-            var notification = new ServerMessage(ServerMessage.ServerMessageType.ERROR, null);
-            notification.setErrorMessage(errMsg);
-            connection.send(new Gson().toJson(notification));
         }
 
     }
