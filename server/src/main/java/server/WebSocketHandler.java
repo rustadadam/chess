@@ -50,11 +50,17 @@ public class WebSocketHandler {
             }
 
         } catch (Exception e) {
-            ServerMessage errorMsg = new ServerMessage(ServerMessage.ServerMessageType.ERROR, null);
-            errorMsg.setErrorMessage("Error: Invalid Auth");
-            GameData game = databaseGameDAO.getGame(action.getGameID());
-            //getConnection(action.getGameID()).reportToUser(game.blackUsername(), errorMsg);
-            getConnection(action.getGameID()).reportToUser(game.whiteUsername(), errorMsg);
+//            ServerMessage errorMsg = new ServerMessage(ServerMessage.ServerMessageType.ERROR, null);
+//            errorMsg.setErrorMessage("Error: Invalid Auth");
+//            GameData game = databaseGameDAO.getGame(action.getGameID());
+//            //getConnection(action.getGameID()).reportToUser(game.blackUsername(), errorMsg);
+//            getConnection(action.getGameID()).reportToUser(game.whiteUsername(), errorMsg);
+
+            var connection = new Connection("Unknown", session);
+            String errMsg = "Error: Unknown Auth";
+            var notification = new ServerMessage(ServerMessage.ServerMessageType.ERROR, null);
+            notification.setErrorMessage(errMsg);
+            connection.send(new Gson().toJson(notification));
         }
 
     }
@@ -174,43 +180,41 @@ public class WebSocketHandler {
     }
 
     public void connect(Integer gameID, String auth, Session session) throws Exception {
+        String userName = databaseAuthDAO.getUserFromAuth(auth).replace("@", "");
 
-            try {
-                String userName = databaseAuthDAO.getUserFromAuth(auth).replace("@", "");
+        try {
+            GameData game = databaseGameDAO.getGame(gameID);
 
-                GameData game = databaseGameDAO.getGame(gameID);
+            //Add connection
+            getConnection(gameID).add(userName, session);
 
-                //Add connection
-                getConnection(gameID).add(userName, session);
+            String message;
 
-                String message;
-
-                if (userName.equalsIgnoreCase(game.blackUsername())) {
-                    message = String.format("%s joined game %s as a player as color black", userName, game.gameName());
-                } else if (userName.equalsIgnoreCase(game.whiteUsername())) {
-                    message = String.format("%s joined game %s as a player white", userName, game.gameName());
-                } else {
-                    message = String.format("%s joined game %s as an observer", userName, game.gameName());
-                }
-
-                //Send join game
-                var notification = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, message);
-                getConnection(gameID).broadcast(userName, notification);
-
-                //Send game
-                var loadGame = new ServerMessage(ServerMessage.ServerMessageType.LOAD_GAME, null);
-                loadGame.addGame(game);
-                getConnection(gameID).reportToUser(userName, loadGame);
-            } catch (Exception ex) {
-                String errMsg = "Invalid Game ID";
-                var notification = new ServerMessage(ServerMessage.ServerMessageType.ERROR, null);
-                notification.setErrorMessage(errMsg);
-                getConnection(gameID).reportToUser(userName, notification);
+            if (userName.equalsIgnoreCase(game.blackUsername())) {
+                message = String.format("%s joined game %s as a player as color black", userName, game.gameName());
+            } else if (userName.equalsIgnoreCase(game.whiteUsername())) {
+                message = String.format("%s joined game %s as a player white", userName, game.gameName());
+            } else {
+                message = String.format("%s joined game %s as an observer", userName, game.gameName());
             }
 
+            //Send join game
+            var notification = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, message);
+            getConnection(gameID).broadcast(userName, notification);
+
+            //Send game
+            var loadGame = new ServerMessage(ServerMessage.ServerMessageType.LOAD_GAME, null);
+            loadGame.addGame(game);
+            getConnection(gameID).reportToUser(userName, loadGame);
+        } catch (Exception ex) {
+            String errMsg = "Invalid Game ID";
+            var notification = new ServerMessage(ServerMessage.ServerMessageType.ERROR, null);
+            notification.setErrorMessage(errMsg);
+            getConnection(gameID).reportToUser(userName, notification);
         }
 
     }
+
 
     private void isInCheck(Integer gameID, ChessGame.TeamColor color) throws DataAccessException {
         String SET_BG_COLOR_RED = "\u001b" + "[48;5;" + "160m";
