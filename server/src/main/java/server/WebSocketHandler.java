@@ -97,7 +97,8 @@ public class WebSocketHandler {
                 getConnection(action.getGameID()).reportToUser(userName, errorMsg);
                 cont = false;
             }
-        } else if (!userName.equalsIgnoreCase(gameData.blackUsername()) &&
+        }
+        if (!userName.equalsIgnoreCase(gameData.blackUsername()) &&
                 !userName.equalsIgnoreCase(gameData.whiteUsername())) {
             ServerMessage errorMsg = new ServerMessage(ServerMessage.ServerMessageType.ERROR, null);
             errorMsg.setErrorMessage("Error: You are observer and can't make moves!");
@@ -109,7 +110,7 @@ public class WebSocketHandler {
             getConnection(action.getGameID()).reportToUser(userName, errorMsg);
             cont = false;
         }
-        
+
         if (cont) {
 
             //Actually Make the move!
