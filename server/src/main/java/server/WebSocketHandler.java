@@ -174,35 +174,50 @@ public class WebSocketHandler {
     }
 
     public void connect(Integer gameID, String auth, Session session) throws Exception {
+
         try {
             String userName = databaseAuthDAO.getUserFromAuth(auth).replace("@", "");
-            GameData game = databaseGameDAO.getGame(gameID);
 
-            //Add connection
-            getConnection(gameID).add(userName, session);
+            try {
+                GameData game = databaseGameDAO.getGame(gameID);
 
-            String message;
+                //Add connection
+                getConnection(gameID).add(userName, session);
 
-            if (userName.equalsIgnoreCase(game.blackUsername())) {
-                message = String.format("%s joined game %s as a player as color black", userName, game.gameName());
-            } else if (userName.equalsIgnoreCase(game.whiteUsername())) {
-                message = String.format("%s joined game %s as a player white", userName, game.gameName());
-            } else {
-                message = String.format("%s joined game %s as an observer", userName, game.gameName());
+                String message;
+
+                if (userName.equalsIgnoreCase(game.blackUsername())) {
+                    message = String.format("%s joined game %s as a player as color black", userName, game.gameName());
+                } else if (userName.equalsIgnoreCase(game.whiteUsername())) {
+                    message = String.format("%s joined game %s as a player white", userName, game.gameName());
+                } else {
+                    message = String.format("%s joined game %s as an observer", userName, game.gameName());
+                }
+
+                //Send join game
+                var notification = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, message);
+                getConnection(gameID).broadcast(userName, notification);
+
+                //Send game
+                var loadGame = new ServerMessage(ServerMessage.ServerMessageType.LOAD_GAME, null);
+                loadGame.addGame(game);
+                getConnection(gameID).reportToUser(userName, loadGame);
+            } catch (Exception ex) {
+                String errMsg = "Invalid Game ID";
+                var notification = new ServerMessage(ServerMessage.ServerMessageType.ERROR, null);
+                notification.setErrorMessage(errMsg);
+                getConnection(gameID).reportToUser(userName, notification);
             }
 
-            //Send join game
-            var notification = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, message);
-            getConnection(gameID).broadcast(userName, notification);
-
-            //Send game
-            var loadGame = new ServerMessage(ServerMessage.ServerMessageType.LOAD_GAME, null);
-            loadGame.addGame(game);
-            getConnection(gameID).reportToUser(userName, loadGame);
-
         } catch (Exception ex) {
-            throw new Exception("Connection error with websocket");
+            //Send error
+            var connection = new Connection("Unknown", session);
+            String errMsg = "Error: Unknown Auth";
+            var notification = new ServerMessage(ServerMessage.ServerMessageType.ERROR, null);
+            notification.setErrorMessage(errMsg);
+            connection.send(new Gson().toJson(notification));
         }
+
     }
 
     private void isInCheck(Integer gameID, ChessGame.TeamColor color) throws DataAccessException {
