@@ -80,29 +80,37 @@ public class WebSocketHandler {
         String userName = databaseAuthDAO.getUserFromAuth(action.getAuthToken()).replace("@", "");
         GameData gameData = databaseGameDAO.getGame(action.getGameID());
 
+        boolean cont = true;
+
         //Check if its there move
         if (userName.equalsIgnoreCase(gameData.whiteUsername())) {
             if (gameData.game().getTeamTurn() != ChessGame.TeamColor.WHITE) {
                 ServerMessage errorMsg = new ServerMessage(ServerMessage.ServerMessageType.ERROR, null);
                 errorMsg.setErrorMessage("Error: You are white but its blacks turn");
                 getConnection(action.getGameID()).reportToUser(userName, errorMsg);
+                cont = false;
             }
         } else if (userName.equalsIgnoreCase(gameData.blackUsername())) {
             if (gameData.game().getTeamTurn() != ChessGame.TeamColor.BLACK) {
                 ServerMessage errorMsg = new ServerMessage(ServerMessage.ServerMessageType.ERROR, null);
                 errorMsg.setErrorMessage("Error: You are black but its white's turn");
                 getConnection(action.getGameID()).reportToUser(userName, errorMsg);
+                cont = false;
             }
         } else if (!userName.equalsIgnoreCase(gameData.blackUsername()) &&
                 !userName.equalsIgnoreCase(gameData.whiteUsername())) {
             ServerMessage errorMsg = new ServerMessage(ServerMessage.ServerMessageType.ERROR, null);
             errorMsg.setErrorMessage("Error: You are observer and can't make moves!");
             getConnection(action.getGameID()).reportToUser(userName, errorMsg);
+            cont = false;
         } else if (isGameFinished.get(action.getGameID())) {
             ServerMessage errorMsg = new ServerMessage(ServerMessage.ServerMessageType.ERROR, null);
             errorMsg.setErrorMessage("Error: Can't make move when game is finished.");
             getConnection(action.getGameID()).reportToUser(userName, errorMsg);
-        } else {
+            cont = false;
+        }
+        
+        if (cont) {
 
             //Actually Make the move!
             try {
