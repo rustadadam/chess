@@ -116,10 +116,10 @@ public class WebSocketHandler {
             try {
                 databaseGameDAO.makeGameMove(action.getGameID(), action.move);
 
-                var send_msg = String.format("%s has made the moved %s to %s", userName,
+                var sendMsg = String.format("%s has made the moved %s to %s", userName,
                         action.move.getStartPosition(), action.move.getEndPosition());
 
-                var notification = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, send_msg);
+                var notification = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, sendMsg);
                 getConnection(action.getGameID()).broadcast(userName, notification);
 
                 //Load Game
@@ -225,11 +225,11 @@ public class WebSocketHandler {
 
 
     private void isInCheck(Integer gameID, ChessGame.TeamColor color) throws DataAccessException {
-        String SET_BG_COLOR_RED = "\u001b" + "[48;5;" + "160m";
-        String SET_TEXT_COLOR_WHITE = "\u001b" + "[38;5;" + "15m";
-        String SET_TEXT_COLOR_RED = "\u001b" + "[38;5;" + "160m";
-        String RESET_BG_COLOR = "\u001b" + "[49m";
-        String RESET_TEXT_COLOR = "\u001b" + "[39m";
+        String colorRed = "\u001b" + "[48;5;" + "160m";
+        String colorWhite = "\u001b" + "[38;5;" + "15m";
+        String textRed = "\u001b" + "[38;5;" + "160m";
+        String resetBackground = "\u001b" + "[49m";
+        String resetText = "\u001b" + "[39m";
 
         GameData gameData = databaseGameDAO.getGame(gameID);
         ChessGame game = gameData.game();
@@ -243,19 +243,19 @@ public class WebSocketHandler {
 
 
         if (game.isInCheck(color)) {
-            String send_msg;
+            String sendMsg;
             //Check if in checkmate
             if (game.isInCheckmate(color)) {
-                send_msg = SET_BG_COLOR_RED + SET_TEXT_COLOR_WHITE + playerName.toUpperCase() +
+                sendMsg = colorRed + colorWhite + playerName.toUpperCase() +
                         "\n----------------------\n HAVE BEEN CHECKMATED!\n----------------------\n"
-                        + RESET_BG_COLOR + SET_TEXT_COLOR_RED;
-                send_msg += playerName + " please Resign by typing resign\n" + RESET_TEXT_COLOR;
+                        + resetBackground + textRed;
+                sendMsg += playerName + " please Resign by typing resign\n" + resetText;
             } else {
-                send_msg = SET_TEXT_COLOR_RED + playerName.toUpperCase() +
-                        " is in check! Quick, your king is in Danger!\n" + RESET_TEXT_COLOR;
+                sendMsg = textRed + playerName.toUpperCase() +
+                        " is in check! Quick, your king is in Danger!\n" + resetText;
             }
 
-            var notification = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, send_msg);
+            var notification = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, sendMsg);
             getConnection(gameID).broadcast("", notification);
         }
     }
