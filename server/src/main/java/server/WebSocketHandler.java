@@ -97,14 +97,15 @@ public class WebSocketHandler {
                 getConnection(action.getGameID()).reportToUser(userName, errorMsg);
                 cont = false;
             }
-        }
-        if (!userName.equalsIgnoreCase(gameData.blackUsername()) &&
+        } else if (!userName.equalsIgnoreCase(gameData.blackUsername()) &&
                 !userName.equalsIgnoreCase(gameData.whiteUsername())) {
             ServerMessage errorMsg = new ServerMessage(ServerMessage.ServerMessageType.ERROR, null);
             errorMsg.setErrorMessage("Error: You are observer and can't make moves!");
             getConnection(action.getGameID()).reportToUser(userName, errorMsg);
             cont = false;
-        } else if (isGameFinished.get(action.getGameID())) {
+        }
+
+        if (isGameFinished.get(action.getGameID())) {
             ServerMessage errorMsg = new ServerMessage(ServerMessage.ServerMessageType.ERROR, null);
             errorMsg.setErrorMessage("Error: Can't make move when game is finished.");
             getConnection(action.getGameID()).reportToUser(userName, errorMsg);
