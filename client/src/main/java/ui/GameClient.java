@@ -58,73 +58,54 @@ public class GameClient implements Client {
         String squareColor;
         ChessPiece[][] board = game.getBoard().board;
         squareColor = SET_BG_COLOR_DARK_GREY;
-
         Set<ChessPosition> moveSet = null;
         if (highlight) {
             moveSet = highlight(params);
-
             if (moveSet.isEmpty()) {
                 return SET_TEXT_COLOR_RED + "Error. No piece selected." + RESET_TEXT_COLOR;
             }
         }
-
         if (!isPlayerWhite) {
             System.out.print("Printing battlefield as Black\n");
         } else {
             System.out.print("Printing battlefield as White\n");
-
-            //Reverse board
             ChessPiece[][] newBoard = new ChessPiece[8][8];
             for (int row = 0; row < 8; row++) {
                 for (int col = 0; col < 8; col++) {
                     newBoard[row][col] = board[7 - row][7 - col];
                 }
             }
-
             board = newBoard;
         }
-
         StringBuilder sb = new StringBuilder();
-
-        //Loop through rows
         for (int row = 0; row < 8; row++) {
-
-            //Line numbers
             if (!isPlayerWhite) {
                 sb.append(SET_TEXT_COLOR_MAGENTA).append(row + 1).append(" ");
             } else {
                 sb.append(SET_TEXT_COLOR_MAGENTA).append(8 - row).append(" ");
             }
-
             if (squareColor.equals(SET_BG_COLOR_LIGHT_GREY)) {
                 squareColor = SET_BG_COLOR_DARK_GREY;
             } else {
                 squareColor = SET_BG_COLOR_LIGHT_GREY;
             }
-
             for (int column = 0; column < 8; column++) {
-
                 if (squareColor.equals(SET_BG_COLOR_DARK_GREY)) {
                     squareColor = SET_BG_COLOR_LIGHT_GREY;
                 } else {
                     squareColor = SET_BG_COLOR_DARK_GREY;
                 }
-
-                //Highlight square
                 ChessPosition pos;
                 if (!isPlayerWhite) {
                     pos = new ChessPosition((row + 1), (1 + column));
                 } else {
                     pos = new ChessPosition(9 - (row + 1), 9 - (1 + column));
                 }
-
                 if (moveSet != null && moveSet.contains(pos)) {
                     sb.append(SET_BG_COLOR_YELLOW);
                 } else {
                     sb.append(squareColor);
                 }
-
-
                 sb.append(" ");
                 if (board[row][column] != null) {
                     sb.append(printPiece(board[row][column].toString())); //Remember to update pieces for this
@@ -136,43 +117,33 @@ public class GameClient implements Client {
                     } else {
                         sb.append(SET_TEXT_COLOR_DARK_GREY);
                     }
-                    //This will be hidden
                     sb.append(BLACK_PAWN);
                 }
                 sb.append(" ");
             }
-
-            sb.append(RESET_BG_COLOR);
-            sb.append("\n");
+            sb.append(RESET_BG_COLOR).append("\n");
         }
-
-        //Print line numbers
         sb.append("  ");
         boolean addSpace = true;
-
         String[] strList;
         if (isPlayerWhite) {
             strList = new String[]{"A", "B", "C", "D", "E", "F", "G", "H"};
         } else {
             strList = new String[]{"H", "G", "F", "E", "D", "C", "B", "A"};
         }
-
         for (String letter : strList) {
             sb.append(SET_TEXT_COLOR_MAGENTA).append("  ").append(letter).append("  ");
             if (addSpace) {
                 sb.append(" ");
                 addSpace = false;
             }
-
             if (letter.equals("C")) {
                 addSpace = true;
             }
-
             if (letter.equals("F")) {
                 addSpace = true;
             }
         }
-
         System.out.print(sb + RESET_BG_COLOR + "\n");
         return "";
     }
