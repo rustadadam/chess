@@ -53,11 +53,6 @@ public class WebSocketHandler {
             }
 
         } catch (Exception e) {
-//            ServerMessage errorMsg = new ServerMessage(ServerMessage.ServerMessageType.ERROR, null);
-//            errorMsg.setErrorMessage("Error: Invalid Auth");
-//            GameData game = databaseGameDAO.getGame(action.getGameID());
-//            //getConnection(action.getGameID()).reportToUser(game.blackUsername(), errorMsg);
-//            getConnection(action.getGameID()).reportToUser(game.whiteUsername(), errorMsg);
 
             var connection = new Connection("Unknown", session);
             String errMsg = "Error: Unknown Auth";
