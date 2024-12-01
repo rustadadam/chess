@@ -29,7 +29,7 @@ public class Server {
     private final GameService gameService;
     private final UserService userService;
     private final Gson gson = new Gson();
-    private final WebSocketHandler webSocketHandler;
+    private WebSocketHandler webSocketHandler;
 
     public Server() {
         try {
@@ -135,6 +135,8 @@ public class Server {
             userService.deleteAllUserData();
             gameService.deleteAllGame();
             authService.deleteAllAuth();
+            webSocketHandler = new WebSocketHandler();
+
             return "";
         } catch (Exception e) {
             return errorHandler(e, res);
