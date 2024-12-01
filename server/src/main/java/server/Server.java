@@ -135,7 +135,7 @@ public class Server {
             userService.deleteAllUserData();
             gameService.deleteAllGame();
             authService.deleteAllAuth();
-            webSocketHandler = new WebSocketHandler();
+            webSocketHandler.clear();
 
             return "";
         } catch (Exception e) {

@@ -22,8 +22,8 @@ import java.util.HashMap;
 @WebSocket
 public class WebSocketHandler {
 
-    private final HashMap<Integer, ConnectionManager> connections = new HashMap<>();
-    private final HashMap<Integer, Boolean> isGameFinished = new HashMap<>();
+    private HashMap<Integer, ConnectionManager> connections = new HashMap<>();
+    private HashMap<Integer, Boolean> isGameFinished = new HashMap<>();
 
 
     private DatabaseAuthDAO databaseAuthDAO = new DatabaseAuthDAO();
@@ -32,7 +32,10 @@ public class WebSocketHandler {
     public WebSocketHandler() throws DataAccessException {
     }
 
-    //private final ConnectionManager connections = new ConnectionManager();
+    public void clear() {
+        connections = new HashMap<>();
+        isGameFinished = new HashMap<>();
+    }
 
     @OnWebSocketMessage
     public void onMessage(Session session, String message) throws Exception {
