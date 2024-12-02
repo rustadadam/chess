@@ -230,8 +230,17 @@ public class GameClient implements Client {
     }
 
     public String resign() throws Exception {
-        ws.resign(authToken, gameData.gameID());
-        return "You have resigned";
+        System.out.println(SET_TEXT_COLOR_RED + "You are resigning. Are you sure? [Yes] or [No]");
+
+        Scanner scanner = new Scanner(System.in);
+        String line = scanner.nextLine();
+
+        if (line.equals("Yes")) {
+            ws.resign(authToken, gameData.gameID());
+            return "You have resigned";
+        } else {
+            return "You did not resign";
+        }
     }
 
     public String clear() throws Exception {
