@@ -57,7 +57,7 @@ public class GameClient implements Client {
         ChessGame game = gameData.game();
         String squareColor;
         ChessPiece[][] board = game.getBoard().board;
-        squareColor = SET_BG_COLOR_DARK_GREY;
+        squareColor = SET_BG_COLOR_LIGHT_GREY;
         Set<ChessPosition> moveSet = null;
         if (highlight) {
             moveSet = highlight(params);
