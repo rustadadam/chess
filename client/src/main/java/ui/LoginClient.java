@@ -120,8 +120,9 @@ public class LoginClient implements Client {
             } catch (Exception ex) {
                 throw new Exception("Observe Game Failed. Expected: <Game ID>");
             }
-            
+
             state = State.INGAME;
+            isPlayerWhite = true;
 
             try {
                 ws.joinGame(authToken, joinID + 1000);
