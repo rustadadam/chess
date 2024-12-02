@@ -242,56 +242,59 @@ public class GameClient implements Client {
 
     public String move(String... params) throws Exception {
         //Check to see if its their turn
-        if (isPlayerWhite) {
-            if (gameData.game().getTeamTurn() != ChessGame.TeamColor.WHITE) {
-                return SET_TEXT_COLOR_RED + "Error: Its not your turn";
-            }
-        } else {
-            if (gameData.game().getTeamTurn() != ChessGame.TeamColor.BLACK) {
-                return SET_TEXT_COLOR_RED + "Error: Its not your turn";
-            }
-        }
-
-        if (params.length >= 4) {
-            Integer rowStart = Integer.parseInt(params[0]);
-            Integer rowEnd = Integer.parseInt(params[2]);
-
-
-            Integer colStart;
-            Integer colEnd;
-            try {
-                colEnd = Integer.parseInt(params[3]);
-
-            } catch (Exception e) {
-                String letter = params[3].toLowerCase();
-                colEnd = letter.charAt(0) - 'a' + 1;
+        try {
+            if (isPlayerWhite) {
+                if (gameData.game().getTeamTurn() != ChessGame.TeamColor.WHITE) {
+                    return SET_TEXT_COLOR_RED + "Error: Its not your turn";
+                }
+            } else {
+                if (gameData.game().getTeamTurn() != ChessGame.TeamColor.BLACK) {
+                    return SET_TEXT_COLOR_RED + "Error: Its not your turn";
+                }
             }
 
-            try {
-                colStart = Integer.parseInt(params[1]);
+            if (params.length >= 4) {
+                Integer rowStart = Integer.parseInt(params[0]);
+                Integer rowEnd = Integer.parseInt(params[2]);
 
-            } catch (Exception e) {
-                String letter = params[1].toLowerCase();
-                colStart = letter.charAt(0) - 'a' + 1;
+
+                Integer colStart;
+                Integer colEnd;
+                try {
+                    colEnd = Integer.parseInt(params[3]);
+
+                } catch (Exception e) {
+                    String letter = params[3].toLowerCase();
+                    colEnd = letter.charAt(0) - 'a' + 1;
+                }
+
+                try {
+                    colStart = Integer.parseInt(params[1]);
+
+                } catch (Exception e) {
+                    String letter = params[1].toLowerCase();
+                    colStart = letter.charAt(0) - 'a' + 1;
+                }
+
+                //Make move
+                ChessPosition startPosition;
+                ChessPosition endPosition;
+
+                startPosition = new ChessPosition(rowStart, 9 - colStart);
+                endPosition = new ChessPosition(rowEnd, 9 - colEnd);
+
+                ChessMove move = new ChessMove(startPosition, endPosition, null);
+
+
+                ws.makeMove(authToken, gameData.gameID(), move);
+                return " ";
+            } else {
+                System.out.print(SET_TEXT_COLOR_RED + "Highlight Failed. Expected: <Piece Row> <Piece Col>");
+                return " ";
             }
 
-            //Make move
-            ChessPosition startPosition;
-            ChessPosition endPosition;
-
-            startPosition = new ChessPosition(rowStart, 9 - colStart);
-            endPosition = new ChessPosition(rowEnd, 9 - colEnd);
-
-            ChessMove move = new ChessMove(startPosition, endPosition, null);
-
-
-            ws.makeMove(authToken, gameData.gameID(), move);
-            return " ";
-
-
-        } else {
-            System.out.print(SET_TEXT_COLOR_RED + "Highlight Failed. Expected: <Piece Row> <Piece Col>");
-            return " ";
+        } catch (Exception e) {
+            return SET_TEXT_COLOR_RED + "Error: invalid move. Should be [num] [col] [num] [col]";
         }
     }
 
